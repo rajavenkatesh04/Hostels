@@ -1,11 +1,12 @@
 import Link from "next/link";
 
+
 export default function Banner() {
     return (
         <div
             className="mt-20 mb-20 relative rounded-2xl overflow-hidden shadow-lg"
             style={{
-                backgroundImage: "url('/download.jpg')", // Use your uploaded file
+                backgroundImage: "url('/download.jpg')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
