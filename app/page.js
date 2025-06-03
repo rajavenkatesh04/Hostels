@@ -1,9 +1,16 @@
 import Image from "next/image";
+import Banner from "@/_components/ui/Banner";
+import Footer from "@/_components/ui/Footer";
+import Navbar from "@/_components/ui/Navbar";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-     <h1>Welcome to hostels</h1>
-    </div>
-  );
+    return (
+        <div className="font-[family-name:var(--font-geist-sans)]">
+            <Navbar />
+            <div className="mx-auto px-4">
+                <Banner />
+            </div>
+            <Footer />
+        </div>
+    );
 }
