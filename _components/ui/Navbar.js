@@ -23,7 +23,7 @@ export default function Navbar() {
         <nav
             className={`w-full fixed top-0 z-50 px-5 lg:px-8 xl:px-[8%] py-4 flex justify-center items-center transition-colors duration-300 ${
                 isScroll
-                    ? "bg-white bg-opacity-50 backdrop-blur-lg shadow-sm"
+                    ? "bg-white bg-opacity-10 backdrop-blur-lg shadow-sm"
                     : "bg-transparent"
             }`}
         >
