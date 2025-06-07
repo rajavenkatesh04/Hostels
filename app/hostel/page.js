@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
     ArrowLeft,
@@ -20,7 +20,8 @@ import {
     Loader2
 } from 'lucide-react';
 
-export default function HostelDetailsPage() {
+// Create a separate component that uses useSearchParams
+function HostelDetailsContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const hostelId = searchParams.get('id');
@@ -526,5 +527,31 @@ export default function HostelDetailsPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+// Loading fallback component for Suspense
+function LoadingFallback() {
+    return (
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            gap: '1rem'
+        }}>
+            <Loader2 size={48} style={{ color: '#2563eb', animation: 'spin 1s linear infinite' }} />
+            <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>Loading page...</p>
+        </div>
+    );
+}
+
+// Main component that wraps the content with Suspense
+export default function HostelDetailsPage() {
+    return (
+        <Suspense fallback={<LoadingFallback />}>
+            <HostelDetailsContent />
+        </Suspense>
     );
 }
