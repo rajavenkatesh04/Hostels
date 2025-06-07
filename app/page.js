@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <div className="font-[family-name:var(--font-geist-sans)]">
             <Navbar />
-            <div className="mx-auto lg:px-50 sm:mx-auto px-6">
+            <div className="mx-auto lg:px-50 sm:mx-auto px-4">
                 <Banner />
                 <HostelsPage />
                 <Footer />

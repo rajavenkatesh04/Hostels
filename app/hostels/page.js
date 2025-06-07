@@ -47,8 +47,8 @@ export default function HostelsPage() {
     return (
         <div className="rounded-2xl min-h-screen bg-gray-50 ">
             {/* Hero Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 ">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 ">
+                <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
                         Find Your Perfect Hostel
                     </h1>

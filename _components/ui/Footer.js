@@ -2,7 +2,7 @@ import { Copyright, Github } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="relative rounded-2xl flex flex-col items-center justify-center py-4 text-center mt-20 bg-teal-400">
+        <footer className="relative flex flex-col items-center justify-center py-4 text-center mt-20 bg-teal-400">
             <p className="flex items-center gap-2 text-gray-600 hover:underline">
                 Built by Raja Venkatesh
                 <a href="https://github.com/rajavenkatesh04" target="_blank" rel="noopener noreferrer">
