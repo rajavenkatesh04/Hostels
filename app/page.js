@@ -2,7 +2,7 @@ import Image from "next/image";
 import Banner from "@/_components/ui/Banner";
 import Footer from "@/_components/ui/Footer";
 import Navbar from "@/_components/ui/Navbar";
-import HostelsPage from "@/app/hostels/page";
+
 
 export default function Page() {
     return (
@@ -10,8 +10,7 @@ export default function Page() {
             {/*<Navbar />*/}
             <main className="flex-grow p-4">
                 <Banner />
-                {/* Include the HostelsPage component if needed */}
-                {/* <HostelsPage /> */}
+
             </main>
             {/*<Footer />*/}
         </div>

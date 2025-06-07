@@ -1,21 +1,25 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import {
     Mars,
     Venus,
-    Snowflake,
     Sun,
+    Snowflake,
     Home,
     Users as UsersIcon,
-    MapPin,
-    IndianRupee,
-    GraduationCap,
     BookOpen,
+    GraduationCap,
     Award,
     Trophy,
     Building2
 } from 'lucide-react';
+import ChooseHostelCard from '@/_components/hostel/ChooseHostelCard';
+
+// Register GSAP plugin for smooth scrolling
+gsap.registerPlugin(ScrollToPlugin);
 
 export default function HostelFilter() {
     const [currentStep, setCurrentStep] = useState(0);
@@ -29,107 +33,89 @@ export default function HostelFilter() {
     });
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    // New state for managing branch options fetched from API
     const [branchOptions, setBranchOptions] = useState([]);
     const [isFetchingBranches, setIsFetchingBranches] = useState(false);
 
-    // Enhanced filter configuration with branch step added after gender
+    // Refs for GSAP animations - these help us target specific DOM elements for smooth animations
+    const questionRefs = useRef([]);
+    const containerRef = useRef(null);
+
+    // Filter configuration with all the questions and options
     const filterSteps = [
         {
             id: 'gender',
-            title: 'Let\'s start with the basics...',
-            subtitle: 'Who will be staying at the hostel?',
-            storyText: 'First, we need to know whether you\'re looking for a boys\' or girls\' hostel. This ensures we find accommodations that match your comfort and safety preferences.',
+            question: 'Who will be staying at the hostel?',
             options: [
-                { value: 'boys', label: 'Boys Hostel', icon: Mars, color: 'bg-blue-500 hover:bg-blue-600' },
-                { value: 'girls', label: 'Girls Hostel', icon: Venus, color: 'bg-pink-500 hover:bg-pink-600' }
+                { value: 'boys', label: 'Boys Hostel', icon: Mars },
+                { value: 'girls', label: 'Girls Hostel', icon: Venus }
             ]
         },
         {
             id: 'branch',
-            title: 'Great! Now let\'s talk location...',
-            subtitle: 'Which campus branch are you looking for?',
-            storyText: 'Different branches offer different experiences and conveniences. Consider factors like proximity to your classes, local amenities, transportation options, and the campus culture when making your choice.',
-            // Options will be populated dynamically from the API
-            // This ensures we always show current, available branches
+            question: 'Which campus branch are you looking for?',
             options: branchOptions
         },
         {
             id: 'yearOfStudy',
-            title: 'Tell us about your academic journey...',
-            subtitle: 'Which year of study are you in?',
-            storyText: 'Many hostels have specific arrangements for different academic years. First-year students often get priority in certain hostels with more guidance and support, while senior students might prefer hostels with more independence and flexibility.',
+            question: 'Which year of study are you in?',
             options: [
-                { value: '1', label: '1st Year', icon: BookOpen, color: 'bg-green-500 hover:bg-green-600' },
-                { value: '2', label: '2nd Year', icon: GraduationCap, color: 'bg-yellow-500 hover:bg-yellow-600' },
-                { value: '3', label: '3rd Year', icon: Award, color: 'bg-purple-500 hover:bg-purple-600' },
-                { value: '4', label: '4th Year', icon: Trophy, color: 'bg-red-500 hover:bg-red-600' }
+                { value: '1', label: '1st Year', icon: BookOpen },
+                { value: '2', label: '2nd Year', icon: GraduationCap },
+                { value: '3', label: '3rd Year', icon: Award },
+                { value: '4', label: '4th Year', icon: Trophy }
             ]
         },
         {
             id: 'acType',
-            title: 'Now, let\'s talk comfort...',
-            subtitle: 'What\'s your temperature preference?',
-            storyText: 'Climate control significantly affects your daily comfort and study environment. Air-conditioned rooms provide consistent temperature but cost more, while non-AC rooms are more economical and some students prefer the natural airflow.',
+            question: 'What\'s your temperature preference?',
             options: [
-                { value: 'ac', label: 'Air Conditioned', icon: Snowflake, color: 'bg-cyan-500 hover:bg-cyan-600' },
-                { value: 'non_ac', label: 'Non AC (Natural)', icon: Sun, color: 'bg-orange-500 hover:bg-orange-600' }
+                { value: 'ac', label: 'Air Conditioned', icon: Snowflake },
+                { value: 'non_ac', label: 'Non AC (Natural)', icon: Sun }
             ]
         },
         {
             id: 'washroomType',
-            title: 'Privacy matters...',
-            subtitle: 'How do you prefer your bathroom setup?',
-            storyText: 'Your bathroom preference affects both privacy and convenience. Attached bathrooms offer complete privacy and convenience but are pricier, while shared bathrooms are more economical and can be quite well-maintained in good hostels.',
+            question: 'How do you prefer your bathroom setup?',
             options: [
-                { value: 'attached', label: 'Private Bathroom', icon: Home, color: 'bg-green-500 hover:bg-green-600' },
-                { value: 'common', label: 'Shared Bathroom', icon: UsersIcon, color: 'bg-purple-500 hover:bg-purple-600' }
+                { value: 'attached', label: 'Private Bathroom', icon: Home },
+                { value: 'common', label: 'Shared Bathroom', icon: UsersIcon }
             ]
         },
         {
             id: 'sharing',
-            title: 'Finally, your social preference...',
-            subtitle: 'How many roommates would you like?',
-            storyText: 'The number of roommates affects both cost and your living experience. More roommates usually means lower individual cost and more social interaction, while fewer roommates provide more personal space and quiet study time.',
+            question: 'How many roommates would you like?',
             options: [
-                { value: '2', label: '2 Person Sharing', icon: UsersIcon, color: 'bg-teal-500 hover:bg-teal-600' },
-                { value: '3', label: '3 Person Sharing', icon: UsersIcon, color: 'bg-amber-500 hover:bg-amber-600' },
-                { value: '4', label: '4 Person Sharing', icon: UsersIcon, color: 'bg-red-500 hover:bg-red-600' }
+                { value: '2', label: '2 Person Sharing', icon: UsersIcon },
+                { value: '3', label: '3 Person Sharing', icon: UsersIcon },
+                { value: '4', label: '4 Person Sharing', icon: UsersIcon }
             ]
         }
     ];
 
     // Fetch branch options when gender is selected
-    // This approach ensures we only load branches when needed, improving performance
     useEffect(() => {
         const fetchBranches = async () => {
-            if (!selections.gender) return; // Only fetch when gender is selected
+            if (!selections.gender) return;
 
             setIsFetchingBranches(true);
             try {
                 const response = await fetch('/api/branches');
                 if (response.ok) {
                     const data = await response.json();
-                    // Transform API response into the format expected by our options
                     const formattedBranches = data.branches.map(branch => ({
                         value: branch.value,
                         label: branch.label,
-                        icon: Building2, // Use consistent icon for all branches
-                        color: 'bg-indigo-500 hover:bg-indigo-600' // Consistent color theme
+                        icon: Building2
                     }));
                     setBranchOptions(formattedBranches);
                 } else {
-                    console.error('Failed to fetch branches:', response.statusText);
-                    // Fallback options in case API fails
                     setBranchOptions([
-                        { value: 'kattankulathur_chennai', label: 'Kattankulathur, Chennai', icon: Building2, color: 'bg-indigo-500 hover:bg-indigo-600' }
+                        { value: 'kattankulathur_chennai', label: 'Kattankulathur, Chennai', icon: Building2 }
                     ]);
                 }
             } catch (error) {
-                console.error('Error fetching branches:', error);
-                // Provide fallback options so the user isn't stuck
                 setBranchOptions([
-                    { value: 'kattankulathur_chennai', label: 'Kattankulathur, Chennai', icon: Building2, color: 'bg-indigo-500 hover:bg-indigo-600' }
+                    { value: 'kattankulathur_chennai', label: 'Kattankulathur, Chennai', icon: Building2 }
                 ]);
             } finally {
                 setIsFetchingBranches(false);
@@ -137,12 +123,9 @@ export default function HostelFilter() {
         };
 
         fetchBranches();
-    }, [selections.gender]); // Trigger when gender selection changes
+    }, [selections.gender]);
 
-    // Check if all selections are complete
-    const isAllComplete = Object.values(selections).every(value => value !== '');
-
-    // Handle selection and determine next step
+    // Handle selection and animate to next question
     const handleSelection = (filterType, value) => {
         const newSelections = {
             ...selections,
@@ -150,23 +133,64 @@ export default function HostelFilter() {
         };
         setSelections(newSelections);
 
-        // Move to next step after a brief delay for better UX
-        // This gives users visual feedback that their choice was registered
+        // Animate the current question moving up and fade in the next question
         if (currentStep < filterSteps.length - 1) {
+            const currentQuestionEl = questionRefs.current[currentStep];
+            const nextQuestionEl = questionRefs.current[currentStep + 1];
+
+            // First, move current question up with a subtle animation
+            gsap.to(currentQuestionEl, {
+                duration: 0.4,
+                y: -20,
+                opacity: 0.7,
+                scale: 0.95,
+                ease: "power2.out"
+            });
+
+            // Then fade in and animate the next question
+            gsap.fromTo(nextQuestionEl,
+                {
+                    opacity: 0,
+                    y: 50,
+                    scale: 0.9
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.6,
+                    delay: 0.2,
+                    ease: "power2.out"
+                }
+            );
+
+            // Smooth scroll to center the next question
+            gsap.to(window, {
+                duration: 0.8,
+                scrollTo: {
+                    y: nextQuestionEl,
+                    offsetY: window.innerHeight / 2 - 100
+                },
+                delay: 0.3,
+                ease: "power2.inOut"
+            });
+
             setTimeout(() => {
                 setCurrentStep(prev => prev + 1);
             }, 300);
         }
     };
 
-    // Enhanced API call that includes branch in the request
+    // Check if all selections are complete
+    const isAllComplete = Object.values(selections).every(value => value !== '');
+
+    // Make API call when all selections are complete
     useEffect(() => {
         const makeApiCall = async () => {
             if (!isAllComplete) return;
 
             setIsLoading(true);
             try {
-                // Now includes branch in the API call
                 const response = await fetch('/api/choose', {
                     method: 'POST',
                     headers: {
@@ -178,25 +202,10 @@ export default function HostelFilter() {
                 if (response.ok) {
                     const data = await response.json();
                     setResults(data.results || []);
-
-                    // Development mode logging for tracing specific results
-                    // This helps with debugging and can be removed in production
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('API Response:', data);
-                        console.log('Applied Filters:', data.filters_applied);
-                        if (data.results?.length > 0) {
-                            console.log('Sample result with UUIDs:', {
-                                room_id: data.results[0].room_id,
-                                hostel_id: data.results[0].hostel_id
-                            });
-                        }
-                    }
                 } else {
-                    console.error('API call failed:', response.statusText);
                     setResults([]);
                 }
             } catch (error) {
-                console.error('Error making API call:', error);
                 setResults([]);
             } finally {
                 setIsLoading(false);
@@ -206,316 +215,153 @@ export default function HostelFilter() {
         makeApiCall();
     }, [selections, isAllComplete]);
 
-    // Function to directly edit a selection without collapsing other steps
-    // This is the key improvement - users can modify any step at any time
-    const handleDirectEdit = (filterType, value) => {
-        const newSelections = {
-            ...selections,
-            [filterType]: value
-        };
-
-        // If user is editing an earlier step, clear all subsequent selections
-        // This ensures data consistency - if they change gender, branch should be reselected
-        const stepIds = filterSteps.map(step => step.id);
-        const editingStepIndex = stepIds.indexOf(filterType);
-
-        for (let i = editingStepIndex + 1; i < stepIds.length; i++) {
-            newSelections[stepIds[i]] = '';
-        }
-
-        setSelections(newSelections);
-
-        // Move current step to the next incomplete step
-        const nextIncompleteStep = stepIds.findIndex((stepId, index) =>
-            index > editingStepIndex && !newSelections[stepId]
-        );
-
-        if (nextIncompleteStep !== -1) {
-            setCurrentStep(nextIncompleteStep);
-        } else {
-            setCurrentStep(editingStepIndex + 1);
-        }
-
-        // Clear results when editing earlier steps
-        setResults([]);
-    };
-
-    // Progress bar component - now more accurate with branch step included
-    const ProgressBar = ({ currentStep, totalSteps }) => {
-        const progress = ((currentStep + 1) / totalSteps) * 100;
-        return (
-            <div className="w-full bg-gray-200 rounded-full h-3 mb-8">
-                <div
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${progress}%` }}
-                ></div>
+    return (
+        <div ref={containerRef} style={{ minHeight: '100vh', padding: '2rem 1rem' }}>
+            {/* Header Section */}
+            <div style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: '800px', margin: '0 auto 3rem auto' }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1f2937' }}>
+                    Find Your Perfect Hostel
+                </h1>
+                <p style={{ fontSize: '1.1rem', color: '#6b7280', lineHeight: '1.6' }}>
+                    We'll guide you through a few simple questions to find the ideal accommodation.
+                    All your choices remain visible and easily editable!
+                </p>
             </div>
-        );
-    };
 
-    // Enhanced component to show all completed steps in an always-visible format
-    // This is the major UX improvement - everything stays visible and editable
-    const CompletedSteps = () => (
-        <div className="space-y-4 mb-8">
-            {filterSteps.map((step, index) => {
-                const selectedOption = step.options.find(opt => opt.value === selections[step.id]);
-                const IconComponent = selectedOption?.icon;
-                const isCompleted = selections[step.id] !== '';
-                const isCurrentStep = index === currentStep;
+            <hr style={{ border: 'none', height: '1px', backgroundColor: '#e5e7eb', margin: '2rem auto', maxWidth: '600px' }} />
 
-                // Show all steps, but style them differently based on their state
-                return (
-                    <div
-                        key={step.id}
-                        className={`border-2 rounded-lg p-4 transition-all duration-300 ${
-                            isCurrentStep
-                                ? 'border-blue-500 bg-blue-50 shadow-lg'
-                                : isCompleted
-                                    ? 'border-green-200 bg-green-50 hover:bg-green-100'
-                                    : 'border-gray-200 bg-gray-50'
-                        }`}
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center space-x-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                                    isCompleted
-                                        ? 'bg-green-500 text-white'
-                                        : isCurrentStep
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-gray-300 text-gray-600'
-                                }`}>
-                                    {isCompleted ? '✓' : index + 1}
+            {/* Questions Container */}
+            <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+                {filterSteps.map((step, index) => {
+                    const isCurrentOrPrevious = index <= currentStep;
+                    const isSelected = selections[step.id] !== '';
+
+                    return (
+                        <div
+                            key={step.id}
+                            ref={el => questionRefs.current[index] = el}
+                            style={{
+                                marginBottom: '3rem',
+                                opacity: isCurrentOrPrevious ? 1 : 0,
+                                visibility: isCurrentOrPrevious ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {/* Question */}
+                            <h3 style={{
+                                fontSize: '1.25rem',
+                                fontWeight: '600',
+                                marginBottom: '1.5rem',
+                                color: isSelected ? '#059669' : '#374151'
+                            }}>
+                                {step.question}
+                                {isSelected && (
+                                    <span style={{ marginLeft: '0.5rem', color: '#059669' }}>✓</span>
+                                )}
+                            </h3>
+
+                            {/* Loading state for branches */}
+                            {step.id === 'branch' && isFetchingBranches ? (
+                                <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+                                    Loading campus branches...
                                 </div>
-                                <div>
-                                    <p className={`text-sm font-medium ${
-                                        isCurrentStep ? 'text-blue-800' : isCompleted ? 'text-green-800' : 'text-gray-600'
-                                    }`}>
-                                        {step.subtitle}
-                                    </p>
-                                    {isCompleted && (
-                                        <div className="flex items-center space-x-2 mt-1">
-                                            {IconComponent && <IconComponent size={16} className="text-green-600" />}
-                                            <span className="text-green-700 font-semibold">{selectedOption?.label}</span>
-                                        </div>
-                                    )}
+                            ) : (
+                                /* Options */
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: step.options.length <= 2 ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+                                    gap: '1rem',
+                                    marginBottom: '2rem'
+                                }}>
+                                    {step.options.map((option) => {
+                                        const IconComponent = option.icon;
+                                        const isOptionSelected = selections[step.id] === option.value;
+
+                                        return (
+                                            <button
+                                                key={option.value}
+                                                onClick={() => handleSelection(step.id, option.value)}
+                                                style={{
+                                                    padding: '1rem',
+                                                    border: isOptionSelected ? '2px solid #059669' : '1px solid #d1d5db',
+                                                    borderRadius: '8px',
+                                                    backgroundColor: isOptionSelected ? '#ecfdf5' : '#ffffff',
+                                                    color: isOptionSelected ? '#059669' : '#374151',
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s ease',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '0.5rem',
+                                                    fontSize: '1rem',
+                                                    fontWeight: isOptionSelected ? '600' : '400'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    if (!isOptionSelected) {
+                                                        e.target.style.backgroundColor = '#f9fafb';
+                                                        e.target.style.borderColor = '#9ca3af';
+                                                    }
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    if (!isOptionSelected) {
+                                                        e.target.style.backgroundColor = '#ffffff';
+                                                        e.target.style.borderColor = '#d1d5db';
+                                                    }
+                                                }}
+                                            >
+                                                {IconComponent && <IconComponent size={20} />}
+                                                {option.label}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-                            </div>
-                            {isCompleted && !isCurrentStep && (
-                                <button
-                                    onClick={() => setCurrentStep(index)}
-                                    className="text-green-600 text-sm hover:text-green-800 hover:underline"
-                                >
-                                    Edit
-                                </button>
                             )}
                         </div>
-
-                        {/* Show options for current step or if user wants to edit */}
-                        {(isCurrentStep || (!isCompleted && index <= currentStep)) && (
-                            <div>
-                                {/* Show loading state for branch options */}
-                                {step.id === 'branch' && isFetchingBranches ? (
-                                    <div className="flex items-center justify-center py-8">
-                                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent mr-3"></div>
-                                        <span className="text-blue-600">Loading campus branches...</span>
-                                    </div>
-                                ) : (
-                                    <>
-                                        {/* Story text for context */}
-                                        <div className="mb-4 p-3 bg-white rounded-lg border">
-                                            <p className="text-blue-800 text-sm leading-relaxed">
-                                                {step.storyText}
-                                            </p>
-                                        </div>
-
-                                        {/* Options grid */}
-                                        <div className={`grid gap-3 ${
-                                            step.options.length <= 2
-                                                ? 'grid-cols-1 sm:grid-cols-2'
-                                                : step.options.length <= 4
-                                                    ? 'grid-cols-2 lg:grid-cols-4'
-                                                    : 'grid-cols-2 lg:grid-cols-3'
-                                        }`}>
-                                            {step.options.map((option) => {
-                                                const IconComponent = option.icon;
-                                                const isSelected = selections[step.id] === option.value;
-
-                                                return (
-                                                    <button
-                                                        key={option.value}
-                                                        onClick={() => handleDirectEdit(step.id, option.value)}
-                                                        className={`group relative p-4 rounded-lg border-2 transition-all duration-300 transform hover:scale-105 ${
-                                                            isSelected
-                                                                ? `${option.color} text-white border-transparent shadow-lg`
-                                                                : 'bg-white hover:bg-gray-50 border-gray-200 hover:border-gray-300 text-gray-700'
-                                                        }`}
-                                                    >
-                                                        <div className="flex flex-col items-center space-y-2">
-                                                            <IconComponent
-                                                                size={32}
-                                                                className={`transition-transform duration-300 ${
-                                                                    isSelected ? 'transform rotate-12' : 'group-hover:transform group-hover:scale-110'
-                                                                }`}
-                                                            />
-                                                            <span className="font-medium text-sm text-center">
-                                                                {option.label}
-                                                            </span>
-                                                        </div>
-                                                        {isSelected && (
-                                                            <div className="absolute top-2 right-2 w-5 h-5 bg-white bg-opacity-30 rounded-full flex items-center justify-center">
-                                                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                                                            </div>
-                                                        )}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
-        </div>
-    );
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-            <div className="w-full max-w-4xl mx-auto px-4">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                        Find Your Perfect Hostel
-                    </h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        We'll guide you through a few simple questions to find the ideal accommodation. All your choices remain visible and easily editable!
-                    </p>
-                </div>
-
-                {/* Progress bar */}
-                <ProgressBar currentStep={currentStep} totalSteps={filterSteps.length} />
-
-                {/* All steps in always-visible format */}
-                <CompletedSteps />
-
-                {/* Loading indicator */}
-                {isLoading && isAllComplete && (
-                    <div className="bg-white rounded-xl shadow-lg p-8 text-center animate-fadeIn">
-                        <div className="flex items-center justify-center text-blue-600 mb-4">
-                            <div className="animate-spin rounded-full h-8 w-8 border-3 border-blue-600 border-t-transparent mr-4"></div>
-                            <span className="text-xl font-semibold">Searching for your perfect hostels...</span>
-                        </div>
-                        <p className="text-gray-600">We're matching your preferences with our database</p>
-                    </div>
-                )}
-
-                {/* Enhanced results section with UUID information for dev mode */}
-                {results.length > 0 && !isLoading && (
-                    <div className="bg-white rounded-xl shadow-lg p-8 animate-fadeIn">
-                        <div className="text-center mb-8">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                🎉 Excellent! We found {results.length} perfect matches
-                            </h2>
-                            <p className="text-gray-600">Here are hostels that match all your preferences</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {results.map((result) => (
-                                <div key={result.room_id} className="border border-gray-200 rounded-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    <div className="flex items-start justify-between mb-4">
-                                        <h3 className="text-xl font-semibold text-gray-800 flex-1 line-clamp-2">
-                                            {result.hostels?.name || 'Hostel Name'}
-                                        </h3>
-                                    </div>
-
-                                    <div className="flex items-center justify-center text-green-600 font-bold text-2xl mb-4 bg-green-50 rounded-lg py-3">
-                                        <IndianRupee size={24} />
-                                        <span>{result.annual_fee?.toLocaleString() || 'Contact'}</span>
-                                    </div>
-
-                                    {/* Branch information prominently displayed */}
-                                    <div className="flex items-center justify-center text-indigo-600 font-medium text-sm mb-4 bg-indigo-50 rounded-lg py-2">
-                                        <Building2 size={16} className="mr-2" />
-                                        <span>{result.hostels?.branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Campus Branch'}</span>
-                                    </div>
-
-                                    <div className="space-y-3 text-sm text-gray-600 mb-6">
-                                        <div className="flex justify-between items-center">
-                                            <span>Year Preference:</span>
-                                            <span className="font-medium bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
-                                                {result.year_of_study?.replace('_', ' ') || 'All Years'}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Room Type:</span>
-                                            <span className="font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                                                {result.ac_type === 'ac' ? 'AC' : 'Non AC'}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Bathroom:</span>
-                                            <span className="font-medium bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
-                                                {result.washroom_type === 'attached' ? 'Private' : 'Shared'}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Occupancy:</span>
-                                            <span className="font-medium bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">
-                                                {result.occupancy_limit} Person
-                                            </span>
-                                        </div>
-
-                                        {/* Development mode: Show UUIDs for tracing */}
-                                        {process.env.NODE_ENV === 'development' && (
-                                            <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
-                                                <div>Room ID: {result.room_id}</div>
-                                                <div>Hostel ID: {result.hostel_id}</div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
-                                        View Details
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* No results message */}
-                {results.length === 0 && isAllComplete && !isLoading && (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 text-center animate-fadeIn">
-                        <h3 className="text-xl font-semibold text-yellow-800 mb-3">
-                            No hostels found with your current preferences
-                        </h3>
-                        <p className="text-yellow-700 mb-4">
-                            Don't worry! You can easily modify your choices using the edit buttons above.
-                        </p>
-                        <p className="text-sm text-yellow-600">
-                            Try different combinations - sometimes a small change opens up many more options!
-                        </p>
-                    </div>
-                )}
+                    );
+                })}
             </div>
 
-            <style jsx>{`
-                .animate-fadeIn {
-                    animation: fadeIn 0.5s ease-in-out;
-                }
-                
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `}</style>
+            <hr style={{ border: 'none', height: '1px', backgroundColor: '#e5e7eb', margin: '2rem auto', maxWidth: '600px' }} />
+
+            {/* Loading State */}
+            {isLoading && isAllComplete && (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+                    <div style={{ marginBottom: '1rem' }}>🔍 Searching for your perfect hostels...</div>
+                    <p>We're matching your preferences with our database</p>
+                </div>
+            )}
+
+            {/* Results Section - Now using the separate component */}
+            {results.length > 0 && !isLoading && (
+                <div style={{ marginTop: '3rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#1f2937' }}>
+                            🎉 Excellent! We found {results.length} perfect matches
+                        </h2>
+                        <p style={{ color: '#6b7280' }}>Here are hostels that match all your preferences</p>
+                    </div>
+
+                    <ChooseHostelCard results={results} />
+                </div>
+            )}
+
+            {/* No Results Message */}
+            {results.length === 0 && isAllComplete && !isLoading && (
+                <div style={{
+                    textAlign: 'center',
+                    padding: '2rem',
+                    backgroundColor: '#fef3c7',
+                    borderRadius: '8px',
+                    maxWidth: '600px',
+                    margin: '2rem auto'
+                }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem', color: '#92400e' }}>
+                        No hostels found with your current preferences
+                    </h3>
+                    <p style={{ color: '#d97706' }}>
+                        Don't worry! You can easily modify your choices by clicking on any question above.
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
