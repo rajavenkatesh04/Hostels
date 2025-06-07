@@ -12,6 +12,7 @@
     "@gsap/react": "^2.1.2",
     "@supabase/supabase-js": "^2.49.9",
     "@vercel/analytics": "^1.5.0",
+    "geist": "^1.4.2",
     "gsap": "^3.13.0",
     "heroicons": "^2.2.0",
     "lucide-react": "^0.511.0",

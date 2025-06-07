@@ -4,16 +4,16 @@ import Footer from "@/_components/ui/Footer";
 import Navbar from "@/_components/ui/Navbar";
 import HostelsPage from "@/app/hostels/page";
 
-export default function Home() {
+export default function Page() {
     return (
-        <div className="font-[family-name:var(--font-geist-sans)]">
-            <Navbar />
-            <div className="mx-auto lg:px-50 sm:mx-auto px-4">
+        <div className="flex flex-col min-h-screen">
+            {/*<Navbar />*/}
+            <main className="flex-grow p-4">
                 <Banner />
-                <HostelsPage />
-                <Footer />
-            </div>
-
+                {/* Include the HostelsPage component if needed */}
+                {/* <HostelsPage /> */}
+            </main>
+            {/*<Footer />*/}
         </div>
     );
 }

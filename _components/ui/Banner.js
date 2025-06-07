@@ -16,7 +16,7 @@ export default function Banner() {
 
     return (
         <div
-            className="mt-20 mb-10 relative rounded-2xl overflow-hidden shadow-lg"
+            className="mb-10 relative rounded-2xl overflow-hidden shadow-lg"
             style={{
                 backgroundImage: "url('/download2.jpg')",
                 backgroundSize: 'cover',
