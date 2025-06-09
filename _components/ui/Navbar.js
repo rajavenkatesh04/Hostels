@@ -13,11 +13,11 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <img
+                        <Link href="/"><img
                             src="/srm-logo.svg"
                             className="h-15 w-20"
                             alt="SRM Logo"
-                        />
+                        /></Link>
                     </div>
 
                     {/* Desktop Navigation */}
@@ -41,7 +41,7 @@ export default function Navbar() {
                             </li>
                             <li>
                                 <Link
-                                    href="/hostels"
+                                    href="/hostel"
                                     className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                                 >
                                     Hostels
@@ -89,7 +89,7 @@ export default function Navbar() {
                             </li>
                             <li>
                                 <Link
-                                    href="/hostels"
+                                    href="/hostel"
                                     onClick={() => setIsOpen(false)}
                                     className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200"
                                 >

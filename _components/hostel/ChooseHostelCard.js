@@ -1,16 +1,19 @@
-"use client"
-
+"use client";
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { IndianRupee, Building2 } from 'lucide-react';
+import {
+    IndianRupee,
+    Building2,
+    Users,
+    Wifi,
+    Bath,
+    Calendar,
+    Snowflake
+} from 'lucide-react';
 
-// This component handles displaying hostel results in a clean card format
-// It receives the results as props and manages navigation to individual hostel pages
 export default function ChooseHostelCard({ results }) {
     const router = useRouter();
 
-    // Handle navigation to individual hostel details page
-    // Uses the hostel_id from Supabase to create a unique URL
     const handleViewDetails = (hostelId) => {
         if (hostelId) {
             router.push(`/hostel?id=${hostelId}`);
@@ -19,200 +22,102 @@ export default function ChooseHostelCard({ results }) {
         }
     };
 
-    // If no results are provided, don't render anything
     if (!results || results.length === 0) {
         return null;
     }
 
+    // Feature item component
+    const FeatureItem = ({ icon, text }) => (
+        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200">
+            {icon}
+            <span className="text-sm font-medium text-gray-700">{text}</span>
+        </div>
+    );
+
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 1rem'
-        }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto p-4">
             {results.map((result) => (
                 <div
                     key={result.room_id}
-                    style={{
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '12px',
-                        padding: '1.5rem',
-                        backgroundColor: '#ffffff',
-                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                        transition: 'all 0.3s ease',
-                        cursor: 'pointer'
-                    }}
+                    onClick={() => handleViewDetails(result.hostel_id)}
+                    className="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer bg-white flex flex-col"
                     onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-4px)';
-                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.borderColor = '#A0AEC0';
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                        e.currentTarget.style.borderColor = '#E2E8F0';
                     }}
                 >
-                    {/* Hostel Name */}
-                    <h3 style={{
-                        fontSize: '1.25rem',
-                        fontWeight: '600',
-                        marginBottom: '1rem',
-                        color: '#1f2937',
-                        lineHeight: '1.4'
-                    }}>
-                        {result.hostels?.name || 'Hostel Name'}
-                    </h3>
-
-                    {/* Price Display */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#ecfdf5',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                        marginBottom: '1rem'
-                    }}>
-                        <IndianRupee size={24} style={{ color: '#059669', marginRight: '0.25rem' }} />
-                        <span style={{
-                            fontSize: '1.75rem',
-                            fontWeight: 'bold',
-                            color: '#059669'
-                        }}>
-                            {result.annual_fee?.toLocaleString() || 'Contact for Price'}
-                        </span>
-                        <span style={{ color: '#6b7280', marginLeft: '0.5rem' }}>/year</span>
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
+                        <h3 className="text-lg font-bold mb-1">{result.hostels?.name || 'Hostel Name'}</h3>
+                        <div className="flex items-center gap-1 text-xs text-blue-100">
+                            <Building2 size={12} />
+                            <span>{result.hostels?.branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Campus Branch'}</span>
+                        </div>
                     </div>
 
-                    {/* Branch Information */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#eff6ff',
-                        padding: '0.75rem',
-                        borderRadius: '6px',
-                        marginBottom: '1.5rem'
-                    }}>
-                        <Building2 size={16} style={{ color: '#2563eb', marginRight: '0.5rem' }} />
-                        <span style={{
-                            color: '#2563eb',
-                            fontWeight: '500',
-                            fontSize: '0.9rem'
-                        }}>
-                            {result.hostels?.branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Campus Branch'}
-                        </span>
-                    </div>
-
-                    {/* Room Details */}
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr',
-                            gap: '0.75rem',
-                            fontSize: '0.9rem'
-                        }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Year:</span>
-                                <span style={{
-                                    backgroundColor: '#dcfce7',
-                                    color: '#166534',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '12px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: '500'
-                                }}>
-                                    {result.year_of_study?.replace('_', ' ') || 'All Years'}
-                                </span>
+                    {/* Content */}
+                    <div className="p-4 flex-grow">
+                        {/* Room Details */}
+                        <div className="mb-3">
+                            <h4 className="text-sm font-semibold text-gray-800 mb-2">Room Details</h4>
+                            <div className="space-y-2">
+                                <FeatureItem
+                                    icon={<Calendar size={14} className="text-gray-500" />}
+                                    text={`Year: ${result.year_of_study?.replace('_', ' ') || 'All Years'}`}
+                                />
+                                <FeatureItem
+                                    icon={<Users size={14} className="text-gray-500" />}
+                                    text={`${result.occupancy_limit} Person Room`}
+                                />
                             </div>
+                        </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>AC:</span>
-                                <span style={{
-                                    backgroundColor: '#dbeafe',
-                                    color: '#1e40af',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '12px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: '500'
-                                }}>
-                                    {result.ac_type === 'ac' ? 'AC' : 'Non AC'}
-                                </span>
+                        {/* Amenities */}
+                        <div className="mb-4">
+                            <h4 className="text-sm font-semibold text-gray-800 mb-2">Amenities</h4>
+                            <div className="space-y-2">
+                                <FeatureItem
+                                    icon={<Snowflake size={14} className="text-gray-500" />}
+                                    text={result.ac_type === 'ac' ? 'Air Conditioned' : 'Non-AC Room'}
+                                />
+                                <FeatureItem
+                                    icon={<Bath size={14} className="text-gray-500" />}
+                                    text={result.washroom_type === 'attached' ? 'Attached Bathroom' : 'Common Bathroom'}
+                                />
                             </div>
+                        </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Bathroom:</span>
-                                <span style={{
-                                    backgroundColor: '#f3e8ff',
-                                    color: '#7c3aed',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '12px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: '500'
-                                }}>
-                                    {result.washroom_type === 'attached' ? 'Private' : 'Shared'}
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Sharing:</span>
-                                <span style={{
-                                    backgroundColor: '#fed7aa',
-                                    color: '#c2410c',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '12px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: '500'
-                                }}>
-                                    {result.occupancy_limit} Person
-                                </span>
+                        {/* Pricing */}
+                        <div className="mt-auto p-3 bg-green-50 rounded-lg border border-green-100">
+                            <span className="text-xs text-green-600 font-medium block mb-1">Annual Fee</span>
+                            <div className="flex items-center gap-1">
+                                <IndianRupee size={16} className="text-green-700" />
+                                <span className="text-lg font-bold text-green-800">
+                  {result.annual_fee?.toLocaleString() || 'N/A'}
+                </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* View Details Button */}
+                    {/* Button */}
                     <button
-                        onClick={() => handleViewDetails(result.hostel_id)}
-                        style={{
-                            width: '100%',
-                            backgroundColor: '#2563eb',
-                            color: 'white',
-                            padding: '0.75rem 1rem',
-                            borderRadius: '8px',
-                            border: 'none',
-                            fontSize: '1rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#1d4ed8';
-                            e.target.style.transform = 'scale(1.02)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = '#2563eb';
-                            e.target.style.transform = 'scale(1)';
-                        }}
+                        className="w-full py-2 bg-blue-600 text-white text-sm font-semibold rounded-b-xl hover:bg-blue-700 transition-colors"
                     >
                         View Details
                     </button>
 
-                    {/* Development Mode Debug Info */}
-                    {process.env.NODE_ENV === 'development' && (
-                        <div style={{
-                            marginTop: '1rem',
-                            padding: '0.5rem',
-                            backgroundColor: '#f3f4f6',
-                            borderRadius: '4px',
-                            fontSize: '0.75rem',
-                            color: '#6b7280'
-                        }}>
-                            <div>Room ID: {result.room_id}</div>
-                            <div>Hostel ID: {result.hostel_id}</div>
-                        </div>
-                    )}
+                    {/* Dev Info */}
+                    {/*{process.env.NODE_ENV === 'development' && (*/}
+                    {/*    <div className="text-xs text-gray-400 text-center pt-1 pb-2 border-t border-gray-100">*/}
+                    {/*        Room ID: {result.room_id} | Hostel ID: {result.hostel_id}*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             ))}
         </div>

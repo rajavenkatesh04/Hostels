@@ -1,6 +1,5 @@
 "use client"
-
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
     ArrowLeft,
@@ -20,17 +19,14 @@ import {
     Loader2
 } from 'lucide-react';
 
-// Create a separate component that uses useSearchParams
-function HostelDetailsContent() {
+export default function HostelDetailsContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const hostelId = searchParams.get('id');
-
     const [hostelData, setHostelData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch hostel details when component mounts or ID changes
     useEffect(() => {
         const fetchHostelDetails = async () => {
             if (!hostelId) {
@@ -38,57 +34,36 @@ function HostelDetailsContent() {
                 setIsLoading(false);
                 return;
             }
-
             try {
                 setIsLoading(true);
                 setError(null);
-
                 const response = await fetch(`/api/hostel?id=${hostelId}`);
                 const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Failed to fetch hostel details');
-                }
-
-                if (data.success) {
-                    setHostelData(data.hostel);
-                } else {
-                    throw new Error(data.message || 'Failed to load hostel data');
-                }
+                if (!response.ok) throw new Error(data.message || 'Failed to fetch details');
+                setHostelData(data.hostel);
             } catch (err) {
-                console.error('Error fetching hostel details:', err);
+                console.error(err);
                 setError(err.message);
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchHostelDetails();
     }, [hostelId]);
 
-    // Helper function to format branch names for display
-    const formatBranchName = (branch) => {
-        return branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Branch';
-    };
+    // Format helper functions
+    const formatBranchName = (branch) =>
+        branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Branch';
 
-    // Helper function to format year of study
-    const formatYearOfStudy = (year) => {
-        return year?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'All Years';
-    };
+    const formatYearOfStudy = (year) =>
+        year?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'All Years';
 
     // Loading state
     if (isLoading) {
         return (
-            <div style={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                gap: '1rem'
-            }}>
-                <Loader2 size={48} style={{ color: '#2563eb', animation: 'spin 1s linear infinite' }} />
-                <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>Loading hostel details...</p>
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-50">
+                <Loader2 className="animate-spin text-blue-600" size={48} />
+                <p className="mt-4 text-lg text-gray-600">Loading hostel details...</p>
             </div>
         );
     }
@@ -96,462 +71,193 @@ function HostelDetailsContent() {
     // Error state
     if (error) {
         return (
-            <div style={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                gap: '1rem',
-                padding: '2rem'
-            }}>
-                <XCircle size={64} style={{ color: '#dc2626' }} />
-                <div style={{ textAlign: 'center' }}>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#1f2937' }}>
-                        Oops! Something went wrong
-                    </h1>
-                    <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>{error}</p>
-                    <button
-                        onClick={() => router.back()}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            backgroundColor: '#2563eb',
-                            color: 'white',
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: '8px',
-                            border: 'none',
-                            fontSize: '1rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            margin: '0 auto'
-                        }}
-                    >
-                        <ArrowLeft size={20} />
-                        Go Back
-                    </button>
-                </div>
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-50">
+                <XCircle className="text-red-500" size={64} />
+                <h1 className="mt-4 text-xl font-bold text-gray-800">Oops! Something went wrong</h1>
+                <p className="mt-2 text-gray-600">{error}</p>
+                <button
+                    onClick={() => router.back()}
+                    className="mt-4 px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                    Go Back
+                </button>
             </div>
         );
     }
 
-    // No data state
+    // No data found
     if (!hostelData) {
         return (
-            <div style={{
-                minHeight: '100vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                gap: '1rem'
-            }}>
-                <Building2 size={64} style={{ color: '#6b7280' }} />
-                <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>No hostel data found</p>
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-50">
+                <Building2 className="text-gray-400" size={64} />
+                <p className="mt-4 text-gray-600">No hostel data found.</p>
             </div>
         );
     }
 
     return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', padding: '2rem 1rem' }}>
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                {/* Header with Back Button */}
-                <div style={{ marginBottom: '2rem' }}>
-                    <button
-                        onClick={() => router.back()}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            backgroundColor: 'white',
-                            border: '1px solid #d1d5db',
-                            padding: '0.75rem 1rem',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            fontSize: '1rem',
-                            fontWeight: '500',
-                            color: '#374151',
-                            marginBottom: '1.5rem'
-                        }}
-                    >
-                        <ArrowLeft size={20} />
-                        Back to Results
-                    </button>
+        <div className="bg-gray-100 min-h-screen pb-10">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
-                    {/* Hostel Title Section */}
-                    <div style={{
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        padding: '2rem',
-                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                            <Building2 size={32} style={{ color: '#2563eb' }} />
-                            <h1 style={{
-                                fontSize: '2.5rem',
-                                fontWeight: 'bold',
-                                color: '#1f2937',
-                                margin: 0
-                            }}>
-                                {hostelData.name}
-                            </h1>
-                        </div>
+                {/* Back Button */}
+                <button
+                    onClick={() => router.back()}
+                    className="mb-6 flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-all text-gray-700 text-base font-medium"
+                >
+                    <ArrowLeft size={20} /> Back to Results
+                </button>
 
-                        {/* Quick Info Badges */}
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: '0.75rem',
-                            marginBottom: '1.5rem'
-                        }}>
-                            <span style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                backgroundColor: '#eff6ff',
-                                color: '#2563eb',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '20px',
-                                fontSize: '0.9rem',
-                                fontWeight: '500'
-                            }}>
-                                <MapPin size={16} />
-                                {formatBranchName(hostelData.branch)}
-                            </span>
-
-                            <span style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                backgroundColor: '#ecfdf5',
-                                color: '#059669',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '20px',
-                                fontSize: '0.9rem',
-                                fontWeight: '500'
-                            }}>
-                                <GraduationCap size={16} />
-                                {formatYearOfStudy(hostelData.year_of_study)}
-                            </span>
-
-                            <span style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                backgroundColor: '#fef3c7',
-                                color: '#d97706',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '20px',
-                                fontSize: '0.9rem',
-                                fontWeight: '500'
-                            }}>
-                                <User size={16} />
-                                {hostelData.gender === 'male' ? 'Boys Hostel' : 'Girls Hostel'}
-                            </span>
-                        </div>
-
-                        {/* Description */}
-                        <p style={{
-                            fontSize: '1.1rem',
-                            lineHeight: '1.6',
-                            color: '#4b5563',
-                            margin: 0
-                        }}>
-                            {hostelData.description}
-                        </p>
+                {/* Hostel Header */}
+                <section className="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                        <Building2 size={32} className="text-blue-600" />
+                        <h1 className="text-3xl font-bold text-gray-900">{hostelData.name}</h1>
                     </div>
-                </div>
+                    <div className="flex flex-wrap gap-3 mb-4">
+            <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+              <MapPin size={14} /> {formatBranchName(hostelData.branch)}
+            </span>
+                        <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+              <GraduationCap size={14} /> {formatYearOfStudy(hostelData.year_of_study)}
+            </span>
+                        <span className="inline-flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium">
+              <User size={14} /> {hostelData.gender === 'male' ? 'Boys Hostel' : 'Girls Hostel'}
+            </span>
+                    </div>
+                    <p className="text-lg text-gray-700">{hostelData.description}</p>
+                </section>
 
-                {/* Main Content Grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '2rem',
-                    marginBottom: '2rem'
-                }}>
-                    {/* Warden Information */}
-                    <div style={{
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        padding: '1.5rem',
-                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: '600',
-                            marginBottom: '1rem',
-                            color: '#1f2937',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <User size={20} />
-                            Warden Information
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <User size={16} style={{ color: '#6b7280' }} />
-                                <span style={{ fontWeight: '500', color: '#374151' }}>
-                                    {hostelData.warden.name}
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Phone size={16} style={{ color: '#6b7280' }} />
-                                <a
-                                    href={`tel:${hostelData.warden.contact}`}
-                                    style={{ color: '#2563eb', textDecoration: 'none' }}
-                                >
+                {/* Warden & Pricing Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    {/* Warden Info */}
+                    <section className="bg-white rounded-xl shadow-md p-6">
+                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800">
+                            <User size={20} /> Warden Information
+                        </h2>
+                        <ul className="space-y-3">
+                            <li className="flex items-center gap-2">
+                                <User size={16} className="text-gray-500" />
+                                <span className="text-gray-700">{hostelData.warden.name}</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Phone size={16} className="text-gray-500" />
+                                <a href={`tel:${hostelData.warden.contact}`} className="text-blue-600 hover:underline">
                                     {hostelData.warden.contact}
                                 </a>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <Mail size={16} style={{ color: '#6b7280' }} />
-                                <a
-                                    href={`mailto:${hostelData.warden.email}`}
-                                    style={{ color: '#2563eb', textDecoration: 'none' }}
-                                >
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Mail size={16} className="text-gray-500" />
+                                <a href={`mailto:${hostelData.warden.email}`} className="text-blue-600 hover:underline">
                                     {hostelData.warden.email}
                                 </a>
-                            </div>
-                        </div>
-                    </div>
+                            </li>
+                        </ul>
+                    </section>
 
-                    {/* Pricing Overview */}
-                    <div style={{
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        padding: '1.5rem',
-                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-                    }}>
-                        <h3 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: '600',
-                            marginBottom: '1rem',
-                            color: '#1f2937',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <IndianRupee size={20} />
-                            Pricing Overview
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Price Range:</span>
-                                <span style={{ fontWeight: '600', color: '#374151' }}>
-                                    ₹{hostelData.room_summary.cheapest_option?.toLocaleString()} - ₹{hostelData.room_summary.most_expensive_option?.toLocaleString()}
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Mess Fees:</span>
-                                <span style={{ fontWeight: '600', color: '#374151' }}>
-                                    ₹{hostelData.pricing.mess_fees?.toLocaleString()}/year
-                                </span>
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ color: '#6b7280' }}>Room Options:</span>
-                                <span style={{ fontWeight: '600', color: '#374151' }}>
-                                    {hostelData.room_summary.total_room_types} types available
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Pricing Info */}
+                    <section className="bg-white rounded-xl shadow-md p-6">
+                        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800">
+                            <IndianRupee size={20} /> Pricing Overview
+                        </h2>
+                        <ul className="space-y-3">
+                            <li className="flex justify-between">
+                                <span className="text-gray-600">Price Range:</span>
+                                <span className="font-medium text-gray-800">
+                  ₹{hostelData.room_summary.cheapest_option?.toLocaleString()} - ₹{hostelData.room_summary.most_expensive_option?.toLocaleString()}
+                </span>
+                            </li>
+                            <li className="flex justify-between">
+                                <span className="text-gray-600">Mess Fees:</span>
+                                <span className="font-medium text-gray-800">
+                  ₹{hostelData.pricing.mess_fees?.toLocaleString()}/year
+                </span>
+                            </li>
+                            <li className="flex justify-between">
+                                <span className="text-gray-600">Room Types Available:</span>
+                                <span className="font-medium text-gray-800">
+                  {hostelData.room_summary.total_room_types}
+                </span>
+                            </li>
+                        </ul>
+                    </section>
                 </div>
 
-                {/* Available Rooms */}
-                <div style={{
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    padding: '2rem',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-                }}>
-                    <h3 style={{
-                        fontSize: '1.5rem',
-                        fontWeight: '600',
-                        marginBottom: '1.5rem',
-                        color: '#1f2937'
-                    }}>
-                        Available Room Types
-                    </h3>
-
-                    {hostelData.available_rooms.length > 0 ? (
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                            gap: '1.5rem'
-                        }}>
-                            {hostelData.available_rooms.map((room) => (
-                                <div
-                                    key={room.id}
-                                    style={{
-                                        border: '1px solid #e5e7eb',
-                                        borderRadius: '8px',
-                                        padding: '1.5rem',
-                                        backgroundColor: '#f9fafb'
-                                    }}
-                                >
-                                    {/* Price Header */}
-                                    <div style={{
-                                        textAlign: 'center',
-                                        marginBottom: '1rem',
-                                        padding: '1rem',
-                                        backgroundColor: '#ecfdf5',
-                                        borderRadius: '6px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.25rem',
-                                            marginBottom: '0.25rem'
-                                        }}>
-                                            <IndianRupee size={24} style={{ color: '#059669' }} />
-                                            <span style={{
-                                                fontSize: '1.75rem',
-                                                fontWeight: 'bold',
-                                                color: '#059669'
-                                            }}>
-                                                {room.annual_fee.toLocaleString()}
-                                            </span>
+                {/* Rooms Section */}
+                <section className="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h2 className="text-2xl font-semibold mb-6 text-gray-800">Available Room Types</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {hostelData.available_rooms.length > 0 ? (
+                            hostelData.available_rooms.map((room) => (
+                                <div key={room.id} className="border border-gray-200 rounded-lg p-5 bg-gray-50 hover:shadow-md transition-shadow">
+                                    <div className="text-center mb-4">
+                                        <div className="flex items-center justify-center gap-1 mb-2">
+                                            <IndianRupee className="text-green-600" size={24} />
+                                            <span className="text-2xl font-bold text-green-700">{room.annual_fee.toLocaleString()}</span>
                                         </div>
-                                        <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>
-                                            per year (₹{room.monthly_fee.toLocaleString()}/month)
-                                        </span>
+                                        <small className="text-gray-500">per year (₹{room.monthly_fee.toLocaleString()}/month)</small>
                                     </div>
-
-                                    {/* Room Features */}
-                                    <div style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: '1fr 1fr',
-                                        gap: '0.75rem'
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <UsersIcon size={16} style={{ color: '#6b7280' }} />
-                                            <span style={{ fontSize: '0.9rem', color: '#374151' }}>
-                                                {room.occupancy} Person
-                                            </span>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <UsersIcon size={16} className="text-gray-500" />
+                                            <span className="text-gray-700">{room.occupancy} Person</span>
                                         </div>
-
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <div className="flex items-center gap-2">
                                             {room.ac_type === 'ac' ? (
-                                                <Snowflake size={16} style={{ color: '#2563eb' }} />
+                                                <Snowflake size={16} className="text-blue-500" />
                                             ) : (
-                                                <Sun size={16} style={{ color: '#f59e0b' }} />
+                                                <Sun size={16} className="text-yellow-500" />
                                             )}
-                                            <span style={{ fontSize: '0.9rem', color: '#374151' }}>
-                                                {room.ac_type === 'ac' ? 'AC' : 'Non AC'}
-                                            </span>
+                                            <span className="text-gray-700">{room.ac_type === 'ac' ? 'AC' : 'Non AC'}</span>
                                         </div>
-
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', gridColumn: '1 / -1' }}>
-                                            <Home size={16} style={{ color: '#6b7280' }} />
-                                            <span style={{ fontSize: '0.9rem', color: '#374151' }}>
-                                                {room.washroom_type === 'attached' ? 'Private Bathroom' : 'Shared Bathroom'}
-                                            </span>
+                                        <div className="flex items-center gap-2">
+                                            <Home size={16} className="text-gray-500" />
+                                            <span className="text-gray-700">
+                        {room.washroom_type === 'attached' ? 'Private Bathroom' : 'Shared Bathroom'}
+                      </span>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '2rem',
-                            color: '#6b7280'
-                        }}>
-                            <Building2 size={48} style={{ margin: '0 auto 1rem', color: '#d1d5db' }} />
-                            <p>No room information available</p>
-                        </div>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <p className="col-span-full text-center text-gray-500">No room types available</p>
+                        )}
+                    </div>
+                </section>
 
-                {/* Quick Features Overview */}
-                <div style={{
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    padding: '2rem',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                    marginTop: '2rem'
-                }}>
-                    <h3 style={{
-                        fontSize: '1.25rem',
-                        fontWeight: '600',
-                        marginBottom: '1.5rem',
-                        color: '#1f2937'
-                    }}>
-                        Hostel Features
-                    </h3>
-
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '1rem'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {/* Features Section */}
+                <section className="bg-white rounded-xl shadow-md p-6">
+                    <h2 className="text-2xl font-semibold mb-6 text-gray-800">Hostel Features</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex items-center gap-3">
                             {hostelData.room_summary.has_ac ? (
-                                <CheckCircle size={20} style={{ color: '#059669' }} />
+                                <CheckCircle className="text-green-600" size={20} />
                             ) : (
-                                <XCircle size={20} style={{ color: '#dc2626' }} />
+                                <XCircle className="text-red-500" size={20} />
                             )}
-                            <span style={{ color: '#374151' }}>AC Rooms Available</span>
+                            <span className="text-gray-700">AC Rooms Available</span>
                         </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div className="flex items-center gap-3">
                             {hostelData.room_summary.has_non_ac ? (
-                                <CheckCircle size={20} style={{ color: '#059669' }} />
+                                <CheckCircle className="text-green-600" size={20} />
                             ) : (
-                                <XCircle size={20} style={{ color: '#dc2626' }} />
+                                <XCircle className="text-red-500" size={20} />
                             )}
-                            <span style={{ color: '#374151' }}>Non-AC Rooms Available</span>
+                            <span className="text-gray-700">Non-AC Rooms Available</span>
                         </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <CheckCircle size={20} style={{ color: '#059669' }} />
-                            <span style={{ color: '#374151' }}>
-                                {hostelData.room_summary.occupancy_options.join(', ')} Person Sharing
-                            </span>
+                        <div className="flex items-center gap-3">
+                            <CheckCircle className="text-green-600" size={20} />
+                            <span className="text-gray-700">
+                {hostelData.room_summary.occupancy_options.join(', ')} Person Sharing
+              </span>
                         </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <CheckCircle size={20} style={{ color: '#059669' }} />
-                            <span style={{ color: '#374151' }}>Mess Facility</span>
+                        <div className="flex items-center gap-3">
+                            <CheckCircle className="text-green-600" size={20} />
+                            <span className="text-gray-700">Mess Facility</span>
                         </div>
                     </div>
-                </div>
+                </section>
+
             </div>
         </div>
-    );
-}
-
-// Loading fallback component for Suspense
-function LoadingFallback() {
-    return (
-        <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            gap: '1rem'
-        }}>
-            <Loader2 size={48} style={{ color: '#2563eb', animation: 'spin 1s linear infinite' }} />
-            <p style={{ color: '#6b7280', fontSize: '1.1rem' }}>Loading page...</p>
-        </div>
-    );
-}
-
-// Main component that wraps the content with Suspense
-export default function HostelDetailsPage() {
-    return (
-        <Suspense fallback={<LoadingFallback />}>
-            <HostelDetailsContent />
-        </Suspense>
     );
 }

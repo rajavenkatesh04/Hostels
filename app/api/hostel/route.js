@@ -1,7 +1,6 @@
 import { supabase, handleSupabaseError } from '@/lib/supabase'
 
-// GET /api/hostel?id={hostel_id}
-// This API fetches comprehensive information about a specific hostel
+
 export async function GET(request) {
     try {
         // Extract the hostel ID from URL search parameters
