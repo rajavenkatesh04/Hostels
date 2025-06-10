@@ -6,7 +6,7 @@ import FAQ from "@/app/faq/page";
 export default function Page() {
     return (
         <div className="flex flex-col min-h-screen">
-            <main className="flex-grow p-5">
+            <main className="flex-grow">
                 <Banner />
                 {/*<GoogleMap />*/}
                 <FAQ />
