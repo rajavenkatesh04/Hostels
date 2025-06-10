@@ -17,10 +17,10 @@ const FAQ = () => {
         <div className="max-w-3xl mx-auto px-4 py-12">
             {/* Header */}
             <div className="text-center mb-10">
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                <h2 className="text-2xl text-left font-bold underline text-gray-900 mb-3">
                     Frequently Asked Questions
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-left">
                     Everything you need to know about staying with us
                 </p>
             </div>

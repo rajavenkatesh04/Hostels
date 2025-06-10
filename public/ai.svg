@@ -1,0 +1,202 @@
+<svg width="2560" height="800" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#000" d="M0 0h3109v2267H0z"/>
+    <g transform="translate(160 -1120)">
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" repeatCount="indefinite" additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-3s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-3s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-3s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-6s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-6s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-6s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-9s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-9s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-9s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-12s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-12s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-12s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-15s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-15s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-15s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-18s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-18s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-18s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-21s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-21s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-21s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-24s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-24s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-24s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-27s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-27s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-27s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-30s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-30s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-30s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-33s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-33s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-33s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-36s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-36s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-36s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-39s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-39s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-39s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-42s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-42s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-42s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-45s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-45s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-45s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+        <ellipse cx="1574" cy="969" rx="1112" ry="224" transform-origin="1400 880" fill="url(#gradient)"
+                 fill-opacity=".24">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="36; 10; 36;" dur="51s"
+                              begin="-48s" repeatCount="indefinite" additive="replace"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="scale"
+                              values="1 1; 0.72 2.8; 0.22 1.2; 1 1;" dur="51s" begin="-48s" repeatCount="indefinite"
+                              additive="sum"/>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate"
+                              values="0 0; -780 20; -1200 200; 0 0;" dur="51s" begin="-48s" repeatCount="indefinite"
+                              additive="sum"/>
+        </ellipse>
+    </g>
+    <rect fill="url(#gradient-1)" width="1298" height="1560" x="900" y="0" transform="rotate(-30) translate(100 500)"></rect>
+    <defs>
+        <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0.84" stop-color="#5000E3"/>
+            <stop offset="1" stop-color="#157CF1"/>
+        </linearGradient>
+        <linearGradient id="gradient-1" x1="0" x2="1" y1="1" y2="1">
+            <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+            <stop offset="0.46" stop-color="#000000" stop-opacity="0.72"/>
+            <stop offset="1" stop-color="#000000" stop-opacity="1"/>
+        </linearGradient>
+    </defs>
+</svg>

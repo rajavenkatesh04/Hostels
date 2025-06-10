@@ -13,7 +13,7 @@ export const faqData = [
   },
   {
     question: "Do you have laundry facilities?",
-    answer: "Yes, laundry service is available for an additional ₹7500/year."
+    answer: "Yes, laundry service is available for an additional fee of ₹7500/year."
   },
   {
     question: "What’s your cancellation policy?",
@@ -22,5 +22,9 @@ export const faqData = [
   {
     question: "Can parents visit their ward in the hostel?",
     answer: "Yes, parents are allowed to visit their ward while at the hostel."
+  },
+  {
+    question: "What are the curfew timings?",
+    answer: "Boys : 9pm and Girls : 7pm."
   }
 ];
