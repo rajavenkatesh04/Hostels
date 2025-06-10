@@ -32,7 +32,7 @@ const GoogleMap = ({
                 const mapOptions = {
                     center,
                     zoom,
-                    mapId: process.env.NEXT_PUBLIC_GOOGLE_MAP_ID || 'HOSTEL_FINDER_MAP', // Use an env var for Map ID
+                    mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'HOSTEL_FINDER_MAP', // Use an env var for Map ID
                     disableDefaultUI: true,
                     zoomControl: true,
                     styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }]
