@@ -17,7 +17,7 @@ export default function Banner() {
                 >
 
                     <div className="bg-black/50 backdrop-blur-sm p-6 flex justify-left items-end h-60" >
-                        <h1 className="flex items-center gap-2 text-white text-2xl hover:text-blue-500 duration-200">Help me choose my hostel <span className="flex items-center"><ArrowRight size={25}/></span></h1>
+                        <h1 className="animate-pulse flex items-center gap-2 text-white text-2xl hover:text-blue-500 duration-200">Help me choose my hostel <span className="flex items-center"><ArrowRight size={25}/></span></h1>
                     </div>
                 </div>
             </Link>
