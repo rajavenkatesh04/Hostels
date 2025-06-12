@@ -1,14 +1,13 @@
-import { Copyright, Github } from 'lucide-react';
+import {Github} from "lucide-react";
 
 export default function Footer() {
-    return (
-        <footer className="relative flex flex-col items-center justify-center py-4 text-center bg-gray-500">
-            <p className="flex items-center gap-2 hover:underline">
-                Built by Raja Venkatesh
-                <a href="https://github.com/rajavenkatesh04" target="_blank" rel="noopener noreferrer">
-                    <Github className="w-5 h-5 hover:text-black transition-colors underline " />
+    return(
+        <footer className="w-full fixed bottom-0 bg-gray-500 flex items-center justify-center p-4">
+            <p className="flex items-center gap-2">Built with love by Raja
+                <a href="https://github.com/rajavenkatesh04" target="_blank" rel="noreferrer">
+                    <Github />
                 </a>
             </p>
         </footer>
-    );
+    )
 }
