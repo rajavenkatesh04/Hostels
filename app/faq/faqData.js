@@ -9,11 +9,11 @@ export const faqData = [
   },
   {
     question: "Do you provide beds and linens?",
-    answer: "No, students are expected to arrange their own mattresses and blankets."
+    answer: "No, students are expected to arrange their own mattresses and blankets. cots are provided."
   },
   {
     question: "Do you have laundry facilities?",
-    answer: "Yes, laundry service is available for an additional fee of ₹7500/year."
+    answer: "Yes, laundry service is available for an additional fee of ₹7500/year for boys and ₹8500/year for girls."
   },
   {
     question: "What’s your cancellation policy?",
