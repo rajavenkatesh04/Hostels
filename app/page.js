@@ -1,16 +1,13 @@
-import Banner from "@/_components/ui/Banner";
-import GoogleMap from "@/_components/maps/GoogleMap";
+import Banner from "@/_components/Banner";
 import FAQ from "@/app/faq/page";
 
 
-export default function Page() {
+export default function Home() {
     return (
-        <div className="flex flex-col min-h-screen">
-            <main className="flex-grow p-4 ">
-                <Banner />
-                {/*<GoogleMap />*/}
-                <FAQ />
-            </main>
+        <div>
+            <Banner />
+            <FAQ />
+
         </div>
     );
 }

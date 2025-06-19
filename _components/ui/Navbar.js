@@ -14,7 +14,7 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/*Logo*/}
                     <div className="flex-shrink-0">
-                        <Link href="/public">
+                        <Link href="/">
                             <Image src="srm-logo.svg" alt="SRM Logo" width="80" height="75"/>
                         </Link>
                     </div>
