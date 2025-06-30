@@ -21,6 +21,8 @@ export default function HostelFilter() {
     const resultsRef = useRef(null);
     const stepRefs = useRef([]);
 
+    const [matchInfo, setMatchInfo] = useState(null);
+
     const filterSteps = [
         {
             id: 'gender',
@@ -169,13 +171,22 @@ export default function HostelFilter() {
                 if (response.ok) {
                     const data = await response.json();
                     setResults(data.results || []);
+                    setMatchInfo({
+                        type: data.match_type,
+                        quality: data.match_quality,
+                        message: data.message,
+                        compromises: data.compromises || [],
+                        explanation: data.explanation
+                    });
                 } else {
                     console.error('API response not ok:', response.status);
                     setResults([]);
+                    setMatchInfo(null);
                 }
             } catch (error) {
                 console.error("API call failed:", error);
                 setResults([]);
+                setMatchInfo(null);
             } finally {
                 setIsLoading(false);
             }
@@ -286,6 +297,7 @@ export default function HostelFilter() {
             </div>
 
             {/* Results Section */}
+
             <div ref={resultsRef} className="py-8">
                 {isLoading && (
                     <div className="text-center py-12 px-4 text-gray-600">
@@ -298,11 +310,44 @@ export default function HostelFilter() {
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                                🎉 We Found {results.length} Match{results.length > 1 ? 'es' : ''}
+                                {results[0]?.match_score !== undefined ? (
+                                    `🏆 We Found ${results.length} Similar Option${results.length > 1 ? 's' : ''}`
+                                ) : (
+                                    `🎉 We Found ${results.length} Exact Match${results.length > 1 ? 'es' : ''}`
+                                )}
                             </h2>
-                            <p className="text-gray-600">These hostels perfectly fit your criteria.</p>
+                            <p className="text-gray-600">
+                                {results[0]?.match_score !== undefined ? (
+                                    "These hostels closely match your criteria."
+                                ) : (
+                                    "These hostels perfectly fit your criteria."
+                                )}
+                            </p>
                         </div>
-                        <ChooseHostelCard results={results} />
+
+                        {results[0]?.match_score !== undefined && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+                                <h3 className="text-xl font-semibold text-blue-800 mb-3">
+                                    ⚠️ No exact matches found
+                                </h3>
+                                <p className="text-blue-700 mb-4">
+                                    We couldn't find hostels that match all your criteria, but here are some similar options you might consider:
+                                </p>
+                                <div className="flex flex-wrap gap-3">
+                                    {Object.entries(selections).map(([key, value]) => (
+                                        <div key={key} className="px-3 py-1 bg-blue-100 rounded-full text-sm text-blue-800">
+                                            {key}: {value}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        <ChooseHostelCard
+                            results={results}
+                            isPartialMatch={results[0]?.match_score !== undefined}
+                            userSelections={selections}
+                        />
                     </div>
                 )}
 
@@ -310,9 +355,15 @@ export default function HostelFilter() {
                     <div className="max-w-4xl mx-auto px-4">
                         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 text-center">
                             <h3 className="text-2xl font-semibold text-yellow-800 mb-2">No Matches Found</h3>
-                            <p className="text-yellow-700">
-                                Try changing a selection above. Your perfect room is just a click away!
+                            <p className="text-yellow-700 mb-4">
+                                We couldn't find any hostels matching your criteria.
                             </p>
+                            <button
+                                onClick={() => setActiveStep(0)}
+                                className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                            >
+                                Try Different Filters
+                            </button>
                         </div>
                     </div>
                 )}

@@ -16,14 +16,14 @@ export async function POST(request) {
             );
         }
 
-        // Same conversion logic with branch
+        // Convert to database values
         const genderEnum = gender === 'boys' ? 'male' : 'female';
         const yearEnum = `${yearOfStudy}${yearOfStudy === '1' ? 'st' : yearOfStudy === '2' ? 'nd' : yearOfStudy === '3' ? 'rd' : 'th'}_year`;
         const occupancyLimit = parseInt(sharing);
         const branchEnum = branch;
 
-        // Enhanced query with branch filtering
-        const { data: results, error } = await supabase
+        // 1. First try exact match query
+        const { data: exactResults, error: exactError } = await supabase
             .from('hostel_rooms')
             .select(`
                 *,
@@ -50,44 +50,78 @@ export async function POST(request) {
             .eq('occupancy', occupancyLimit)
             .order('price', { ascending: true });
 
-        if (error) {
-            handleSupabaseError(error);
+        if (exactError) {
+            handleSupabaseError(exactError);
         }
 
-        // Enhanced transformation with UUIDs
-        const transformedResults = results.map(row => ({
-            room_id: row.id,
-            hostel_id: row.hostels.id,
-            hostels: {
-                name: row.hostels.name,
-                description: row.hostels.description,
-                branch: row.hostels.branch,
-                warden_name: row.hostels.warden_name,
-                warden_contact: row.hostels.warden_contact,
-                warden_email: row.hostels.warden_email
-            },
-            annual_fee: row.price,
-            ac_type: row.ac_type,
-            washroom_type: row.washroom_type,
-            occupancy_limit: row.occupancy,
-            year_of_study: row.hostels.year_of_study,
-            gender: row.hostels.gender,
-            branch: row.hostels.branch,
-            mess_fees: row.hostels.mess_fees
-        }));
+        // If we have exact matches, return them
+        if (exactResults && exactResults.length > 0) {
+            return Response.json({
+                success: true,
+                results: transformResults(exactResults),
+                count: exactResults.length,
+                match_type: 'exact',
+                filters_applied: body
+            });
+        }
+
+        // 2. If no exact matches, try partial matches (only relax AC, washroom, and sharing)
+        const { data: partialResults, error: partialError } = await supabase
+            .from('hostel_rooms')
+            .select(`
+                *,
+                hostels!inner(
+                    id,
+                    name,
+                    description,
+                    year_of_study,
+                    gender,
+                    branch,
+                    warden_name,
+                    warden_contact,
+                    warden_email,
+                    min_price,
+                    max_price,
+                    mess_fees
+                )
+            `)
+            // Strict requirements (non-negotiable)
+            .eq('hostels.gender', genderEnum)
+            .eq('hostels.year_of_study', yearEnum)
+            .eq('hostels.branch', branchEnum)
+            // Relaxable requirements (any combination)
+            .or(`ac_type.eq.${acType},washroom_type.eq.${washroomType},occupancy.eq.${occupancyLimit}`)
+            .order('price', { ascending: true })
+            .limit(10); // Limit to top 10 partial matches
+
+        if (partialError) {
+            handleSupabaseError(partialError);
+        }
+
+        // Calculate match score for each partial result (only considering relaxable filters)
+        const partialWithScores = (partialResults || []).map(result => {
+            let score = 0;
+            if (result.ac_type === acType) score += 1;
+            if (result.washroom_type === washroomType) score += 1;
+            if (result.occupancy === occupancyLimit) score += 1;
+
+            return {
+                ...result,
+                match_score: score,
+                matched_filters: {
+                    ac_type: result.ac_type === acType,
+                    washroom_type: result.washroom_type === washroomType,
+                    occupancy: result.occupancy === occupancyLimit
+                }
+            };
+        }).sort((a, b) => b.match_score - a.match_score); // Sort by highest score first
 
         return Response.json({
             success: true,
-            results: transformedResults,
-            count: transformedResults.length,
-            filters_applied: {
-                gender: genderEnum,
-                yearOfStudy: yearEnum,
-                branch: branchEnum,
-                acType,
-                washroomType,
-                sharing: occupancyLimit
-            }
+            results: transformResults(partialWithScores),
+            count: partialWithScores.length,
+            match_type: partialWithScores.length > 0 ? 'partial' : 'none',
+            filters_applied: body
         });
 
     } catch (error) {
@@ -97,4 +131,33 @@ export async function POST(request) {
             { status: 500 }
         );
     }
+}
+
+// Helper function to transform results
+function transformResults(results) {
+    return results.map(row => ({
+        room_id: row.id,
+        hostel_id: row.hostels.id,
+        hostels: {
+            name: row.hostels.name,
+            description: row.hostels.description,
+            branch: row.hostels.branch,
+            warden_name: row.hostels.warden_name,
+            warden_contact: row.hostels.warden_contact,
+            warden_email: row.hostels.warden_email
+        },
+        annual_fee: row.price,
+        ac_type: row.ac_type,
+        washroom_type: row.washroom_type,
+        occupancy_limit: row.occupancy,
+        year_of_study: row.hostels.year_of_study,
+        gender: row.hostels.gender,
+        branch: row.hostels.branch,
+        mess_fees: row.hostels.mess_fees,
+        // Additional fields for partial matches
+        ...(row.match_score !== undefined && {
+            match_score: row.match_score,
+            matched_filters: row.matched_filters
+        })
+    }));
 }

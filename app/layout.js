@@ -3,6 +3,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/_components/ui/Navbar";
 import Footer from "@/_components/ui/Footer";
+import {Providers} from "@/Providers";
 
 export const metadata = {
     title: "Hostels - Find Your Perfect Stay",
@@ -20,12 +21,13 @@ export default function RootLayout({ children }) {
             />
         </head>
         <body className="antialiased">
-        <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow pt-16">{children}</main>
-            {/*<Footer />*/}
-        </div>
-        <Analytics />
+        <Providers>
+            <div className="flex flex-col min-h-screen">
+                <Navbar/>
+                <main className="flex-grow pt-16">{children}</main>
+                {/*<Footer />*/}
+            </div>
+            <Analytics/></Providers>
         </body>
         </html>
     );
