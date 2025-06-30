@@ -341,7 +341,7 @@ export default function HostelDetailsContent() {
                                 <ul className="space-y-3 text-sm text-gray-700">
                                     <li className="flex items-start gap-3 font-light">
                                         <span className="text-indigo-500 mt-1">•</span>
-                                        <span>Prices are for the entire academic year (10 months)</span>
+                                        <span>Prices are for one entire academic year</span>
                                     </li>
                                     <li className="flex items-start gap-3 font-light">
                                         <span className="text-indigo-500 mt-1">•</span>
@@ -349,11 +349,7 @@ export default function HostelDetailsContent() {
                                     </li>
                                     <li className="flex items-start gap-3 font-light">
                                         <span className="text-indigo-500 mt-1">•</span>
-                                        <span>Security deposit of ₹5,000 (refundable) required</span>
-                                    </li>
-                                    <li className="flex items-start gap-3 font-light">
-                                        <span className="text-indigo-500 mt-1">•</span>
-                                        <span>Laundry service can be added later</span>
+                                        <span>Laundry service can also be availed later by contacting warden.</span>
                                     </li>
                                 </ul>
                             </div>
