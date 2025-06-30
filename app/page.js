@@ -8,7 +8,6 @@ export default function Home() {
             <Banner />
             <Maps />
             <FAQ />
-
         </div>
     );
 }
