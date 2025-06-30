@@ -300,48 +300,58 @@ export default function HostelFilter() {
 
             <div ref={resultsRef} className="py-8">
                 {isLoading && (
-                    <div className="text-center py-12 px-4 text-gray-600">
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-2">Finding Your Hostel...</h3>
-                        <p>We're matching your preferences with available rooms.</p>
+                    <div className="text-center py-12 px-4">
+                        <div className="flex flex-col items-center gap-4">
+                            {/* Pulsing spinner */}
+                            <div className="relative">
+                                <div className="w-12 h-12 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                                <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-teal-400 rounded-full animate-spin animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-2xl font-light text-gray-900 tracking-wide">Finding Your Perfect Match</h3>
+                                <p className="text-gray-600 font-medium">Analyzing preferences and available rooms...</p>
+                            </div>
+                        </div>
                     </div>
                 )}
 
                 {!isLoading && results.length > 0 && (
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4 tracking-wide">
                                 {results[0]?.match_score !== undefined ? (
-                                    `🏆 We Found ${results.length} Similar Option${results.length > 1 ? 's' : ''}`
+                                    <>
+                                        Perfect matches weren't available, but we found{' '}
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500 font-medium">
+                                {results.length}
+                            </span>
+                                        {' '}alternative{results.length > 1 ? 's' : ''} for you
+                                    </>
                                 ) : (
-                                    `🎉 We Found ${results.length} Exact Match${results.length > 1 ? 'es' : ''}`
+                                    <>
+                                        Found{' '}
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-indigo-600 font-medium">
+                                {results.length}
+                            </span>
+                                        {' '}perfect match{results.length > 1 ? 'es' : ''} for your preferences
+                                    </>
                                 )}
                             </h2>
-                            <p className="text-gray-600">
-                                {results[0]?.match_score !== undefined ? (
-                                    "These hostels closely match your criteria."
-                                ) : (
-                                    "These hostels perfectly fit your criteria."
-                                )}
-                            </p>
-                        </div>
 
-                        {results[0]?.match_score !== undefined && (
-                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-                                <h3 className="text-xl font-semibold text-blue-800 mb-3">
-                                    ⚠️ No exact matches found
-                                </h3>
-                                <p className="text-blue-700 mb-4">
-                                    We couldn't find hostels that match all your criteria, but here are some similar options you might consider:
+                            {/* Only show message for exact matches - keep it simple */}
+                            {results[0]?.match_score === undefined && (
+                                <p className="text-gray-600 font-medium">
+                                    These hostels meet all your specified criteria.
                                 </p>
-                                <div className="flex flex-wrap gap-3">
-                                    {Object.entries(selections).map(([key, value]) => (
-                                        <div key={key} className="px-3 py-1 bg-blue-100 rounded-full text-sm text-blue-800">
-                                            {key}: {value}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                            )}
+
+                            {/* For partial matches, show a brief professional message */}
+                            {results[0]?.match_score !== undefined && (
+                                <p className="text-gray-600 font-medium">
+                                    Consider these quality alternatives that closely match your needs.
+                                </p>
+                            )}
+                        </div>
 
                         <ChooseHostelCard
                             results={results}
@@ -353,16 +363,16 @@ export default function HostelFilter() {
 
                 {!isLoading && isAllComplete && results.length === 0 && (
                     <div className="max-w-4xl mx-auto px-4">
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 text-center">
-                            <h3 className="text-2xl font-semibold text-yellow-800 mb-2">No Matches Found</h3>
-                            <p className="text-yellow-700 mb-4">
-                                We couldn't find any hostels matching your criteria.
+                        <div className="bg-white border-2 border-amber-200 rounded-xl p-8 text-center shadow-lg">
+                            <h3 className="text-2xl font-light text-gray-900 mb-3 tracking-wide">No Available Matches</h3>
+                            <p className="text-gray-600 mb-6 font-medium">
+                                Unfortunately, no hostels currently match your specific criteria.
                             </p>
                             <button
                                 onClick={() => setActiveStep(0)}
-                                className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                                className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105"
                             >
-                                Try Different Filters
+                                Adjust Preferences
                             </button>
                         </div>
                     </div>
