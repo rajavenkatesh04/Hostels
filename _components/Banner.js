@@ -1,13 +1,12 @@
 import Link from "next/link";
 import {ArrowRight} from "lucide-react";
 
-
 export default function Banner() {
     return(
         <div>
             <Link href="/choose">
                 <div
-                    className="m-10 rounded-2xl overflow-hidden shadow-lg"
+                    className="m-6 rounded-2xl overflow-hidden shadow-lg"
                     style={{
                         backgroundImage: "url('bg2.jpg')",
                         backgroundSize: "cover",
@@ -16,8 +15,8 @@ export default function Banner() {
                     }}
                 >
 
-                    <div className="bg-black/50 backdrop-blur-sm p-6 flex justify-left items-end h-60" >
-                        <h1 className="animate-pulse flex items-center gap-2 text-white text-2xl hover:text-blue-500 duration-200">Help me choose my hostel <span className="flex items-center"><ArrowRight size={25}/></span></h1>
+                    <div className="bg-black/20 p-6 backdrop-blur-xl flex justify-left items-end h-60" >
+                        <h1 className="animate-pulse flex items-center text-white text-2xl hover:text-blue-700 duration-300">Help me choose my hostel <span className="flex items-center"><ArrowRight size={30}/></span></h1>
                     </div>
                 </div>
             </Link>
