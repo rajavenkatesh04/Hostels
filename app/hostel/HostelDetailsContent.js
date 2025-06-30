@@ -191,7 +191,7 @@ export default function HostelDetailsContent() {
                                                         {room.occupancy} Sharing {room.ac_type === 'ac' ? 'AC' : 'Non-AC'}
                                                     </h3>
                                                     <p className="text-sm text-gray-600 font-light">
-                                                        {room.washroom_type === 'attached' ? 'Private Bathroom' : 'Shared Bathroom'}
+                                                        {room.washroom_type === 'attached' ? 'Attached Bathroom' : 'Common Bathroom'}
                                                     </p>
                                                 </div>
                                                 <div className="text-right">
