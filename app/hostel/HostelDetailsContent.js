@@ -18,7 +18,8 @@ import {
     ShoppingCart,
     ShieldCheck,
     WashingMachine,
-    Info
+    Info,
+    Wifi
 } from 'lucide-react';
 
 export default function HostelDetailsContent() {
@@ -400,6 +401,10 @@ export default function HostelDetailsContent() {
                                             <li className="flex items-center gap-3">
                                                 <CheckCircle className="text-teal-500" size={18} />
                                                 <span className="text-gray-700 font-light">Laundry Service</span>
+                                            </li>
+                                            <li className="flex items-center gap-3">
+                                                <Wifi className="text-teal-500" size={18} />
+                                                <span className="text-gray-700 font-light">24/7 Wifi</span>
                                             </li>
                                         </ul>
                                     </div>
