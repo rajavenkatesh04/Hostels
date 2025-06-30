@@ -61,6 +61,7 @@ export default function HostelDetailsContent() {
 
     const formatBranchName = (branch) =>
         branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Unknown Branch';
+
     const formatYearOfStudy = (year) =>
         year?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'All Years';
 
@@ -68,7 +69,7 @@ export default function HostelDetailsContent() {
         if (!selectedRoom) return 0;
         let total = selectedRoom.annual_fee + hostelData.pricing.mess_fees;
         if (includeLaundry) {
-            total += hostelData.laundry_fees || 7500;
+            total += hostelData.pricing.laundry_fees || 0;
         }
         return total;
     };
@@ -138,7 +139,6 @@ export default function HostelDetailsContent() {
                 >
                     <ArrowLeft size={20} /> Back to Results
                 </button>
-
                 <div className="grid lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                         <section className="space-y-6">
@@ -165,8 +165,8 @@ export default function HostelDetailsContent() {
                             <p className="text-lg text-gray-700 font-light leading-relaxed">
                                 {hostelData.description}
                             </p>
+                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
                         </section>
-
                         <section className="space-y-6">
                             <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
                                 <Home size={24} className="text-indigo-500" />
@@ -211,7 +211,35 @@ export default function HostelDetailsContent() {
                             </div>
                             <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
                         </section>
-
+                        <section className="space-y-6">
+                            <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
+                                <User size={24} className="text-indigo-500" />
+                                Warden Contact
+                            </h2>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-indigo-500/20 to-teal-500/20 flex items-center justify-center border border-indigo-500/30">
+                                        <User size={20} className="text-indigo-500" />
+                                    </div>
+                                    <div>
+                                        <p className="text-lg font-medium text-gray-900">{hostelData.warden.name}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <Phone size={18} className="text-indigo-500" />
+                                    <a href={`tel:${hostelData.warden.contact}`} className="text-teal-500 hover:underline font-light">
+                                        {hostelData.warden.contact}
+                                    </a>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <Mail size={18} className="text-indigo-500 mt-0.5" />
+                                    <a href={`mailto:${hostelData.warden.email}`} className="text-teal-500 hover:underline font-light break-all sm:break-normal">
+                                        {hostelData.warden.email}
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
+                        </section>
                         <section className="space-y-6">
                             <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
                                 <Info size={24} className="text-indigo-500" />
@@ -238,41 +266,8 @@ export default function HostelDetailsContent() {
                                     <div className="font-medium text-gray-900">{hostelData.room_summary.occupancy_options.join('/')}</div>
                                 </div>
                             </div>
-                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
-                        </section>
-
-                        <section className="space-y-6">
-                            <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
-                                <User size={24} className="text-indigo-500" />
-                                Warden Contact
-                            </h2>
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-indigo-500/20 to-teal-500/20 flex items-center justify-center border border-indigo-500/30">
-                                        <User size={20} className="text-indigo-500" />
-                                    </div>
-                                    <div>
-                                        <p className="text-lg font-medium text-gray-900">{hostelData.warden.name}</p>
-                                        <p className="text-sm text-gray-600 font-light">Warden</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <Phone size={18} className="text-indigo-500" />
-                                    <a href={`tel:${hostelData.warden.contact}`} className="text-teal-500 hover:underline font-light">
-                                        {hostelData.warden.contact}
-                                    </a>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <Mail size={18} className="text-indigo-500 mt-0.5" />
-                                    <a href={`mailto:${hostelData.warden.email}`} className="text-teal-500 hover:underline font-light break-all sm:break-normal">
-                                        {hostelData.warden.email}
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
                         </section>
                     </div>
-
                     <div className="space-y-8">
                         <section className="sticky top-6 space-y-8">
                             <div className="border border-gray-300 rounded-xl p-6">
@@ -312,7 +307,7 @@ export default function HostelDetailsContent() {
                                                         />
                                                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
                                                     </label>
-                                                    <span className="font-medium text-gray-900">₹{(hostelData.laundry_fees || 7500).toLocaleString()}</span>
+                                                    <span className="font-medium text-gray-900">₹{hostelData.pricing.laundry_fees.toLocaleString()}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -338,7 +333,30 @@ export default function HostelDetailsContent() {
                                     <p className="text-gray-500 text-center py-8 font-light">Select a room type to see pricing</p>
                                 )}
                             </div>
-
+                            <div className="border border-indigo-500/20 bg-indigo-500/5 rounded-xl p-6">
+                                <h3 className="font-medium text-indigo-500 mb-4 flex items-center gap-3">
+                                    <Info size={18} />
+                                    Important Notes
+                                </h3>
+                                <ul className="space-y-3 text-sm text-gray-700">
+                                    <li className="flex items-start gap-3 font-light">
+                                        <span className="text-indigo-500 mt-1">•</span>
+                                        <span>Prices are for the entire academic year (10 months)</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 font-light">
+                                        <span className="text-indigo-500 mt-1">•</span>
+                                        <span>Mess fees are mandatory for all residents</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 font-light">
+                                        <span className="text-indigo-500 mt-1">•</span>
+                                        <span>Security deposit of ₹5,000 (refundable) required</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 font-light">
+                                        <span className="text-indigo-500 mt-1">•</span>
+                                        <span>Laundry service can be added later</span>
+                                    </li>
+                                </ul>
+                            </div>
                             <div className="border border-indigo-500/20 bg-indigo-500/5 rounded-xl p-6">
                                 <h3 className="font-medium text-indigo-500 mb-4 flex items-center gap-3">
                                     <ShieldCheck size={24} className="text-indigo-500" />
