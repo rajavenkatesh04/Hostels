@@ -100,7 +100,8 @@ export async function GET(request) {
             pricing: {
                 min_price: hostelData.min_price,
                 max_price: hostelData.max_price,
-                mess_fees: hostelData.mess_fees
+                mess_fees: hostelData.mess_fees,
+                laundry_fees: hostelData.laundry_fees
             },
 
             // Available rooms organized by type for easy display

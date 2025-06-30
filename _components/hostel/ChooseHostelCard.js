@@ -2,7 +2,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
-    IndianRupee,
     Building2,
     Users,
     ArrowRight,
@@ -26,70 +25,53 @@ export default function ChooseHostelCard({ results }) {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto p-4">
             {results.map((result) => (
-                <div
-                    key={result.room_id}
-                    className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-lg transition-all duration-200 group"
-                >
-                    {/* Header */}
-                    <div className="p-4 border-b border-gray-100">
-                        <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                <div key={result.room_id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    {/* Card Header with Hostel Name */}
+                    <div className="bg-gradient-to-r from-indigo-500 to-teal-500 p-4">
+                        <h3 className="text-white text-xl font-bold">
                             {result.hostels?.name || 'Hostel Name'}
                         </h3>
-                        <div className="flex items-center gap-1 text-sm text-gray-500">
+                        <div className="flex items-center gap-1 text-sm text-indigo-100 mt-1">
                             <Building2 size={14} />
                             <span>
-                                {result.hostels?.branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Campus Branch'}
-                            </span>
+                {result.hostels?.branch?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Campus Branch'}
+              </span>
                         </div>
                     </div>
 
-                    {/* Quick Info */}
-                    <div className="p-4 space-y-3">
-                        {/* Room Type */}
-                        <div className="flex items-center justify-between">
+                    {/* Card Body */}
+                    <div className="p-6">
+                        <div className="flex justify-between items-center mb-4">
                             <div className="flex items-center gap-2">
-                                <Users size={16} className="text-gray-400" />
-                                <span className="text-sm text-gray-600">
-                                    {result.occupancy_limit} Person Room
-                                </span>
+                                <Users size={18} className="text-gray-500" />
+                                <span className="text-gray-700">
+                  {result.occupancy_limit} Person Room
+                </span>
                             </div>
-                            <div className="flex gap-1">
+                            <div className="flex gap-2">
                                 {result.ac_type === 'ac' && (
-                                    <div className="bg-blue-50 p-1 rounded">
-                                        <Snowflake size={12} className="text-blue-600" />
+                                    <div className="bg-indigo-100 p-2 rounded-full">
+                                        <Snowflake size={16} className="text-indigo-600" />
                                     </div>
                                 )}
                                 {result.washroom_type === 'attached' && (
-                                    <div className="bg-green-50 p-1 rounded">
-                                        <Bath size={12} className="text-green-600" />
+                                    <div className="bg-teal-100 p-2 rounded-full">
+                                        <Bath size={16} className="text-teal-600" />
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        {/* Pricing */}
-                        <div className="bg-gray-50 rounded-lg p-3">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="flex items-center gap-1">
-                                        <IndianRupee size={18} className="text-gray-700" />
-                                        <span className="text-xl font-bold text-gray-900">
-                                            {result.annual_fee?.toLocaleString() || 'N/A'}
-                                        </span>
-                                    </div>
-                                    <span className="text-xs text-gray-500">per year, excl. laundry</span>
-                                </div>
-                                <button
-                                    onClick={() => handleViewDetails(result.hostel_id)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors group-hover:scale-105 transform duration-200"
-                                >
-                                    View Details
-                                    <ArrowRight size={14} />
-                                </button>
-                            </div>
-                        </div>
+                        {/* View Details Button */}
+                        <button
+                            onClick={() => handleViewDetails(result.hostel_id)}
+                            className="w-full bg-gradient-to-r from-indigo-500 to-teal-500 hover:from-indigo-600 hover:to-teal-600 text-white py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors duration-300 transform hover:scale-105"
+                        >
+                            View Details
+                            <ArrowRight size={16} />
+                        </button>
                     </div>
                 </div>
             ))}
