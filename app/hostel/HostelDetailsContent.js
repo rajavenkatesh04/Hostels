@@ -200,7 +200,6 @@ export default function HostelDetailsContent() {
                               {room.annual_fee.toLocaleString()}
                             </span>
                                                     </div>
-                                                    <small className="text-xs text-gray-500 font-light">(₹{room.monthly_fee.toLocaleString()}/month)</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -317,9 +316,6 @@ export default function HostelDetailsContent() {
                                                 <span className="text-2xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-teal-500">
                           ₹{calculateTotalPrice().toLocaleString()}
                         </span>
-                                            </div>
-                                            <div className="text-sm text-gray-500 text-right font-light">
-                                                (~₹{Math.round(calculateTotalPrice() / 12).toLocaleString()}/month)
                                             </div>
                                         </div>
                                         <button
