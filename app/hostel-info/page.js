@@ -23,15 +23,20 @@ import {
     BookOpen,
     Gamepad2,
     ShoppingBag,
-    Zap
+    Zap,
+    Search,
+    X
 } from 'lucide-react';
+import SearchBar from "@/_components/ui/SearchBar";
 
 export default function HostelsPage() {
     const router = useRouter();
     const [hostels, setHostels] = useState([]);
+    const [filteredHostels, setFilteredHostels] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [filter, setFilter] = useState('all'); // 'all', 'male', 'female'
+    const [filter, setFilter] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchHostels = async () => {
@@ -42,6 +47,7 @@ export default function HostelsPage() {
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.message || 'Failed to fetch hostels');
                 setHostels(data.hostels);
+                setFilteredHostels(data.hostels);
             } catch (err) {
                 console.error(err);
                 setError(err.message);
@@ -53,10 +59,24 @@ export default function HostelsPage() {
         fetchHostels();
     }, []);
 
-    const filteredHostels = hostels.filter(hostel => {
-        if (filter === 'all') return true;
-        return hostel.gender === filter;
-    });
+    useEffect(() => {
+        let results = hostels;
+
+        if (filter !== 'all') {
+            results = results.filter(hostel => hostel.gender === filter);
+        }
+
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            results = results.filter(hostel =>
+                hostel.name.toLowerCase().includes(query) ||
+                (hostel.description && hostel.description.toLowerCase().includes(query)) ||
+                (hostel.branch && hostel.branch.toLowerCase().includes(query))
+            );
+        }
+
+        setFilteredHostels(results);
+    }, [hostels, filter, searchQuery]);
 
     const keyFeatures = [
         {
@@ -68,13 +88,13 @@ export default function HostelsPage() {
         {
             id: 2,
             title: "Modern Amenities",
-            description: "Fully equipped gym, Wi-Fi, lifts, air-conditioned waiting halls, study halls, TV halls, and indoor games facilities ",
+            description: "Fully equipped gym, Wi-Fi, lifts, air-conditioned waiting halls, study halls, TV halls, and indoor games facilities",
             icon: <Wifi className="text-teal-600" size={24} />
         },
         {
             id: 3,
             title: "Convenient Living",
-            description: "On-campus supermarkets, eatery shops, beauty parlour, clothing shops, photocopier services  and jogging tracks for comfortable student life.",
+            description: "On-campus supermarkets, eatery shops, beauty parlour, clothing shops, photocopier services and jogging tracks for comfortable student life.",
             icon: <MapPin className="text-indigo-600" size={24} />
         }
     ];
@@ -157,8 +177,11 @@ export default function HostelsPage() {
                     </p>
                 </div>
 
+                {/* Search Bar */}
+                <SearchBar />
+
                 {/* Key Features */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                     {keyFeatures.map(feature => (
                         <div key={feature.id} className="group p-6 rounded-xl border border-gray-300 bg-gray-50 hover:border-indigo-600/50 hover:bg-indigo-600/5 transition-all duration-300">
                             <div className="flex items-center gap-3 mb-4">
@@ -243,37 +266,39 @@ export default function HostelsPage() {
                 </div>
 
                 {/* Filter Buttons */}
-                <div className="flex justify-center gap-4 mb-8">
-                    <button
-                        onClick={() => setFilter('all')}
-                        className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                            filter === 'all'
-                                ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                    >
-                        All Hostels
-                    </button>
-                    <button
-                        onClick={() => setFilter('male')}
-                        className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                            filter === 'male'
-                                ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                    >
-                        Boys Hostels
-                    </button>
-                    <button
-                        onClick={() => setFilter('female')}
-                        className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                            filter === 'female'
-                                ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                    >
-                        Girls Hostels
-                    </button>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
+                    <div className="flex gap-4">
+                        <button
+                            onClick={() => setFilter('all')}
+                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                filter === 'all'
+                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                        >
+                            All Hostels
+                        </button>
+                        <button
+                            onClick={() => setFilter('male')}
+                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                filter === 'male'
+                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                        >
+                            Boys Hostels
+                        </button>
+                        <button
+                            onClick={() => setFilter('female')}
+                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                filter === 'female'
+                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                        >
+                            Girls Hostels
+                        </button>
+                    </div>
                 </div>
 
                 {/* Results Count */}
@@ -282,6 +307,9 @@ export default function HostelsPage() {
                         <p className="text-gray-600 font-light">
                             Showing <span className="font-medium text-indigo-600">{filteredHostels.length}</span>
                             {filter === 'all' ? ' hostels' : ` ${filter} hostels`}
+                            {searchQuery && (
+                                <span> matching <span className="font-medium">"{searchQuery}"</span></span>
+                            )}
                         </p>
                     </div>
                 )}
@@ -291,7 +319,11 @@ export default function HostelsPage() {
                     <div className="text-center py-16">
                         <Building2 className="mx-auto text-gray-400 mb-4" size={64} />
                         <h3 className="text-xl font-light text-gray-600 mb-2">No hostels found</h3>
-                        <p className="text-gray-500">Try adjusting your filter selection</p>
+                        <p className="text-gray-500">
+                            {searchQuery
+                                ? "Try a different search term or clear filters"
+                                : "Try adjusting your filter selection"}
+                        </p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
