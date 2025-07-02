@@ -17,14 +17,14 @@ export const faqData = [
   },
   {
     question: "What’s your cancellation policy?",
-    answer: "No refunds are given. Please double-check before booking. In exceptional cases, room exchange may be possible."
+    answer: "please check the following link for cancellation policy [link]."
   },
   {
     question: "Can parents visit their ward in the hostel?",
-    answer: "Yes, parents are allowed to visit their ward while at the hostel."
+    answer: "Yes, parents are allowed to visit their ward from 9am to 6pm."
   },
   {
-    question: "What are the curfew timings?",
-    answer: "Boys : 9pm and Girls : 7pm."
+    question: "How  is attendance managed?",
+    answer: "Students are expected to give biometric attendance everyday."
   }
 ];

@@ -50,6 +50,9 @@ export default function Navbar() {
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center space-x-2">
+                        <div className="px-4 py-3">
+                            <HostelSearchBar />
+                        </div>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="p-2 rounded-md hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -62,9 +65,7 @@ export default function Navbar() {
                 {/*Mobile Menu navigation*/}
                 {isOpen && (
                     <div className="md:hidden border-t bg-white">
-                        <div className="px-4 py-3">
-                            <HostelSearchBar />
-                        </div>
+
                         <ul className="px-2 pb-3 space-y-1">
                             <li>
                                 <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">

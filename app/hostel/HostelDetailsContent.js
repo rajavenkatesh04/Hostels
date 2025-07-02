@@ -77,7 +77,7 @@ export default function HostelDetailsContent() {
     const handleProceedToBooking = () => {
         setIsRedirecting(true);
         setTimeout(() => {
-            window.open('https://www.srmist.edu.in/srm-hostels/', '_blank');
+            window.open('https://sp.srmist.edu.in/srmiststudentportal/students/loginManager/youLogin.jsp', '_blank');
             setIsRedirecting(false);
         }, 2000);
     };
