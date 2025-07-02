@@ -99,11 +99,12 @@ const Loader = () => {
             <div className="loader-container">
                 <p>Loading</p>
                 <div className="words">
-                    <span className="word">amenities...</span>
                     <span className="word">room details...</span>
+                    <span className="word">amenities...</span>
+                    <span className="word">availability...</span>
                     <span className="word">gallery...</span>
                     <span className="word">features...</span>
-                    <span className="word">availability...</span>
+
                 </div>
             </div>
         </>
