@@ -150,12 +150,12 @@ export default function HostelsPage() {
 
     const hostelStats = [
         {
-            number: "11,500+",
+            number: "15,000+",
             label: "Total Capacity",
             description: "Students accommodated"
         },
         {
-            number: "20",
+            number: "20+",
             label: "Hostel Blocks",
             description: "Across campus"
         },

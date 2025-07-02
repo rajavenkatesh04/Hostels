@@ -109,7 +109,7 @@ export default function About() {
                         className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
                     >
                         {[
-                            { number: "10,000+", label: "Students" },
+                            { number: "15,000+", label: "Students" },
                             { number: "20+", label: "Hostels" },
                             { number: "24/7", label: "Support" },
                             { number: "100%", label: "Satisfaction" }

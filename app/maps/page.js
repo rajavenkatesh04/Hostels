@@ -183,7 +183,7 @@ export default function Maps() {
     }
 
     return (
-        <div className={`m-6 rounded-2xl`}><LoadScript
+        <div className={`m-6`}><LoadScript
             googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
             libraries={['places', 'geocoding']}
             loadingElement={
@@ -196,7 +196,7 @@ export default function Maps() {
             }
         >
             <GoogleMap
-                mapContainerClassName="w-full h-60"
+                mapContainerClassName="w-full h-66 rounded-2xl"
                 mapContainerStyle={MAP_CONTAINER_STYLE}
                 center={DEFAULT_CENTER}
                 zoom={16}

@@ -4,7 +4,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import {
     ArrowLeft,
     Building2,
-    IndianRupee,
     Phone,
     Mail,
     User,
@@ -18,7 +17,8 @@ import {
     ShoppingCart,
     ShieldCheck,
     WashingMachine,
-    Info
+    Info,
+    IdCard
 } from 'lucide-react';
 
 export default function HostelDetailsContent() {
@@ -161,8 +161,7 @@ export default function HostelDetailsContent() {
                   <User size={14} /> {hostelData.gender === 'male' ? 'Boys Hostel' : 'Girls Hostel'}
                 </span>
                             </div>
-                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
-                            <p className="text-lg text-gray-700 font-light leading-relaxed">
+                            <p className=" text-gray-600 leading-relaxed">
                                 {hostelData.description}
                             </p>
                             <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
@@ -185,21 +184,18 @@ export default function HostelDetailsContent() {
                                             }`}
                                         >
                                             <div className="flex justify-between items-center">
-                                                <div>
+                                                {/* Left Section */}
+                                                <div className="flex flex-col">
                                                     <h3 className="font-medium text-gray-900">
                                                         {room.occupancy} Sharing {room.ac_type === 'ac' ? 'AC' : 'Non-AC'}
                                                     </h3>
-                                                    <p className="text-sm text-gray-600 font-light">
+                                                </div>
+
+                                                {/* Right Section */}
+                                                <div className="text-right">
+                                                    <p className="font-medium text-gray-600">
                                                         {room.washroom_type === 'attached' ? 'Attached Bathroom' : 'Common Bathroom'}
                                                     </p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <div className="flex items-center justify-end gap-1">
-                                                        <IndianRupee className="text-teal-500" size={16} />
-                                                        <span className="font-medium text-teal-500">
-                              {room.annual_fee.toLocaleString()}
-                            </span>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,22 +213,18 @@ export default function HostelDetailsContent() {
                             </h2>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-indigo-500/20 to-teal-500/20 flex items-center justify-center border border-indigo-500/30">
-                                        <User size={20} className="text-indigo-500" />
-                                    </div>
-                                    <div>
-                                        <p className="text-lg font-medium text-gray-900">{hostelData.warden.name}</p>
-                                    </div>
+                                    <IdCard size={18} className="text-indigo-500" />
+                                    <p className="text-lg text-medium text-teal-500">{hostelData.warden.name}</p>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <Phone size={18} className="text-indigo-500" />
-                                    <a href={`tel:${hostelData.warden.contact}`} className="text-teal-500 hover:underline font-light">
+                                    <a href={`tel:${hostelData.warden.contact}`} className="text-teal-500 hover:underline font-medium">
                                         {hostelData.warden.contact}
                                     </a>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <Mail size={18} className="text-indigo-500 mt-0.5" />
-                                    <a href={`mailto:${hostelData.warden.email}`} className="text-teal-500 hover:underline font-light break-all sm:break-normal">
+                                    <a href={`mailto:${hostelData.warden.email}`} className="text-teal-500 hover:underline font-medium  break-all sm:break-normal">
                                         {hostelData.warden.email}
                                     </a>
                                 </div>
@@ -270,8 +262,8 @@ export default function HostelDetailsContent() {
                     <div className="space-y-8">
                         <section className="sticky top-6 space-y-8">
                             <div className="border border-gray-300 rounded-xl p-6">
-                                <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3 mb-6">
-                                    <ShoppingCart size={24} className="text-indigo-500" />
+                                <h2 className="text-2xl  text-gray-900 flex items-center gap-3 mb-6">
+                                    <ShoppingCart size={24} className="text-purple-500" />
                                     Pricing Summary
                                 </h2>
                                 {selectedRoom ? (

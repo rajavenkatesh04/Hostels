@@ -29,20 +29,20 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center">
                         <ul className="flex space-x-6">
                             <li>
-                                <Link href="/about" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
-                                    About
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link href="/contact" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
-                                    Contact
-                                </Link>
-                            </li>
-
-                            <li>
                                 <Link href="/hostel-info" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
                                     Hostels
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/resources" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
+                                    Resources
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/about" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
+                                    About
                                 </Link>
                             </li>
                         </ul>
@@ -68,20 +68,18 @@ export default function Navbar() {
 
                         <ul className="px-2 pb-3 space-y-1">
                             <li>
-                                <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
-                                    About
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link href="/contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
-                                    Contact
-                                </Link>
-                            </li>
-
-                            <li>
                                 <Link href="/hostel-info" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
                                     Hostels
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/resources" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
+                                    Resources
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
+                                    About
                                 </Link>
                             </li>
                         </ul>
