@@ -10,7 +10,7 @@ let hostelCache = null;
 let dataFetchPromise = null;
 let mapInstance = null;
 
-// Constants
+// Modified Constants - Notice how we've removed fixed height
 const MAP_CONTAINER_STYLE = {
     width: '100%',
     height: '100%',
@@ -164,16 +164,17 @@ export default function Maps() {
 
     if (error) {
         return (
-            <div className="m-6 rounded-2xl overflow-hidden shadow-lg h-60 flex items-center justify-center bg-red-50">
-                <div className="text-center text-red-600">
+            // Modified error container to be fully responsive with proper height constraints
+            <div className="h-full w-full flex items-center justify-center bg-red-50 rounded-2xl shadow-lg">
+                <div className="text-center text-red-600 p-6">
                     <p className="text-lg font-semibold mb-2">Error Loading Map</p>
-                    <p>{error}</p>
+                    <p className="mb-4">{error}</p>
                     <button
                         onClick={() => {
                             setError(null);
                             fetchHostels();
                         }}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                     >
                         Retry
                     </button>
@@ -183,96 +184,105 @@ export default function Maps() {
     }
 
     return (
-        <div className={`m-6`}><LoadScript
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-            libraries={['places', 'geocoding']}
-            loadingElement={
-                <div className="flex items-center justify-center h-60 bg-gray-50">
-                    <div className="text-center">
-                        <Loader2 className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4"/>
-                        <p className="text-gray-600">Loading Google Maps...</p>
+        // Critical change: Container now fills available space completely
+        <div className="h-full w-full p-6">
+            <LoadScript
+                googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+                libraries={['places', 'geocoding']}
+                loadingElement={
+                    // Loading element also adapts to full container height
+                    <div className="flex items-center justify-center h-full w-full bg-gray-50 rounded-2xl">
+                        <div className="text-center">
+                            <Loader2 className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4"/>
+                            <p className="text-gray-600">Loading Google Maps...</p>
+                        </div>
                     </div>
-                </div>
-            }
-        >
-            <GoogleMap
-                mapContainerClassName="w-full h-66 rounded-2xl"
-                mapContainerStyle={MAP_CONTAINER_STYLE}
-                center={DEFAULT_CENTER}
-                zoom={16}
-                options={MAP_OPTIONS}
-                onLoad={onMapLoad}
+                }
             >
-                {hostels.map((hostel) => (
-                    <Marker
-                        key={hostel.id}
-                        position={hostel.coordinates}
-                        icon={hostelIcons[hostel.gender === 'female' ? 'female' : 'male'] || null}
-                        onClick={() => handleMarkerClick(hostel)}
-                        onMouseOver={() => handleMarkerMouseOver(hostel)}
-                        onMouseOut={handleMarkerMouseOut}
-                        title={`${hostel.name} - ${hostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel`}
-                    />
-                ))}
+                <GoogleMap
+                    // Map container now takes full available space with proper styling
+                    mapContainerClassName="w-full h-full rounded-2xl shadow-lg"
+                    mapContainerStyle={MAP_CONTAINER_STYLE}
+                    center={DEFAULT_CENTER}
+                    zoom={16}
+                    options={MAP_OPTIONS}
+                    onLoad={onMapLoad}
+                >
+                    {hostels.map((hostel) => (
+                        <Marker
+                            key={hostel.id}
+                            position={hostel.coordinates}
+                            icon={hostelIcons[hostel.gender === 'female' ? 'female' : 'male'] || null}
+                            onClick={() => handleMarkerClick(hostel)}
+                            onMouseOver={() => handleMarkerMouseOver(hostel)}
+                            onMouseOut={handleMarkerMouseOut}
+                            title={`${hostel.name} - ${hostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel`}
+                        />
+                    ))}
 
-                {(hoveredHostel && !selectedHostel) && (
-                    <InfoWindow
-                        position={hoveredHostel.coordinates}
-                        options={{pixelOffset: new window.google.maps.Size(0, -40)}}
-                    >
-                        <div
-                            className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
-                            <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
-                                {hoveredHostel.name}
-                            </h3>
-                            <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-                                <span
-                                    className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
-                                <span
-                                    className="truncate">{hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
-                            </p>
-                            <p className="text-xs text-gray-500 mt-1">Click for more options</p>
-                        </div>
-                    </InfoWindow>
-                )}
+                    {(hoveredHostel && !selectedHostel) && (
+                        <InfoWindow
+                            position={hoveredHostel.coordinates}
+                            options={{pixelOffset: new window.google.maps.Size(0, -40)}}
+                        >
+                            <div className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
+                                <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
+                                    {hoveredHostel.name}
+                                </h3>
+                                <p className="text-xs sm:text-sm text-gray-600 flex items-center">
+                                    <span className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
+                                    <span className="truncate">{hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">Click for more options</p>
+                            </div>
+                        </InfoWindow>
+                    )}
 
-                {selectedHostel && (
-                    <InfoWindow
-                        position={selectedHostel.coordinates}
-                        onCloseClick={() => setSelectedHostel(null)}
-                    >
-                        <div
-                            className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100 font-sans">
-                            <div className="mb-3 sm:mb-4">
-                                <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">{selectedHostel.name}</h3>
-                                <div className="flex items-center">
-                                    <span
-                                        className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
-                                    <span
-                                        className="font-medium text-sm sm:text-base text-gray-700">{selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
+                    {selectedHostel && (
+                        <InfoWindow
+                            position={selectedHostel.coordinates}
+                            onCloseClick={() => setSelectedHostel(null)}
+                        >
+                            <div className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100 font-sans">
+                                <div className="mb-3 sm:mb-4">
+                                    <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">{selectedHostel.name}</h3>
+                                    <div className="flex items-center">
+                                        <span className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
+                                        <span className="font-medium text-sm sm:text-base text-gray-700">{selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
+                                    </div>
                                 </div>
+                                <div className="mb-4 space-y-2">
+                                    <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                        <MapPin size={14} className="text-gray-400 mr-2 flex-shrink-0"/>
+                                        <span className="truncate">Campus Location</span>
+                                    </div>
+                                    <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                        <Users size={14} className="text-indigo-500 mr-2 flex-shrink-0"/>
+                                        <span>Student Accommodation</span>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                    <button
+                                        onClick={() => handleLearnMore(selectedHostel)}
+                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    >
+                                        <ArrowRight size={14}/><span>Learn More</span>
+                                    </button>
+                                    <a
+                                        href={getNavigationUrl(selectedHostel)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    >
+                                        <Navigation size={14}/><span>Navigate</span>
+                                    </a>
+                                </div>
+                                <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">Tap outside to close</p>
                             </div>
-                            <div className="mb-4 space-y-2">
-                                <div className="flex items-center text-xs sm:text-sm text-gray-600"><MapPin size={14}
-                                                                                                            className="text-gray-400 mr-2 flex-shrink-0"/>
-                                    <span className="truncate">Campus Location</span></div>
-                                <div className="flex items-center text-xs sm:text-sm text-gray-600"><Users size={14}
-                                                                                                           className="text-indigo-500 mr-2 flex-shrink-0"/>
-                                    <span>Student Accommodation</span></div>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                <button onClick={() => handleLearnMore(selectedHostel)}
-                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                                    <ArrowRight size={14}/><span>Learn More</span></button>
-                                <a href={getNavigationUrl(selectedHostel)} target="_blank" rel="noopener noreferrer"
-                                   className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"><Navigation
-                                    size={14}/><span>Navigate</span></a>
-                            </div>
-                            <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">Tap outside to close</p>
-                        </div>
-                    </InfoWindow>
-                )}
-            </GoogleMap>
-        </LoadScript></div>
+                        </InfoWindow>
+                    )}
+                </GoogleMap>
+            </LoadScript>
+        </div>
     );
 }
