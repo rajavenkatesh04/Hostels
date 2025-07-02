@@ -2,7 +2,8 @@
 
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { MapPin, Home, Users, Snowflake, Bath, Loader2, Navigation, X } from 'lucide-react';
+import { MapPin, Home, Users, Snowflake, Bath, Loader2, Navigation, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 // Constants
 const MAP_CONTAINER_STYLE = {
@@ -41,6 +42,7 @@ export default function Maps() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [mapLoaded, setMapLoaded] = useState(false);
+    const router = useRouter();
 
     // Create pin symbols using MapPin from lucide-react
     const createPinSymbol = useCallback((color) => {
@@ -155,13 +157,17 @@ export default function Maps() {
         return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hostel.plus_code)}`;
     }, []);
 
+    const handleLearnMore = useCallback((hostel) => {
+        router.push(`/hostel?id=${hostel.id}`);
+    }, [router]);
+
     // Feature icons
     const featureIcons = {
-        ac: <Snowflake size={16} className="text-indigo-600" />,
-        nonAc: <Home size={16} className="text-gray-500" />,
-        attached: <Bath size={16} className="text-teal-600" />,
-        common: <Home size={16} className="text-gray-500" />,
-        sharing: <Users size={16} className="text-indigo-600" />,
+        ac: <Snowflake size={14} className="text-blue-500" />,
+        nonAc: <Home size={14} className="text-gray-500" />,
+        attached: <Bath size={14} className="text-teal-500" />,
+        common: <Home size={14} className="text-gray-500" />,
+        sharing: <Users size={14} className="text-indigo-500" />,
     };
 
     if (error) {
@@ -237,17 +243,19 @@ export default function Maps() {
                                     pixelOffset: new window.google.maps.Size(0, -40)
                                 }}
                             >
-                                <div className="p-3 min-w-[200px] bg-white rounded-lg shadow-md">
-                                    <h3 className="font-semibold text-gray-800 text-base mb-1">
+                                <div className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
+                                    <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
                                         {hoveredHostel.name}
                                     </h3>
-                                    <p className="text-sm text-gray-600 flex items-center">
-                                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                    <p className="text-xs sm:text-sm text-gray-600 flex items-center">
+                                        <span className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${
                                             hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
                                         }`}></span>
-                                        {hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel
+                                        <span className="truncate">
+                                            {hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel
+                                        </span>
                                     </p>
-                                    <p className="text-xs text-gray-500 mt-1">Click for details</p>
+                                    <p className="text-xs text-gray-500 mt-1">Click for more options</p>
                                 </div>
                             </InfoWindow>
                         )}
@@ -258,73 +266,66 @@ export default function Maps() {
                                 position={selectedHostel.coordinates}
                                 onCloseClick={() => setSelectedHostel(null)}
                             >
-                                <div className="p-4 max-w-[300px] bg-white rounded-lg shadow-lg border border-gray-100">
-                                    <h3 className="font-bold text-lg text-gray-900 mb-3">
-                                        {selectedHostel.name}
-                                    </h3>
-
-                                    <div className="mb-4 space-y-2">
-                                        <div className="flex items-center text-sm">
-                                            <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                <div className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100">
+                                    {/* Header */}
+                                    <div className="mb-3 sm:mb-4">
+                                        <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">
+                                            {selectedHostel.name}
+                                        </h3>
+                                        <div className="flex items-center">
+                                            <span className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${
                                                 selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
                                             }`}></span>
-                                            <span className="font-medium text-gray-700">
+                                            <span className="font-medium text-sm sm:text-base text-gray-700">
                                                 {selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel
                                             </span>
                                         </div>
-
-                                        {selectedHostel.ac_type && (
-                                            <div className="flex items-center text-sm text-gray-600">
-                                                {selectedHostel.ac_type === 'ac' ? featureIcons.ac : featureIcons.nonAc}
-                                                <span className="ml-2">
-                                                    {selectedHostel.ac_type === 'ac' ? 'AC Rooms' : 'Non-AC Rooms'}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        {selectedHostel.washroom_type && (
-                                            <div className="flex items-center text-sm text-gray-600">
-                                                {selectedHostel.washroom_type === 'attached' ? featureIcons.attached : featureIcons.common}
-                                                <span className="ml-2">
-                                                    {selectedHostel.washroom_type === 'attached' ? 'Attached Bathroom' : 'Common Bathroom'}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        {selectedHostel.occupancy_limit && (
-                                            <div className="flex items-center text-sm text-gray-600">
-                                                {featureIcons.sharing}
-                                                <span className="ml-2">
-                                                    {selectedHostel.occupancy_limit}-person rooms
-                                                </span>
-                                            </div>
-                                        )}
                                     </div>
 
-                                    <div className="flex gap-3">
-                                        <a
-                                            href={getNavigationUrl(selectedHostel)}
+                                    {/* Quick Info */}
+                                    <div className="mb-4 space-y-2">
+                                        <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                            <MapPin size={14} className="text-gray-400 mr-2 flex-shrink-0" />
+                                            <span className="truncate">Campus Location</span>
+                                        </div>
+                                        <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                                            <Users size={14} className="text-indigo-500 mr-2 flex-shrink-0" />
+                                            <span>Student Accommodation</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                        <button
+                                            onClick={() => handleLearnMore(selectedHostel)}
+                                            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                        >
+                                            <ArrowRight size={14} />
+                                            <span>Learn More</span>
+                                        </button>
+
+                                        <a href={getNavigationUrl(selectedHostel)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm px-4 py-2 rounded-md hover:from-blue-600 hover:to-indigo-700 transition-colors font-medium"
-                                        >
-                                            <Navigation size={16} />
-                                            Navigate
-                                        </a>
-
-                                        <button
-                                            onClick={() => setSelectedHostel(null)}
-                                            className="flex-1 flex items-center justify-center gap-1 bg-gray-200 text-gray-700 text-sm px-4 py-2 rounded-md hover:bg-gray-300 transition-colors font-medium"
-                                        >
-                                            <X size={16} />
-                                            Close
-                                        </button>
-                                    </div>
+                                            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r
+                                            from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md
+                                            hover:from-blue-600 hover:to-cyan-700 transition-all duration-200
+                                            font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                            >
+                                            <Navigation size={14}/>
+                                            <span>Navigate</span></a>
+                                    
                                 </div>
+
+                                {/* Footer hint */}
+                                <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">
+                                    Tap outside to close
+                                </p>
+                            </div>
                             </InfoWindow>
-                        )}
+                            )}
                     </GoogleMap>
-                )}
+                    )}
             </LoadScript>
         </div>
     );
