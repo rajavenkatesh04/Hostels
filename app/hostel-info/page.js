@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
     Building2,
     User,
-    Loader2,
     XCircle,
     Users,
     MapPin,
@@ -29,11 +28,41 @@ import {
 } from 'lucide-react';
 import SearchBar from "@/_components/ui/SearchBar";
 
+// Cache implementation
+const cache = new Map();
+
+const fetchHostelsWithCache = async () => {
+    const cacheKey = 'hostel-data';
+
+    // Return cached data if available and not expired (5 minute cache)
+    if (cache.has(cacheKey)) {
+        const { data, timestamp } = cache.get(cacheKey);
+        const now = Date.now();
+        if (now - timestamp < 300000) { // 5 minutes in milliseconds
+            return data;
+        }
+    }
+
+    // Fetch fresh data
+    const response = await fetch('/api/hostel-info');
+    if (!response.ok) {
+        throw new Error('Failed to fetch hostels');
+    }
+    const data = await response.json();
+
+    // Update cache
+    cache.set(cacheKey, {
+        data: data.hostels,
+        timestamp: Date.now()
+    });
+
+    return data.hostels;
+};
+
 export default function HostelsPage() {
     const router = useRouter();
     const [hostels, setHostels] = useState([]);
     const [filteredHostels, setFilteredHostels] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -41,18 +70,13 @@ export default function HostelsPage() {
     useEffect(() => {
         const fetchHostels = async () => {
             try {
-                setIsLoading(true);
                 setError(null);
-                const response = await fetch('/api/hostel-info');
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Failed to fetch hostels');
-                setHostels(data.hostels);
-                setFilteredHostels(data.hostels);
+                const data = await fetchHostelsWithCache();
+                setHostels(data);
+                setFilteredHostels(data);
             } catch (err) {
                 console.error(err);
                 setError(err.message);
-            } finally {
-                setIsLoading(false);
             }
         };
 
@@ -142,21 +166,18 @@ export default function HostelsPage() {
         }
     ];
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
-                <Loader2 className="animate-spin text-indigo-500" size={48} />
-                <p className="mt-4 text-lg font-light text-gray-700">Loading hostels...</p>
-            </div>
-        );
-    }
-
     if (error) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
                 <XCircle className="text-red-500" size={64} />
                 <h1 className="mt-4 text-xl font-light text-gray-900">Something went wrong</h1>
                 <p className="mt-2 text-gray-600 font-light">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                >
+                    Retry
+                </button>
             </div>
         );
     }
@@ -164,21 +185,19 @@ export default function HostelsPage() {
     return (
         <div className="bg-white text-gray-900 min-h-screen transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-24 py-16">
-
                 {/* Header Section */}
                 <div className="text-center mb-16">
                     <h1 className="text-4xl sm:text-5xl font-light text-gray-900 tracking-wide mb-4">
                         SRM <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600">Hostels</span>
                     </h1>
                     <div className="w-16 h-0.5 bg-gradient-to-r from-indigo-600 to-teal-600 mx-auto mb-6"></div>
-
                     <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed font-light">
                         Experience comfortable and safe housing with world-class facilities designed to enhance your academic journey
                     </p>
                 </div>
 
                 {/* Search Bar */}
-                <SearchBar />
+                <SearchBar onSearch={setSearchQuery} />
 
                 {/* Key Features */}
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -318,11 +337,11 @@ export default function HostelsPage() {
                 {filteredHostels.length === 0 ? (
                     <div className="text-center py-16">
                         <Building2 className="mx-auto text-gray-400 mb-4" size={64} />
-                        <h3 className="text-xl font-light text-gray-600 mb-2">No hostels found</h3>
+                        <h3 className="text-xl font-light text-gray-600 mb-2">Please wait, Loading...</h3>
                         <p className="text-gray-500">
                             {searchQuery
-                                ? "Try a different search term or clear filters"
-                                : "Try adjusting your filter selection"}
+                                ? "Try adjusting your filter selection"
+                                : "If issue persists, please check your internet connection and try again"}
                         </p>
                     </div>
                 ) : (
