@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Main App component to demonstrate the loader in a full-screen, centered layout.
 export default function App() {
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -11,7 +10,6 @@ export default function App() {
     );
 }
 
-// The Loader component, now adapted for a light theme.
 const Loader = () => {
     return (
         <>
@@ -99,12 +97,11 @@ const Loader = () => {
             <div className="loader-container">
                 <p>Loading</p>
                 <div className="words">
-                    <span className="word">room details...</span>
-                    <span className="word">amenities...</span>
-                    <span className="word">availability...</span>
-                    <span className="word">gallery...</span>
                     <span className="word">features...</span>
-
+                    <span className="word">room details...</span>
+                    <span className="word">availability...</span>
+                    <span className="word">amenities...</span>
+                    <span className="word">gallery...</span>
                 </div>
             </div>
         </>

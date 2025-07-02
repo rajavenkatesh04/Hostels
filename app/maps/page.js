@@ -1,9 +1,14 @@
 "use client";
 
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { MapPin, Home, Users, Snowflake, Bath, Loader2, Navigation, ArrowRight } from 'lucide-react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { MapPin, Home, Users, ArrowRight, Navigation, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+
+// --- Caching Solution ---
+let hostelCache = null;
+let dataFetchPromise = null;
+let mapInstance = null;
 
 // Constants
 const MAP_CONTAINER_STYLE = {
@@ -22,31 +27,23 @@ const MAP_OPTIONS = {
     mapTypeControl: false,
     fullscreenControl: false,
     styles: [
-        {
-            featureType: "poi",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }]
-        },
-        {
-            featureType: "transit",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }]
-        }
+        { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+        { featureType: "transit", elementType: "labels", stylers: [{ visibility: "off" }] }
     ]
 };
 
 export default function Maps() {
-    const [hostels, setHostels] = useState([]);
+    const [hostels, setHostels] = useState(hostelCache || []);
     const [selectedHostel, setSelectedHostel] = useState(null);
     const [hoveredHostel, setHoveredHostel] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [mapLoaded, setMapLoaded] = useState(false);
     const router = useRouter();
+    const mapRef = useRef(null);
+    const hasFetched = useRef(false);
 
-    // Create pin symbols using MapPin from lucide-react
     const createPinSymbol = useCallback((color) => {
-        if (!window.google || !window.google.maps) return null;
+        if (typeof window === 'undefined' || !window.google || !window.google.maps) return null;
 
         return {
             path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
@@ -59,94 +56,92 @@ export default function Maps() {
         };
     }, []);
 
-    // Memoized hostel icons
     const hostelIcons = useMemo(() => {
         if (!mapLoaded) return { female: null, male: null };
-
         return {
-            female: createPinSymbol('#EC4899'), // Pink for female
-            male: createPinSymbol('#3B82F6')    // Blue for male
+            female: createPinSymbol('#EC4899'),
+            male: createPinSymbol('#3B82F6')
         };
     }, [mapLoaded, createPinSymbol]);
 
-    // Fetch hostel data
     const fetchHostels = useCallback(async () => {
-        try {
-            setLoading(true);
-            const response = await fetch('/api/map-data');
+        if (hostelCache) {
+            setHostels(hostelCache);
+            return;
+        }
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch hostel data');
+        if (dataFetchPromise) {
+            try {
+                await dataFetchPromise;
+                setHostels(hostelCache);
+            } catch (err) {
+                setError(err.message);
             }
+            return;
+        }
 
-            const data = await response.json();
+        if (typeof window === 'undefined' || !window.google || !window.google.maps) {
+            setError('Google Maps API not loaded');
+            return;
+        }
 
-            if (!data.success) {
-                throw new Error(data.message || 'Failed to load hostel data');
-            }
+        dataFetchPromise = new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch('/api/map-data');
+                if (!response.ok) throw new Error('Failed to fetch hostel data');
+                const data = await response.json();
+                if (!data.success) throw new Error(data.message || 'Failed to load hostel data');
 
-            // Process hostels in parallel
-            const processedHostels = await Promise.all(
-                data.hostels.map(async (hostel) => {
-                    try {
-                        if (!window.google || !window.google.maps) {
-                            throw new Error('Google Maps not loaded');
-                        }
-
-                        const geocoder = new window.google.maps.Geocoder();
-                        const results = await new Promise((resolve) => {
+                const geocoder = new window.google.maps.Geocoder();
+                const processedHostels = await Promise.all(
+                    data.hostels.map(hostel =>
+                        new Promise((resolveGeocode) => {
                             geocoder.geocode({ address: hostel.plus_code }, (results, status) => {
                                 if (status === 'OK' && results[0]) {
-                                    resolve(results);
+                                    resolveGeocode({
+                                        ...hostel,
+                                        coordinates: {
+                                            lat: results[0].geometry.location.lat(),
+                                            lng: results[0].geometry.location.lng()
+                                        }
+                                    });
                                 } else {
                                     console.error(`Geocoding failed for ${hostel.name}:`, status);
-                                    resolve(null);
+                                    resolveGeocode(null);
                                 }
                             });
-                        });
+                        })
+                    )
+                );
 
-                        if (!results) return null;
-
-                        return {
-                            ...hostel,
-                            coordinates: {
-                                lat: results[0].geometry.location.lat(),
-                                lng: results[0].geometry.location.lng()
-                            }
-                        };
-                    } catch (err) {
-                        console.error(`Error processing ${hostel.name}:`, err);
-                        return null;
-                    }
-                })
-            );
-
-            setHostels(processedHostels.filter(Boolean));
-        } catch (err) {
-            console.error('Error fetching hostels:', err);
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+                const validHostels = processedHostels.filter(Boolean);
+                hostelCache = validHostels;
+                setHostels(validHostels);
+                resolve(validHostels);
+            } catch (err) {
+                console.error('Error fetching hostels:', err);
+                setError(err.message);
+                reject(err);
+            } finally {
+                dataFetchPromise = null;
+            }
+        });
     }, []);
 
-    // Load hostels when map is ready
     useEffect(() => {
-        if (mapLoaded) {
+        if (mapLoaded && !hasFetched.current) {
+            hasFetched.current = true;
             fetchHostels();
         }
     }, [mapLoaded, fetchHostels]);
 
-    // Event handlers
     const handleMarkerClick = useCallback((hostel) => {
         setSelectedHostel(hostel);
         setHoveredHostel(null);
     }, []);
 
     const handleMarkerMouseOver = useCallback((hostel) => {
-        if (!selectedHostel) {
-            setHoveredHostel(hostel);
-        }
+        if (!selectedHostel) setHoveredHostel(hostel);
     }, [selectedHostel]);
 
     const handleMarkerMouseOut = useCallback(() => {
@@ -161,14 +156,11 @@ export default function Maps() {
         router.push(`/hostel?id=${hostel.id}`);
     }, [router]);
 
-    // Feature icons
-    const featureIcons = {
-        ac: <Snowflake size={14} className="text-blue-500" />,
-        nonAc: <Home size={14} className="text-gray-500" />,
-        attached: <Bath size={14} className="text-teal-500" />,
-        common: <Home size={14} className="text-gray-500" />,
-        sharing: <Users size={14} className="text-indigo-500" />,
-    };
+    const onMapLoad = useCallback((map) => {
+        mapRef.current = map;
+        mapInstance = map;
+        setMapLoaded(true);
+    }, []);
 
     if (error) {
         return (
@@ -179,7 +171,6 @@ export default function Maps() {
                     <button
                         onClick={() => {
                             setError(null);
-                            setLoading(true);
                             fetchHostels();
                         }}
                         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
@@ -192,141 +183,96 @@ export default function Maps() {
     }
 
     return (
-        <div className="m-6 rounded-2xl overflow-hidden shadow-lg">
-            <LoadScript
-                googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-                onLoad={() => setMapLoaded(true)}
-                libraries={['places']}
-                loadingElement={
-                    <div className="flex items-center justify-center h-60 bg-gray-50">
-                        <div className="text-center">
-                            <Loader2 className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" />
-                            <p className="text-gray-600">Loading Google Maps...</p>
-                        </div>
+        <div className={`m-6 rounded-2xl`}><LoadScript
+            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+            libraries={['places', 'geocoding']}
+            loadingElement={
+                <div className="flex items-center justify-center h-60 bg-gray-50">
+                    <div className="text-center">
+                        <Loader2 className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4"/>
+                        <p className="text-gray-600">Loading Google Maps...</p>
                     </div>
-                }
+                </div>
+            }
+        >
+            <GoogleMap
+                mapContainerClassName="w-full h-60"
+                mapContainerStyle={MAP_CONTAINER_STYLE}
+                center={DEFAULT_CENTER}
+                zoom={16}
+                options={MAP_OPTIONS}
+                onLoad={onMapLoad}
             >
-                {mapLoaded && hostelIcons.female && hostelIcons.male && (
-                    <GoogleMap
-                        mapContainerClassName="w-full h-60"
-                        mapContainerStyle={MAP_CONTAINER_STYLE}
-                        center={DEFAULT_CENTER}
-                        zoom={16}
-                        options={MAP_OPTIONS}
+                {hostels.map((hostel) => (
+                    <Marker
+                        key={hostel.id}
+                        position={hostel.coordinates}
+                        icon={hostelIcons[hostel.gender === 'female' ? 'female' : 'male'] || null}
+                        onClick={() => handleMarkerClick(hostel)}
+                        onMouseOver={() => handleMarkerMouseOver(hostel)}
+                        onMouseOut={handleMarkerMouseOut}
+                        title={`${hostel.name} - ${hostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel`}
+                    />
+                ))}
+
+                {(hoveredHostel && !selectedHostel) && (
+                    <InfoWindow
+                        position={hoveredHostel.coordinates}
+                        options={{pixelOffset: new window.google.maps.Size(0, -40)}}
                     >
-                        {loading ? (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-10 rounded-2xl">
-                                <div className="bg-white p-4 rounded-lg shadow-lg flex items-center">
-                                    <Loader2 className="animate-spin h-5 w-5 mr-2 text-blue-500" />
-                                    <p className="text-gray-700">Loading hostel locations...</p>
+                        <div
+                            className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
+                            <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
+                                {hoveredHostel.name}
+                            </h3>
+                            <p className="text-xs sm:text-sm text-gray-600 flex items-center">
+                                <span
+                                    className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
+                                <span
+                                    className="truncate">{hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">Click for more options</p>
+                        </div>
+                    </InfoWindow>
+                )}
+
+                {selectedHostel && (
+                    <InfoWindow
+                        position={selectedHostel.coordinates}
+                        onCloseClick={() => setSelectedHostel(null)}
+                    >
+                        <div
+                            className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100 font-sans">
+                            <div className="mb-3 sm:mb-4">
+                                <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">{selectedHostel.name}</h3>
+                                <div className="flex items-center">
+                                    <span
+                                        className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
+                                    <span
+                                        className="font-medium text-sm sm:text-base text-gray-700">{selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
                                 </div>
                             </div>
-                        ) : (
-                            hostels.map((hostel) => (
-                                <Marker
-                                    key={hostel.id}
-                                    position={hostel.coordinates}
-                                    icon={hostelIcons[hostel.gender === 'female' ? 'female' : 'male']}
-                                    onClick={() => handleMarkerClick(hostel)}
-                                    onMouseOver={() => handleMarkerMouseOver(hostel)}
-                                    onMouseOut={handleMarkerMouseOut}
-                                    title={`${hostel.name} - ${hostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel`}
-                                />
-                            ))
-                        )}
-
-                        {/* Hover InfoWindow */}
-                        {hoveredHostel && !selectedHostel && (
-                            <InfoWindow
-                                position={hoveredHostel.coordinates}
-                                options={{
-                                    pixelOffset: new window.google.maps.Size(0, -40)
-                                }}
-                            >
-                                <div className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
-                                    <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
-                                        {hoveredHostel.name}
-                                    </h3>
-                                    <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-                                        <span className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${
-                                            hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
-                                        }`}></span>
-                                        <span className="truncate">
-                                            {hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel
-                                        </span>
-                                    </p>
-                                    <p className="text-xs text-gray-500 mt-1">Click for more options</p>
-                                </div>
-                            </InfoWindow>
-                        )}
-
-                        {/* Click InfoWindow */}
-                        {selectedHostel && (
-                            <InfoWindow
-                                position={selectedHostel.coordinates}
-                                onCloseClick={() => setSelectedHostel(null)}
-                            >
-                                <div className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100">
-                                    {/* Header */}
-                                    <div className="mb-3 sm:mb-4">
-                                        <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">
-                                            {selectedHostel.name}
-                                        </h3>
-                                        <div className="flex items-center">
-                                            <span className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${
-                                                selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
-                                            }`}></span>
-                                            <span className="font-medium text-sm sm:text-base text-gray-700">
-                                                {selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Quick Info */}
-                                    <div className="mb-4 space-y-2">
-                                        <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                                            <MapPin size={14} className="text-gray-400 mr-2 flex-shrink-0" />
-                                            <span className="truncate">Campus Location</span>
-                                        </div>
-                                        <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                                            <Users size={14} className="text-indigo-500 mr-2 flex-shrink-0" />
-                                            <span>Student Accommodation</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Action Buttons */}
-                                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                        <button
-                                            onClick={() => handleLearnMore(selectedHostel)}
-                                            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                        >
-                                            <ArrowRight size={14} />
-                                            <span>Learn More</span>
-                                        </button>
-
-                                        <a href={getNavigationUrl(selectedHostel)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r
-                                            from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md
-                                            hover:from-blue-600 hover:to-cyan-700 transition-all duration-200
-                                            font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                            >
-                                            <Navigation size={14}/>
-                                            <span>Navigate</span></a>
-                                    
-                                </div>
-
-                                {/* Footer hint */}
-                                <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">
-                                    Tap outside to close
-                                </p>
+                            <div className="mb-4 space-y-2">
+                                <div className="flex items-center text-xs sm:text-sm text-gray-600"><MapPin size={14}
+                                                                                                            className="text-gray-400 mr-2 flex-shrink-0"/>
+                                    <span className="truncate">Campus Location</span></div>
+                                <div className="flex items-center text-xs sm:text-sm text-gray-600"><Users size={14}
+                                                                                                           className="text-indigo-500 mr-2 flex-shrink-0"/>
+                                    <span>Student Accommodation</span></div>
                             </div>
-                            </InfoWindow>
-                            )}
-                    </GoogleMap>
-                    )}
-            </LoadScript>
-        </div>
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                <button onClick={() => handleLearnMore(selectedHostel)}
+                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <ArrowRight size={14}/><span>Learn More</span></button>
+                                <a href={getNavigationUrl(selectedHostel)} target="_blank" rel="noopener noreferrer"
+                                   className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"><Navigation
+                                    size={14}/><span>Navigate</span></a>
+                            </div>
+                            <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">Tap outside to close</p>
+                        </div>
+                    </InfoWindow>
+                )}
+            </GoogleMap>
+        </LoadScript></div>
     );
 }
