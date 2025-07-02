@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import {useState} from "react";
 import {X, Menu} from "lucide-react";
-import HostelSearchBar from "@/_components/ui/HostelSearchBar";
+import HostelSearchBar from "@/_components/hostel/HostelSearchBar";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     return(
-        <nav className="w-full fixed top-0 z-60 bg-white shadow mb-16">
+        <nav className="w-full fixed top-0 z-60 bg-white border border-b-blue-500 shadow mb-16">
             <div className="max-w-7xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/*Logo*/}

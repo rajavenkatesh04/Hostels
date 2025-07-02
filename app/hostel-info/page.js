@@ -26,7 +26,7 @@ import {
     Search,
     X
 } from 'lucide-react';
-import SearchBar from "@/_components/ui/SearchBar";
+import SearchBar from "@/_components/hostel/SearchBar";
 
 // Cache implementation
 const cache = new Map();

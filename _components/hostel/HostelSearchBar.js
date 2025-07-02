@@ -107,7 +107,7 @@ export default function HostelSearchBar() {
                             transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                             className="text-gray-400 text-sm whitespace-nowrap"
                         >
-                            Enter hostel to get directions...
+                            Enter hostel name to get directions...
                         </motion.div>
                     </div>
                 )}

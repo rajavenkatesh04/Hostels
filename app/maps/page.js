@@ -13,7 +13,7 @@ let mapInstance = null;
 // Constants
 const MAP_CONTAINER_STYLE = {
     width: '100%',
-    height: '400px',
+    height: '100%',
 };
 
 const DEFAULT_CENTER = {

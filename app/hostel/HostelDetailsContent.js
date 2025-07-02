@@ -123,7 +123,7 @@ export default function HostelDetailsContent() {
                     <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
                     <div className="space-y-2">
                         <h2 className="text-2xl font-light text-gray-900">You're now being redirected</h2>
-                        <p className="text-gray-600 font-light">Taking you to SRM Hostels - SRMIST</p>
+                        <p className="text-gray-600 font-light">Taking you to student portal - SRMIST</p>
                     </div>
                 </div>
             </div>
