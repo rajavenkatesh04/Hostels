@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { ChevronDown, MessageCircle } from 'lucide-react';
+import { TableOfContents, ChevronDown, Building2 } from 'lucide-react';
 import { faqData } from './faqData';
 
 const FAQ = () => {
@@ -14,17 +14,18 @@ const FAQ = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto px-4 py-12">
+        <div className="m-6">
             {/* Header */}
-            <div className="text-center mb-10">
-                <h2 className="text-2xl text-left font-bold underline text-gray-900 mb-3">
-                    Frequently Asked Questions
-                </h2>
-                <p className="text-gray-600 text-left">
+            <section className="space-y-2 mb-4">
+                <div className="flex items-center gap-4">
+                    <h1 className="text-4xl sm:text-4xl font-light tracking-wide">
+                        Frequently Asked Questions
+                    </h1>
+                </div>
+                <p className="text-gray-600 leading-relaxed">
                     Everything you need to know about staying with us
                 </p>
-            </div>
-
+            </section>
             {/* FAQ Items */}
             <div className="space-y-3">
                 {faqData.map((item, index) => (
@@ -37,16 +38,15 @@ const FAQ = () => {
                             className="w-full px-5 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition-colors"
                             aria-expanded={openItems[index]}
                         >
-              <span className="font-medium text-gray-900 pr-4">
-                {item.question}
-              </span>
+                            <span className="font-medium text-gray-900 pr-4">
+                                {item.question}
+                            </span>
                             <ChevronDown
                                 className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
                                     openItems[index] ? 'rotate-180' : ''
                                 }`}
                             />
                         </button>
-
                         <div
                             className={`transition-all duration-300 ease-out ${
                                 openItems[index]

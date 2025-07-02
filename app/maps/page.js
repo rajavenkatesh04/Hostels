@@ -10,7 +10,7 @@ let hostelCache = null;
 let dataFetchPromise = null;
 let mapInstance = null;
 
-// Modified Constants - Notice how we've removed fixed height
+
 const MAP_CONTAINER_STYLE = {
     width: '100%',
     height: '100%',
