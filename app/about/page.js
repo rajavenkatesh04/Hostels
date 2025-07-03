@@ -65,6 +65,7 @@ export default function About() {
                     >
                         Your Home Away From Home
                     </p>
+
                 </div>
 
                 {/* Minimalist Content Grid */}

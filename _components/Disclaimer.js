@@ -14,9 +14,6 @@ export default function Disclaimer() {
                         The information here-in has been verified and found to be true.
                         However, despite immense efforts some discrepancies could've crept in.
                         we apologise for any inconveniences caused.
-                        We will do our best to keep the information up-to-date.
-                        If you find any discrepancies, please report them to us.
-                        We will do our best to resolve them as soon as possible.
                     </p>
                 </div>
             </div>

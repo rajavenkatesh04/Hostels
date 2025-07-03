@@ -56,9 +56,7 @@ export default function Navbar() {
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center space-x-2">
-                        <div className="px-4 py-3">
-                            <HostelSearchBar />
-                        </div>
+
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="p-2 rounded-md hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
