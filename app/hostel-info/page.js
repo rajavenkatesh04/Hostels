@@ -230,7 +230,7 @@ export default function HostelsPage() {
                 {/* Facilities Section */}
                 <div className="mb-16">
                     <h2 className="text-2xl font-light text-center text-gray-900 mb-12">
-                        World-Class <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600">Facilities</span>
+                        Available <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600">Facilities</span>
                     </h2>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
