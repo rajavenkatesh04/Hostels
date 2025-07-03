@@ -51,7 +51,7 @@ export default function Banner() {
 
                     <div className="bg-black/60 backdrop-blur-sm flex justify-center items-center h-48 sm:h-60 md:h-72 relative overflow-hidden">
                         <header className="text-center px-4">
-                            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tighter mb-4 flex flex-wrap justify-center items-center gap-2">
+                            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-tighter mb-4 flex flex-wrap justify-center items-center gap-2">
                                 <span
                                     ref={textRef1}
                                     className="banner-text whitespace-nowrap"

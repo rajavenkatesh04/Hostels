@@ -97,7 +97,7 @@ export default function HostelSearchBar() {
     };
 
     return (
-        <div className="relative w-full max-w-lg mx-auto" ref={searchBarRef}>
+        <div className="relative w-full max-w-lg mx-auto z-80" ref={searchBarRef}>
             <div className="relative">
                 <div className="relative flex items-center">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -133,15 +133,15 @@ export default function HostelSearchBar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 right-0 mt-2 z-50 w-full max-h-80 overflow-hidden bg-white border border-gray-100 shadow-lg rounded-lg"
+                        className="absolute z-80 top-full left-0 right-0 mt-2 z-50 w-full max-h-80 overflow-hidden bg-white border border-gray-100 shadow-lg rounded-lg"
                     >
                         {isLoading ? (
-                            <div className="p-4 flex items-center justify-center gap-2 text-gray-500">
+                            <div className="p-4 z-80 flex items-center justify-center gap-2 text-gray-500">
                                 <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
                                 <span className="text-sm">Searching hostels...</span>
                             </div>
                         ) : results.length > 0 ? (
-                            <div className="overflow-y-auto max-h-80">
+                            <div className="overflow-y-auto z-80 max-h-80">
                                 {results.map((hostel, index) => (
                                     <motion.div
                                         key={hostel.id}
@@ -152,7 +152,7 @@ export default function HostelSearchBar() {
                                             index !== results.length - 1 ? 'border-b border-gray-100' : ''
                                         }`}
                                     >
-                                        <div className="flex items-center justify-between gap-3">
+                                        <div className="flex items-center justify-between z-80 gap-3">
                                             <div className="flex items-center gap-3 min-w-0">
                                                 <h3 className="text-sm font-semibold text-gray-900 truncate">
                                                     {hostel.name}

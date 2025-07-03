@@ -27,7 +27,7 @@ export default function Home() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <div className="md:hidden m-4 content-section">
+            <div className="md:hidden z-50 m-4 content-section">
                 <HostelSearchBar />
             </div>
             <div className="banner">
