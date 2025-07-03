@@ -70,7 +70,8 @@ export default function HostelFilter() {
                 { value: '2', label: '2 Sharing', icon: UsersIcon },
                 { value: '3', label: '3 Sharing', icon: UsersIcon },
                 { value: '4', label: '4 Sharing', icon: UsersIcon },
-                { value: '5', label: '5 Sharing', icon: UsersIcon }
+                { value: '5', label: '5 Sharing', icon: UsersIcon },
+                { value: '6', label: '6 Sharing', icon: UsersIcon }
             ]
         }
     ];
