@@ -225,13 +225,15 @@ export default function HostelFilter() {
         <main className="bg-gray-50 min-h-screen">
             {/* Header */}
             <header className="text-center py-16 px-4 bg-white">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-                    Find Your Perfect Hostel
+                <h1 className="text-4xl sm:text-5xl font-light text-gray-900 tracking-wide mb-4">
+                    Let's find your
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600"> Perfect </span>
+                    hostel!
                 </h1>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                <div className="w-16 h-0.5 bg-gradient-to-r from-indigo-600 to-teal-600 mx-auto mb-6"></div>
+                <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed font-light">
                     Answer a few questions and we'll find the perfect room for you.
                 </p>
-
             </header>
 
             {Object.values(selections).some(v => v) && <SelectionsSummary/>}

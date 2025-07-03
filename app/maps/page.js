@@ -2,7 +2,7 @@
 
 import { GoogleMap, LoadScript, Marker, InfoWindow, Polygon } from '@react-google-maps/api';
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { MapPin, Info, Users, ArrowRight, Navigation, Loader2, GraduationCap } from 'lucide-react';
+import { Info, ArrowRight, Navigation, Loader2, GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // --- Caching Solution ---
@@ -242,7 +242,7 @@ export default function Maps() {
                     mapContainerClassName="w-full h-full rounded-2xl shadow-lg"
                     mapContainerStyle={MAP_CONTAINER_STYLE}
                     center={DEFAULT_CENTER}
-                    zoom={16.5}
+                    zoom={16.2}
                     options={MAP_OPTIONS}
                     onLoad={onMapLoad}
                     onClick={handleMapClick}
@@ -293,8 +293,8 @@ export default function Maps() {
                                     <div className="mb-4 flex items-center justify-center">
                                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                                             activeInfoWindow.gender === 'female'
-                                                ? 'bg-pink-100 text-pink-800 border border-pink-200'
-                                                : 'bg-blue-100 text-blue-800 border border-blue-200'
+                                                ? 'bg-pink-200 text-pink-800 border border-pink-200'
+                                                : 'bg-blue-200 text-blue-800 border border-blue-200'
                                         }`}>
                                             <span className={`w-2 h-2 rounded-full mr-2 ${
                                                 activeInfoWindow.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
