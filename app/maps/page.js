@@ -1,15 +1,14 @@
 "use client";
 
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow, Polygon } from '@react-google-maps/api';
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { MapPin, Home, Users, ArrowRight, Navigation, Loader2 } from 'lucide-react';
+import { MapPin, Info, Users, ArrowRight, Navigation, Loader2, GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // --- Caching Solution ---
 let hostelCache = null;
 let dataFetchPromise = null;
 let mapInstance = null;
-
 
 const MAP_CONTAINER_STYLE = {
     width: '100%',
@@ -32,15 +31,56 @@ const MAP_OPTIONS = {
     ]
 };
 
+// First Year Building Coordinates
+const FIRST_YEAR_BUILDING_COORDS = [
+    { lat: 12.823177630633419, lng: 80.04252332891708 },
+    { lat: 12.82375346771602, lng: 80.04252971342196 },
+    { lat: 12.823793931893912, lng: 80.04223602619749 },
+    { lat: 12.823523133041068, lng: 80.04195191573034 },
+    { lat: 12.823214982267931, lng: 80.04192956996326 },
+    { lat: 12.823177630633419, lng: 80.04252332891708 } // Close the polygon
+];
+
+// Building center point for the info window
+const BUILDING_CENTER = {
+    lat: 12.823483782762984,
+    lng: 80.04222644732022
+};
+
+// Updated polygon options with purple/amber color that stands out
+const POLYGON_OPTIONS = {
+    fillColor: '#A855F7', // Purple color
+    fillOpacity: 0.25,
+    strokeColor: '#7C3AED',
+    strokeOpacity: 0.9,
+    strokeWeight: 3,
+    clickable: true,
+    editable: false,
+    draggable: false,
+};
+
 export default function Maps() {
     const [hostels, setHostels] = useState(hostelCache || []);
-    const [selectedHostel, setSelectedHostel] = useState(null);
-    const [hoveredHostel, setHoveredHostel] = useState(null);
+    const [activeInfoWindow, setActiveInfoWindow] = useState(null);
+    const [showClassroomInfo, setShowClassroomInfo] = useState(false);
     const [error, setError] = useState(null);
     const [mapLoaded, setMapLoaded] = useState(false);
     const router = useRouter();
     const mapRef = useRef(null);
     const hasFetched = useRef(false);
+
+    // Distance calculation helper function
+    const calculateDistance = useCallback((lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c * 1000; // Distance in meters
+        return Math.round(distance);
+    }, []);
 
     const createPinSymbol = useCallback((color) => {
         if (typeof window === 'undefined' || !window.google || !window.google.maps) return null;
@@ -135,17 +175,19 @@ export default function Maps() {
         }
     }, [mapLoaded, fetchHostels]);
 
-    const handleMarkerClick = useCallback((hostel) => {
-        setSelectedHostel(hostel);
-        setHoveredHostel(null);
+    const handleMarkerInteraction = useCallback((hostel) => {
+        setActiveInfoWindow(hostel);
+        setShowClassroomInfo(false);
     }, []);
 
-    const handleMarkerMouseOver = useCallback((hostel) => {
-        if (!selectedHostel) setHoveredHostel(hostel);
-    }, [selectedHostel]);
+    const handleBuildingInteraction = useCallback(() => {
+        setShowClassroomInfo(true);
+        setActiveInfoWindow(null);
+    }, []);
 
-    const handleMarkerMouseOut = useCallback(() => {
-        setHoveredHostel(null);
+    const handleMapClick = useCallback(() => {
+        setActiveInfoWindow(null);
+        setShowClassroomInfo(false);
     }, []);
 
     const getNavigationUrl = useCallback((hostel) => {
@@ -164,7 +206,6 @@ export default function Maps() {
 
     if (error) {
         return (
-            // Modified error container to be fully responsive with proper height constraints
             <div className="h-full w-full flex items-center justify-center bg-red-50 rounded-2xl shadow-lg">
                 <div className="text-center text-red-600 p-6">
                     <p className="text-lg font-semibold mb-2">Error Loading Map</p>
@@ -184,13 +225,11 @@ export default function Maps() {
     }
 
     return (
-        // Critical change: Container now fills available space completely
-        <div className="h-[calc(100vh-120px)] w-full p-7.5 sm:h-full ">
+        <div className="h-[calc(100vh-120px)] w-full p-7.5 sm:h-full">
             <LoadScript
                 googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
                 libraries={['places', 'geocoding']}
                 loadingElement={
-                    // Loading element also adapts to full container height
                     <div className="flex items-center justify-center h-full w-full bg-gray-50 rounded-2xl">
                         <div className="text-center">
                             <Loader2 className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4"/>
@@ -200,84 +239,167 @@ export default function Maps() {
                 }
             >
                 <GoogleMap
-                    // Map container now takes full available space with proper styling
                     mapContainerClassName="w-full h-full rounded-2xl shadow-lg"
                     mapContainerStyle={MAP_CONTAINER_STYLE}
                     center={DEFAULT_CENTER}
                     zoom={16.5}
                     options={MAP_OPTIONS}
                     onLoad={onMapLoad}
+                    onClick={handleMapClick}
                 >
+                    {/* Building Polygon */}
+                    <Polygon
+                        paths={FIRST_YEAR_BUILDING_COORDS}
+                        options={POLYGON_OPTIONS}
+                        onClick={handleBuildingInteraction}
+                        onMouseOver={handleBuildingInteraction}
+                    />
+
+                    {/* Hostel Markers */}
                     {hostels.map((hostel) => (
                         <Marker
                             key={hostel.id}
                             position={hostel.coordinates}
                             icon={hostelIcons[hostel.gender === 'female' ? 'female' : 'male'] || null}
-                            onClick={() => handleMarkerClick(hostel)}
-                            onMouseOver={() => handleMarkerMouseOver(hostel)}
-                            onMouseOut={handleMarkerMouseOut}
+                            onClick={() => handleMarkerInteraction(hostel)}
+                            onMouseOver={() => handleMarkerInteraction(hostel)}
                             title={`${hostel.name} - ${hostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel`}
                         />
                     ))}
 
-                    {(hoveredHostel && !selectedHostel) && (
+                    {/* Unified Hostel Info Window */}
+                    {activeInfoWindow && (
                         <InfoWindow
-                            position={hoveredHostel.coordinates}
-                            options={{pixelOffset: new window.google.maps.Size(0, -40)}}
+                            position={activeInfoWindow.coordinates}
+                            onCloseClick={() => setActiveInfoWindow(null)}
+                            options={{
+                                pixelOffset: new window.google.maps.Size(0, -40),
+                                disableAutoPan: false,
+                                maxWidth: 350
+                            }}
                         >
-                            <div className="p-2 sm:p-3 min-w-[160px] sm:min-w-[200px] bg-white rounded-lg shadow-lg border border-gray-100">
-                                <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 leading-tight">
-                                    {hoveredHostel.name}
-                                </h3>
-                                <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-                                    <span className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full mr-2 flex-shrink-0 ${hoveredHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
-                                    <span className="truncate">{hoveredHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
-                                </p>
-                                <p className="text-xs text-gray-500 mt-1">Click for more options</p>
+                            <div className={`bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border-2 ${
+                                activeInfoWindow.gender === 'female'
+                                    ? 'border-pink-500/30'
+                                    : 'border-blue-500/30'
+                            } overflow-hidden font-sans`}>
+                                <div className="p-4 sm:p-6 text-center">
+                                    {/* Hostel Name */}
+                                    <h3 className="text-2xl sm:text-3xl font-light text-gray-900 mb-2 tracking-wide">
+                                        {activeInfoWindow.name}
+                                    </h3>
+
+                                    {/* Gender Badge */}
+                                    <div className="mb-4 flex items-center justify-center">
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                                            activeInfoWindow.gender === 'female'
+                                                ? 'bg-pink-100 text-pink-800 border border-pink-200'
+                                                : 'bg-blue-100 text-blue-800 border border-blue-200'
+                                        }`}>
+                                            <span className={`w-2 h-2 rounded-full mr-2 ${
+                                                activeInfoWindow.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'
+                                            }`}></span>
+                                            {activeInfoWindow.gender === 'female' ? 'Girls' : 'Boys'} Hostel
+                                        </span>
+                                    </div>
+
+                                    {/* Info Details */}
+                                    <div className="mb-6 space-y-3">
+                                        <div className="flex items-center justify-center text-sm text-gray-700">
+                                            <GraduationCap size={16} className="text-green-500 mr-2 flex-shrink-0"/>
+                                            <span className="font-medium">
+                                                {calculateDistance(
+                                                    activeInfoWindow.coordinates.lat,
+                                                    activeInfoWindow.coordinates.lng,
+                                                    BUILDING_CENTER.lat,
+                                                    BUILDING_CENTER.lng
+                                                )}m to University Building
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-col gap-3">
+                                        <button
+                                            onClick={() => handleLearnMore(activeInfoWindow)}
+                                            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white text-sm px-4 py-2.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        >
+                                            <span>Learn More</span>
+                                            <ArrowRight size={16} />
+                                        </button>
+                                        <a
+                                            href={getNavigationUrl(activeInfoWindow)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white text-sm px-4 py-2.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        >
+                                            <Navigation size={16} />
+                                            <span>Navigate</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </InfoWindow>
                     )}
 
-                    {selectedHostel && (
+                    {/* Building Info Window */}
+                    {showClassroomInfo && (
                         <InfoWindow
-                            position={selectedHostel.coordinates}
-                            onCloseClick={() => setSelectedHostel(null)}
+                            position={BUILDING_CENTER}
+                            onCloseClick={() => setShowClassroomInfo(false)}
+                            options={{
+                                pixelOffset: new window.google.maps.Size(0, -40),
+                                disableAutoPan: false,
+                                maxWidth: 350
+                            }}
                         >
-                            <div className="p-3 sm:p-4 w-full max-w-[280px] sm:max-w-[320px] bg-white rounded-lg shadow-xl border border-gray-100 font-sans">
-                                <div className="mb-3 sm:mb-4">
-                                    <h3 className="font-bold text-base sm:text-lg text-gray-900 mb-2 leading-tight">{selectedHostel.name}</h3>
-                                    <div className="flex items-center">
-                                        <span className={`inline-block w-3 h-3 rounded-full mr-2 flex-shrink-0 ${selectedHostel.gender === 'female' ? 'bg-pink-500' : 'bg-blue-500'}`}></span>
-                                        <span className="font-medium text-sm sm:text-base text-gray-700">{selectedHostel.gender === 'female' ? 'Girls' : 'Boys'} Hostel</span>
+                            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border-2 border-purple-500/30 overflow-hidden font-sans">
+                                <div className="p-4 sm:p-6 text-center">
+                                    {/* University Badge */}
+                                    <div className="mb-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-purple-600/30 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 backdrop-blur-sm">
+                                        <GraduationCap size={16} className="text-purple-600"/>
+                                        <span className="text-xs font-medium text-purple-700">Academic Building</span>
+                                    </div>
+
+                                    {/* Building Name */}
+                                    <h3 className="text-2xl sm:text-3xl font-light text-gray-900 mb-2 tracking-wide">
+                                        University Building
+                                    </h3>
+
+                                    {/* Info Details */}
+                                    <div className="mb-6 space-y-3">
+                                        <div className="flex items-center justify-center text-sm text-gray-700">
+                                            <Info size={16} className="text-green-500 mr-2 flex-shrink-0"/>
+                                            <span>1st year classes happen here</span>
+                                        </div>
+                                        <div className="flex items-center justify-center text-sm text-gray-700">
+                                            <Info size={16} className="text-green-500 mr-2 flex-shrink-0"/>
+                                            <span>Admission office (2nd floor)</span>
+                                        </div>
+                                        <div className="flex items-center justify-center text-sm text-gray-700">
+                                            <Info size={16} className="text-green-500 mr-2 flex-shrink-0"/>
+                                            <span>Central library</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Info Note */}
+                                    <div className="text-xs text-gray-700 bg-purple-50/80 backdrop-blur-sm border border-purple-200/50 p-3 rounded-lg mb-4">
+                                        📚 All first year classes are conducted in this building. Check the distance from your hostel by clicking on the hostel markers!
+                                    </div>
+
+                                    {/* Action Button */}
+                                    <div className="flex flex-col gap-3">
+                                        <a
+                                            href={`https://www.google.com/maps/dir/?api=1&destination=${BUILDING_CENTER.lat},${BUILDING_CENTER.lng}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white text-sm px-4 py-2.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        >
+                                            <Navigation size={16} />
+                                            <span>Navigate to Building</span>
+                                        </a>
                                     </div>
                                 </div>
-                                <div className="mb-4 space-y-2">
-                                    <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                                        <MapPin size={14} className="text-gray-400 mr-2 flex-shrink-0"/>
-                                        <span className="truncate">Campus Location</span>
-                                    </div>
-                                    <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                                        <Users size={14} className="text-indigo-500 mr-2 flex-shrink-0"/>
-                                        <span>Student Accommodation</span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                    <button
-                                        onClick={() => handleLearnMore(selectedHostel)}
-                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                    >
-                                        <ArrowRight size={14}/><span>Learn More</span>
-                                    </button>
-                                    <a
-                                        href={getNavigationUrl(selectedHostel)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 text-white text-xs sm:text-sm px-3 py-2 rounded-md hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                    >
-                                        <Navigation size={14}/><span>Navigate</span>
-                                    </a>
-                                </div>
-                                <p className="text-xs text-gray-400 text-center mt-3 border-t pt-2">Tap outside to close</p>
                             </div>
                         </InfoWindow>
                     )}

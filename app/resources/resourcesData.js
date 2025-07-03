@@ -10,6 +10,11 @@ export const resourceCategories = [
                 link: "https://www.srmist.edu.in/policies/code-of-conduct-for-students/"
             },
             {
+                title: "Contact details of hostel staff",
+                description: "warden contact details.",
+                link: "https://www.srmist.edu.in/srm-hostels/meet-our-staff/"
+            },
+            {
                 title: "Hostel rules & regulations",
                 description: "",
                 link: "https://webstor.srmist.edu.in/web_assets/downloads/2024/srm-hostel-rules-2025.pdf"
@@ -28,12 +33,12 @@ export const quickLinks = [
         color: "indigo",
         link: "https://sp.srmist.edu.in/srmiststudentportal/students/loginManager/youLogin.jsp"
     },
-    {
-        title: "Interactive Map",
-        icon: "Map",
-        color: "blue",
-        link: "/maps"
-    },
+    // {
+    //     title: "Interactive Map",
+    //     icon: "Map",
+    //     color: "blue",
+    //     link: "/maps"
+    // },
 ];
 
 
