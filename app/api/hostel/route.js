@@ -43,6 +43,7 @@ export async function GET(request) {
                     occupancy,
                     ac_type,
                     price,
+                    notes,
                     created_at
                 )
             `)
@@ -110,8 +111,8 @@ export async function GET(request) {
                 washroom_type: room.washroom_type,
                 occupancy: room.occupancy,
                 ac_type: room.ac_type,
+                notes: room.notes,
                 annual_fee: room.price,
-                // Calculate monthly fee for display
                 monthly_fee: Math.round(room.price / 12)
             })) || [],
 

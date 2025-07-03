@@ -17,8 +17,8 @@ const MAP_CONTAINER_STYLE = {
 };
 
 const DEFAULT_CENTER = {
-    lat: 12.823183,
-    lng: 80.042759,
+    lat: 12.8223491,
+    lng: 80.0454476,
 };
 
 const MAP_OPTIONS = {
@@ -204,7 +204,7 @@ export default function Maps() {
                     mapContainerClassName="w-full h-full rounded-2xl shadow-lg"
                     mapContainerStyle={MAP_CONTAINER_STYLE}
                     center={DEFAULT_CENTER}
-                    zoom={16}
+                    zoom={16.5}
                     options={MAP_OPTIONS}
                     onLoad={onMapLoad}
                 >

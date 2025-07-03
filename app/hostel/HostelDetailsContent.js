@@ -187,7 +187,7 @@ export default function HostelDetailsContent() {
                                                 {/* Left Section */}
                                                 <div className="flex flex-col">
                                                     <h3 className="font-medium text-gray-900">
-                                                        {room.occupancy} Sharing {room.ac_type === 'ac' ? 'AC' : 'Non-AC'}
+                                                        {room.occupancy} Sharing {room.ac_type === 'ac' ? 'AC' : 'Non-AC'} {room.notes}
                                                     </h3>
                                                 </div>
 
