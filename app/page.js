@@ -10,18 +10,18 @@ import { gsap } from "gsap";
 
 export default function Home() {
     useEffect(() => {
-
+        // Banner animation: Sweeping fade-in from left to right
         gsap.fromTo(
             ".banner",
             { opacity: 0, x: -100 },
-            { opacity: 1, x: 0, duration: 1.2, ease: "power3.out" }
+            { opacity: 1, x: 0, duration: 1.2, ease: "power4.out" }
         );
 
-        // Subtle fade-in for other components
+        // Smooth fade-in for other components without stagger
         gsap.fromTo(
             ".content-section",
             { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", stagger: 0.2, delay: 0.3 }
+            { opacity: 1, y: 0, duration: 0.8, ease: "power4.out", delay: 0.3 }
         );
     }, []);
 

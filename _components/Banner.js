@@ -11,11 +11,11 @@ export default function Banner() {
     const arrowRef = useRef(null);
 
     useEffect(() => {
-        // Left-to-right fade-in animation
+        // Left-to-right fade-in animation without stagger
         gsap.fromTo(
             [textRef1.current, textRef2.current, arrowRef.current],
             { opacity: 0, x: -50 },
-            { opacity: 1, x: 0, duration: 1, ease: "power2.out", stagger: 0.2 }
+            { opacity: 1, x: 0, duration: 1, ease: "power4.out" }
         );
     }, []);
 
