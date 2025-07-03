@@ -185,7 +185,7 @@ export default function Maps() {
 
     return (
         // Critical change: Container now fills available space completely
-        <div className="h-[calc(100vh-120px)] w-full p-10 sm:h-full ">
+        <div className="h-[calc(100vh-120px)] w-full p-7.5 sm:h-full ">
             <LoadScript
                 googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
                 libraries={['places', 'geocoding']}

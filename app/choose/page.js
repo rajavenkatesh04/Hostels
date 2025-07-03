@@ -42,9 +42,9 @@ export default function HostelFilter() {
             question: 'Which year of study are you in?',
             options: [
                 { value: '1', label: '1st Year', icon: BookOpen },
-                { value: '2', label: '2nd Year', icon: GraduationCap },
-                { value: '3', label: '3rd Year', icon: Award },
-                { value: '4', label: '4th Year', icon: Trophy }
+                // { value: '2', label: '2nd Year', icon: GraduationCap },
+                // { value: '3', label: '3rd Year', icon: Award },
+                // { value: '4', label: '4th Year', icon: Trophy }
             ]
         },
         {
@@ -230,13 +230,14 @@ export default function HostelFilter() {
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                     Answer a few questions and we'll find the perfect room for you.
                 </p>
+
             </header>
 
-            {Object.values(selections).some(v => v) && <SelectionsSummary />}
+            {Object.values(selections).some(v => v) && <SelectionsSummary/>}
 
             {/* Filters Section */}
             <div className="max-w-4xl mx-auto px-4 py-8">
-                {filterSteps.map((step, index) => {
+            {filterSteps.map((step, index) => {
                     const isEnabled = index === 0 || !!selections[filterSteps[index - 1].id];
                     const isCompleted = !!selections[step.id];
 
@@ -266,30 +267,40 @@ export default function HostelFilter() {
                             {step.id === 'branch' && isFetchingBranches ? (
                                 <div className="text-gray-500 py-8 text-center">Loading branches...</div>
                             ) : (
-                                <div className={`grid gap-4 ${
-                                    step.options.length <= 2
-                                        ? 'grid-cols-1 sm:grid-cols-2'
-                                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                                }`}>
-                                    {step.options.map((option) => {
-                                        const Icon = option.icon;
-                                        const isSelected = selections[step.id] === option.value;
-                                        return (
-                                            <button
-                                                key={option.value}
-                                                onClick={() => handleSelection(step.id, option.value, index)}
-                                                className={`flex items-center justify-center gap-3 p-4 md:p-5 rounded-lg border-2 font-semibold transition-all duration-200 ${
-                                                    isSelected
-                                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                        : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
-                                                }`}
-                                            >
-                                                {Icon && <Icon size={20} />}
-                                                <span className="text-sm md:text-base">{option.label}</span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
+                                <>
+                                    {/* Alert for year of study section */}
+                                    {step.id === 'yearOfStudy' && (
+                                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-6" role="alert">
+                                            <p className="font-bold">Note:</p>
+                                            <p>The booking period for 2nd, 3rd, and 4th year students has been closed. Please visit the hostel office for any further information.</p>
+                                        </div>
+                                    )}
+
+                                    <div className={`grid gap-4 ${
+                                        step.options.length <= 2
+                                            ? 'grid-cols-1 sm:grid-cols-2'
+                                            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                                    }`}>
+                                        {step.options.map((option) => {
+                                            const Icon = option.icon;
+                                            const isSelected = selections[step.id] === option.value;
+                                            return (
+                                                <button
+                                                    key={option.value}
+                                                    onClick={() => handleSelection(step.id, option.value, index)}
+                                                    className={`flex items-center justify-center gap-3 p-4 md:p-5 rounded-lg border-2 font-semibold transition-all duration-200 ${
+                                                        isSelected
+                                                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                                            : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                                                    }`}
+                                                >
+                                                    {Icon && <Icon size={20} />}
+                                                    <span className="text-sm md:text-base">{option.label}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </>
                             )}
                         </section>
                     );
