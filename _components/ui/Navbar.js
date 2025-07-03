@@ -10,7 +10,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     return(
-        <nav className="w-full fixed top-0 z-60 bg-white  shadow mb-16">
+        <nav className="w-full fixed top-0 z-60 bg-white/90 backdrop-blur-xl  shadow mb-16">
             <div className="max-w-7xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/*Logo*/}
@@ -31,6 +31,12 @@ export default function Navbar() {
                             <li>
                                 <Link href="/hostel-info" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
                                     Hostels
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link href="/choose" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
+                                    Choose
                                 </Link>
                             </li>
 
@@ -64,8 +70,7 @@ export default function Navbar() {
 
                 {/*Mobile Menu navigation*/}
                 {isOpen && (
-                    <div className="md:hidden border-t bg-white">
-
+                    <div className="md:hidden border-t bg-white/60 backdrop-blur-xl">
                         <ul className="px-2 pb-3 space-y-1">
                             <li>
                                 <Link href="/hostel-info" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">

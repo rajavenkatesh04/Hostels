@@ -15,6 +15,11 @@ export const resourceCategories = [
                 link: "https://www.srmist.edu.in/srm-hostels/meet-our-staff/"
             },
             {
+                title: "Mess details",
+                description: "warden contact details.",
+                link: "https://www.srmist.edu.in/srm-hostels/dining-eateries/"
+            },
+            {
                 title: "Hostel rules & regulations",
                 description: "",
                 link: "https://webstor.srmist.edu.in/web_assets/downloads/2024/srm-hostel-rules-2025.pdf"

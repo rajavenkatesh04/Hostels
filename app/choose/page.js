@@ -273,7 +273,7 @@ export default function HostelFilter() {
                                 <>
                                     {/* Alert for year of study section */}
                                     {step.id === 'yearOfStudy' && (
-                                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-6" role="alert">
+                                        <div className="bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 mb-6" role="alert">
                                             <p className="font-bold">Note:</p>
                                             <p>The booking period for 2nd, 3rd, and 4th year students has been closed. Please visit the hostel office for any further information.</p>
                                         </div>
