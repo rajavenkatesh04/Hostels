@@ -1,6 +1,6 @@
 export const resourceCategories = [
     {
-        title: "Hostel Realted",
+        title: "Hostel Related",
         icon: "Home",
         color: "blue",
         items: [
@@ -27,6 +27,25 @@ export const resourceCategories = [
 
         ]
     },
+
+    {
+        title: "Fee Structure",
+        icon: "IndianRupee",
+        color: "indigo",
+        items: [
+            {
+                title: "Hostel fee structure for Girls",
+                description: "",
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/srm-hostels-booking-schedule-girls-1st-year-btech-mtech.pdf"
+            },
+            {
+                title: "Hostel fee structure for Boys",
+                description: "",
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/srm-hostels-booking-schedule-boys-1st-year-btech-mtech.pdf"
+            }
+
+        ]
+    }
 ];
 
 

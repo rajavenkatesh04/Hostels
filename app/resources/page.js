@@ -1,5 +1,5 @@
 "use client";
-import { FileText, BookOpen, Shield, Calendar, HelpCircle, Library, ClipboardList, Users, Home, Settings, Mail, Map } from 'lucide-react';
+import { FileText, BookOpen, Shield, Calendar, IndianRupee, HelpCircle, Library, ClipboardList, Users, Home, Settings, Mail, Map } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { resourceCategories, quickLinks, announcement } from './resourcesData';
@@ -14,7 +14,8 @@ const iconComponents = {
     Settings,
     Mail,
     Map,
-    HelpCircle
+    HelpCircle,
+    IndianRupee
 };
 
 export default function Resources() {
@@ -30,7 +31,7 @@ export default function Resources() {
                     </h1>
                     <div className="w-16 h-0.5 bg-gradient-to-r from-indigo-600 to-teal-600 mx-auto mb-6"></div>
                     <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed font-light">
-                        Everything you need for academic and hostel life in one place
+                        Everything you need for hostel life in one place
                     </p>
                 </div>
 
@@ -86,7 +87,7 @@ export default function Resources() {
                                                 href={item.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="group flex items-start space-x-3 hover:bg-indigo-600/5 p-2 rounded-md transition-colors duration-300"
+                                                className="group flex items-start space-x-3 hover:bg-indigo-600/9 p-2 rounded-md transition-colors duration-300"
                                             >
                                                 <div className="flex-shrink-0 h-5 w-5 mt-0.5 text-indigo-600 group-hover:text-indigo-500">
                                                     <FileText className="w-full h-full" />

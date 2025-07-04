@@ -7,6 +7,7 @@ import Maps from "@/app/maps/page";
 import FAQ from "@/app/faq/page";
 import HostelSearchBar from "@/_components/hostel/HostelSearchBar";
 import { gsap } from "gsap";
+import Footer from "@/_components/ui/Footer";
 
 export default function Home() {
     useEffect(() => {
@@ -44,13 +45,7 @@ export default function Home() {
             <div className="content-section">
                 <Disclaimer />
             </div>
-
-            <div className="m-6 text-center text-xs text-gray-500 opacity-50">
-                <div className={``} >
-                    v1.0 • Built by <a href={"https://rajavenkatesh.me/"} target={`_blank`} className={`hover:underline hover:text-purple-800`}>Raja Venkatesh</a>
-                </div>
-            </div>
-
+            <Footer />
         </div>
     );
 }

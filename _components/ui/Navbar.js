@@ -35,16 +35,17 @@ export default function Navbar() {
                             </li>
 
                             <li>
+                                <Link href="/resources" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
+                                    Resources
+                                </Link>
+                            </li>
+
+                            <li>
                                 <Link href="/choose" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
                                     Choose
                                 </Link>
                             </li>
 
-                            <li>
-                                <Link href="/resources" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
-                                    Resources
-                                </Link>
-                            </li>
 
                             <li>
                                 <Link href="/about" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
@@ -76,13 +77,13 @@ export default function Navbar() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/choose" className="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium transition-colors duration-200 whitespace-nowrap">
-                                    Choose
+                                <Link href="/resources" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
+                                    Resources
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/resources" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
-                                    Resources
+                                <Link href="/choose" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md text-sm font-medium transition-colors duration-200">
+                                    Choose
                                 </Link>
                             </li>
                             <li>
