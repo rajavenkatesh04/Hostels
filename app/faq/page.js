@@ -13,6 +13,26 @@ const FAQ = () => {
         }));
     };
 
+    const renderAnswer = (item) => {
+        if (item.question === "What's your cancellation policy?") {
+            return (
+                <>
+                    Please check our{' '}
+                    <a
+                        href="https://www.srmist.edu.in/policies/hostel-policy/#hostel-refund"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline font-medium transition-colors duration-300"
+                    >
+                        official cancellation policy
+                    </a>
+                    {' '}for detailed information.
+                </>
+            );
+        }
+        return item.answer;
+    };
+
     return (
         <div className="m-6">
             {/* Header */}
@@ -55,9 +75,9 @@ const FAQ = () => {
                             } overflow-hidden`}
                         >
                             <div className="px-5 pb-4 pt-1">
-                                <p className="text-gray-600 text-sm leading-relaxed">
-                                    {item.answer}
-                                </p>
+                                <div className="text-gray-600 text-sm leading-relaxed">
+                                    {renderAnswer(item)}
+                                </div>
                             </div>
                         </div>
                     </div>

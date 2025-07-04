@@ -35,22 +35,22 @@ export default function Resources() {
                 </div>
 
                 {/* Search Bar */}
-                <div className="mb-16 max-w-2xl mx-auto">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <HelpCircle className="h-5 w-5 text-indigo-600" />
-                        </div>
-                        <input
-                            type="text"
-                            className="block w-full pl-10 pr-3 py-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg font-light text-gray-900 placeholder-gray-500"
-                            placeholder="Search resources (coming soon)..."
-                            disabled
-                        />
-                    </div>
-                    <p className="mt-2 text-sm text-gray-500 text-center font-light">
-                        Search functionality will be added in future updates
-                    </p>
-                </div>
+                {/*<div className="mb-16 max-w-2xl mx-auto">*/}
+                {/*    <div className="relative">*/}
+                {/*        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">*/}
+                {/*            <HelpCircle className="h-5 w-5 text-indigo-600" />*/}
+                {/*        </div>*/}
+                {/*        <input*/}
+                {/*            type="text"*/}
+                {/*            className="block w-full pl-10 pr-3 py-4 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg font-light text-gray-900 placeholder-gray-500"*/}
+                {/*            placeholder="Search resources (coming soon)..."*/}
+                {/*            disabled*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <p className="mt-2 text-sm text-gray-500 text-center font-light">*/}
+                {/*        Search functionality will be added in future updates*/}
+                {/*    </p>*/}
+                {/*</div>*/}
 
                 {/* Resource Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">

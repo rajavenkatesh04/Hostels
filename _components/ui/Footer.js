@@ -2,12 +2,8 @@ import {Github} from "lucide-react";
 
 export default function Footer() {
     return(
-        <footer className="w-full fixed bottom-0 bg-gray-500 flex items-center justify-center p-4">
-            <p className="flex items-center gap-2">Built with love by Raja
-                <a href="https://github.com/rajavenkatesh04" target="_blank" rel="noreferrer">
-                    <Github />
-                </a>
-            </p>
+        <footer className="text-center py-4 text-xs text-gray-500 border-t border-gray-200">
+            <p>© 2025 SRM Hostels • Developed by <a href="https://rajavenkatesh.me" target="_blank" className="text-blue-600 hover:text-blue-800 transition-colors">Raja</a></p>
         </footer>
     )
 }

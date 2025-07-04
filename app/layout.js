@@ -6,7 +6,7 @@ import Footer from "@/_components/ui/Footer";
 import {Providers} from "@/Providers";
 
 export const metadata = {
-    title: "Hostels - Find Your Perfect Stay",
+    title: "Hostels",
     description: "Discover comfortable and affordable hostels for your next adventure",
 };
 

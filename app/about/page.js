@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Github, Mail, User, CircleUserRound } from "lucide-react";
+
 
 export default function About() {
     const titleRef = useRef(null);
@@ -16,12 +18,12 @@ export default function About() {
             { opacity: 0, y: -80, scale: 0.8 },
             { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "back.out(1.7)" }
         )
-            // Animate subtitle
+
             .fromTo(subtitleRef.current,
                 { opacity: 0, y: 30 },
                 { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5"
             )
-            // Animate content cards
+
             .fromTo(contentRef.current,
                 { opacity: 0, y: 50 },
                 {
@@ -51,24 +53,23 @@ export default function About() {
 
             {/* Main Content */}
             <div className="relative z-10 container mx-auto px-6 py-20">
-                {/* Centered Header */}
                 <div className="text-center mb-20">
                     <h1
                         ref={titleRef}
-                        className="text-7xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 mb-8 tracking-tight"
+                        className="text-4xl sm:text-5xl font-light text-white tracking-wide mb-4"
                     >
-                        SRM IST Hostels
+                        SRM <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Hostels</span>
                     </h1>
+                    <div className="w-16 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto mb-6"></div>
                     <p
                         ref={subtitleRef}
-                        className="text-xl text-gray-400 font-light max-w-md mx-auto"
+                        className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed font-light"
                     >
-                        Your Home Away From Home
+                        Experience comfortable and safe housing with world-class facilities designed to enhance your academic journey
                     </p>
-
                 </div>
 
-                {/* Minimalist Content Grid */}
+
                 <div className="max-w-4xl mx-auto space-y-8">
                     {/* Mission */}
                     <div
@@ -114,6 +115,7 @@ export default function About() {
                             { number: "20+", label: "Hostels" },
                             { number: "24/7", label: "Support" },
                             { number: "100%", label: "Satisfaction" }
+
                         ].map((stat, index) => (
                             <div key={index} className="text-center">
                                 <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-1">
@@ -122,6 +124,64 @@ export default function About() {
                                 <div className="text-sm text-gray-500 uppercase tracking-wide">{stat.label}</div>
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                <div className="fixed bottom-4 right-4 z-50">
+                    <div className="group relative">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-full p-2 border border-white/20 hover:border-purple-400/50 transition-all duration-300 cursor-pointer">
+                            <User size={16} className="text-gray-400 group-hover:text-purple-400 transition-colors" />
+                        </div>
+
+                        <div className="absolute bottom-full right-0 mb-1 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
+                            <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 text-sm min-w-[200px] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                {/* Mini card header */}
+                                <div className="flex items-center gap-2 mb-3">
+                                    <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                                        <User size={14} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-900">Raja Venkatesh</p>
+                                        <p className="text-xs text-gray-500">Developer</p>
+                                    </div>
+                                </div>
+
+                                {/* Links */}
+                                <div className="space-y-2">
+                                    <a
+                                        href="https://rajavenkatesh.me/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors text-xs py-1"
+                                    >
+                                        <CircleUserRound size={14} />
+                                        Portfolio
+                                    </a>
+
+                                    <a
+                                        href="https://github.com/rajavenkatesh04"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors text-xs py-1"
+                                    >
+                                        <Github size={14} />
+                                        GitHub
+                                    </a>
+
+                                    <a
+                                        href="mailto:grv.9604@gmail.com"
+                                        className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors text-xs py-1"
+                                    >
+                                        <Mail size={14} />
+                                        Email
+                                    </a>
+                                </div>
+                                <div className="border-t border-gray-200 mt-3 pt-2">
+                                    <p className="text-xs text-gray-400 text-center">Built with ❤️</p>
+                                </div>
+                                <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

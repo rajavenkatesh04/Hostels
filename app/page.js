@@ -10,14 +10,14 @@ import { gsap } from "gsap";
 
 export default function Home() {
     useEffect(() => {
-        // Banner animation: Sweeping fade-in from left to right
+
         gsap.fromTo(
             ".banner",
             { opacity: 0, x: -100 },
             { opacity: 1, x: 0, duration: 1.2, ease: "power4.out" }
         );
 
-        // Smooth fade-in for other components without stagger
+
         gsap.fromTo(
             ".content-section",
             { opacity: 0, y: 20 },
@@ -44,6 +44,13 @@ export default function Home() {
             <div className="content-section">
                 <Disclaimer />
             </div>
+
+            <div className="m-6 text-center text-xs text-gray-500 opacity-50">
+                <div className={``} >
+                    v1.0 • Built by <a href={"https://rajavenkatesh.me/"} target={`_blank`} className={`hover:underline hover:text-purple-800`}>Raja Venkatesh</a>
+                </div>
+            </div>
+
         </div>
     );
 }

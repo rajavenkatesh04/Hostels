@@ -5,24 +5,24 @@ export const resourceCategories = [
         color: "blue",
         items: [
             {
+                title: "Contact details of hostel staff",
+                description: "",
+                link: "https://www.srmist.edu.in/srm-hostels/meet-our-staff/"
+            },
+            {
+                title: "Mess details",
+                description: "",
+                link: "https://www.srmist.edu.in/srm-hostels/dining-eateries/"
+            },
+            {
                 title: "Hostel Code of Conduct",
                 description: "",
                 link: "https://www.srmist.edu.in/policies/code-of-conduct-for-students/"
             },
             {
-                title: "Contact details of hostel staff",
-                description: "warden contact details.",
-                link: "https://www.srmist.edu.in/srm-hostels/meet-our-staff/"
-            },
-            {
-                title: "Mess details",
-                description: "warden contact details.",
-                link: "https://www.srmist.edu.in/srm-hostels/dining-eateries/"
-            },
-            {
                 title: "Hostel rules & regulations",
                 description: "",
-                link: "https://webstor.srmist.edu.in/web_assets/downloads/2024/srm-hostel-rules-2025.pdf"
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/srm-hostel-rules-2025.pdf"
             }
 
         ]
