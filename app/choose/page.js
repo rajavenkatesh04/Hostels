@@ -227,7 +227,7 @@ export default function HostelFilter() {
             <header className="text-center py-16 px-4 bg-white">
                 <h1 className="text-4xl sm:text-5xl font-light text-gray-900 tracking-wide mb-4">
                     Let's find your
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600"> Perfect </span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-600"> perfect </span>
                     hostel!
                 </h1>
                 <div className="w-16 h-0.5 bg-gradient-to-r from-indigo-600 to-teal-600 mx-auto mb-6"></div>
@@ -275,7 +275,7 @@ export default function HostelFilter() {
                                     {step.id === 'yearOfStudy' && (
                                         <div className="bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 mb-6" role="alert">
                                             <p className="font-bold">Note:</p>
-                                            <p>The booking period for 2nd, 3rd, and 4th year students has been closed. Please visit the hostel office for any further information.</p>
+                                            <p>The booking period for 2nd, 3rd, and 4th-year students is now closed. Please visit the hostel office for more information.</p>
                                         </div>
                                     )}
 
@@ -323,7 +323,7 @@ export default function HostelFilter() {
                             </div>
                             <div className="space-y-2">
                                 <h3 className="text-2xl font-light text-gray-900 tracking-wide">Finding Your Perfect Match</h3>
-                                <p className="text-gray-600 font-medium">Analyzing preferences and available rooms...</p>
+                                <p className="text-gray-600 font-medium">Analyzing your preferences and available options...</p>
                             </div>
                         </div>
                     </div>
@@ -335,7 +335,7 @@ export default function HostelFilter() {
                             <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4 tracking-wide">
                                 {results[0]?.match_score !== undefined ? (
                                     <>
-                                        Perfect matches weren't available, but we found{' '}
+                                        We couldn’t find an exact match, but we found{' '}
                                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500 font-medium">
                                 {results.length}
                             </span>
@@ -343,11 +343,11 @@ export default function HostelFilter() {
                                     </>
                                 ) : (
                                     <>
-                                        Found{' '}
+                                        We Found{' '}
                                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-indigo-600 font-medium">
                                 {results.length}
                             </span>
-                                        {' '}perfect match{results.length > 1 ? 'es' : ''} for your preferences
+                                        {' '}perfect match{results.length > 1 ? 'es' : ''} based on your preferences.
                                     </>
                                 )}
                             </h2>
@@ -362,7 +362,7 @@ export default function HostelFilter() {
                             {/* For partial matches, show a brief professional message */}
                             {results[0]?.match_score !== undefined && (
                                 <p className="text-gray-600 font-medium">
-                                    Consider these quality alternatives that closely match your needs.
+                                    These are strong alternatives that closely align with your preferences.
                                 </p>
                             )}
                         </div>
@@ -380,7 +380,7 @@ export default function HostelFilter() {
                         <div className="bg-white border-2 border-amber-200 rounded-xl p-8 text-center shadow-lg">
                             <h3 className="text-2xl font-light text-gray-900 mb-3 tracking-wide">No Available Matches</h3>
                             <p className="text-gray-600 mb-6 font-medium">
-                                Unfortunately, no hostels currently match your specific criteria.
+                                Unfortunately, no hostels currently match your exact criteria.
                             </p>
                             <button
                                 onClick={() => setActiveStep(0)}
