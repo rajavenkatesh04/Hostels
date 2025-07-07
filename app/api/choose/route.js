@@ -92,7 +92,7 @@ export async function POST(request) {
             // Relaxable requirements (any combination)
             .or(`ac_type.eq.${acType},washroom_type.eq.${washroomType},occupancy.eq.${occupancyLimit}`)
             .order('price', { ascending: true })
-            .limit(10); // Limit to top 10 partial matches
+            .limit(20); // Limit to top 20 partial matches
 
         if (partialError) {
             handleSupabaseError(partialError);

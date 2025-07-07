@@ -238,7 +238,7 @@ export default function HostelDetailsContent() {
                             </h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-indigo-500/5 p-4 rounded-lg border border-indigo-500/20">
-                                    <div className="text-xs text-indigo-500 font-medium">Starting Price</div>
+                                    <div className="text-xs text-indigo-500 font-medium">Starting room price</div>
                                     <div className="font-medium text-gray-900">₹{hostelData.room_summary.cheapest_option?.toLocaleString()}</div>
                                 </div>
                                 <div className="bg-teal-500/5 p-4 rounded-lg border border-teal-500/20">
@@ -286,7 +286,7 @@ export default function HostelDetailsContent() {
                                             <div className="flex justify-between items-center py-3 border-b border-gray-200">
                                                 <div className="flex items-center gap-3">
                                                     <WashingMachine size={16} className="text-indigo-500" />
-                                                    <span className="text-gray-700 font-light">Laundry Fee</span>
+                                                    <span className="text-gray-700 font-light">Laundry Fee <br/>(Optional)</span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
                                                     <label className="relative inline-flex items-center cursor-pointer">

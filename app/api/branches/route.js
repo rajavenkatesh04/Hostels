@@ -22,7 +22,7 @@ export async function GET() {
         const { data: branches, error } = await supabase
             .from('hostels')
             .select('branch')
-            .not('branch', 'is', null); // Ensure we exclude any null values
+            .not('branch', 'is', null); // we exclude any null values
 
         if (error) {
             handleSupabaseError(error);
@@ -34,8 +34,8 @@ export async function GET() {
 
         // Transform database values into frontend-friendly format
         const branchOptions = uniqueBranches.map(branch => ({
-            value: branch,           // This matches your enum values
-            label: formatBranchName(branch)  // This shows user-friendly names
+            value: branch,       // Database enum value
+            label: formatBranchName(branch)  //Formatted label for display to user
         }));
 
         return Response.json({
