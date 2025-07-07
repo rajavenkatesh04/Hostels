@@ -5,6 +5,10 @@ export const faqData = [
         "We have 24/7 reception, CCTV in common areas, and individual lockers in each room. Your safety and security are our top priorities."
   },
   {
+    "question": "Do you provide housekeeping services?",
+    "answer": "Yes, our housekeeping staff clean the rooms and bathrooms."
+  },
+  {
     question: "Is WiFi included?",
     answer:
         "Yes, high-speed WiFi is available throughout the hostel, including all rooms and common areas."
