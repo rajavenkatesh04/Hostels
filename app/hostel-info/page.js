@@ -197,7 +197,7 @@ export default function HostelsPage() {
                 </div>
 
                 {/* Search Bar */}
-                <SearchBar onSearch={setSearchQuery} />
+                {/*<SearchBar onSearch={setSearchQuery} />*/}
 
                 {/* Key Features */}
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
