@@ -1,2 +1,28 @@
 @import "tailwindcss";
 
+:root {
+    /* Primary Palette - Foundational calming colors with SRMIST influence */
+    --color-sage-primary: #F0F4F0;      /* Soft sage green - main background (unchanged) */
+    --color-warm-white: #F5F5F5;        /* Light gray from SRMIST, slightly warmer */
+    --color-blue-gray-accent: #E0E7EC;  /* Softer blue-gray inspired by #003087 */
+    --color-lavender-highlight: #F8F7FA; /* Muted lavender with SRMIST white influence */
+
+    /* Secondary Palette - Functional colors with SRMIST tones */
+    --color-teal-action: #4A7C7C;       /* Muted teal, softened from SRMIST blue */
+    --color-coral-girls: #E8A598;       /* Soft coral (unchanged, complements SRMIST red) */
+    --color-blue-boys: #6A8EA0;         /* Gentle blue, desaturated from #003087 */
+    --color-warm-gray: #666666;         /* Warmer gray, inspired by SRMIST #333333 */
+
+    /* Derived Colors - Lighter and darker versions */
+    --color-sage-light: #F8FAF8;        /* Lighter sage (unchanged) */
+    --color-sage-dark: #E8EEE8;         /* Darker sage (unchanged) */
+    --color-teal-hover: #3A6363;        /* Darker teal for hover states */
+    --color-coral-light: #F2C4B8;       /* Lighter coral (unchanged) */
+    --color-blue-light: #A5C4D4;        /* Lighter blue (unchanged) */
+}
+
+/* Apply the primary background to entire application */
+body {
+    background-color: var(--color-sage-primary);
+    color: var(--color-warm-gray);
+}

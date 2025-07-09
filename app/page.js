@@ -5,9 +5,10 @@ import Disclaimer from "@/_components/Disclaimer";
 import Banner from "@/_components/Banner";
 import Maps from "@/app/maps/page";
 import FAQ from "@/app/faq/page";
-import HostelSearchBar from "@/_components/hostel/HostelSearchBar";
+import MasterSearch from "@/_components/hostel/MasterSearch";
 import { gsap } from "gsap";
 import Footer from "@/_components/ui/Footer";
+import ColourPalette from "@/_components/ui/ColourPalette";
 
 export default function Home() {
     useEffect(() => {
@@ -28,8 +29,10 @@ export default function Home() {
 
     return (
         <div className="min-h-screen flex flex-col">
+            {/*<ColourPalette />*/}
             <div className="md:hidden z-50 m-4 content-section">
-                <HostelSearchBar />
+
+                <MasterSearch />
             </div>
             <div className="banner">
                 <Banner />

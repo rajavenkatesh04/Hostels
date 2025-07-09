@@ -77,7 +77,7 @@ export default function SearchBar() {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`/api/hostel/search?q=${encodeURIComponent(searchTerm)}`);
+            const response = await fetch(`/api/search${encodeURIComponent(searchTerm)}`);
             if (!response.ok) throw new Error('Search failed');
             const data = await response.json();
             setResults(data.hostels || []);
