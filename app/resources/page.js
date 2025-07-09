@@ -1,5 +1,5 @@
 "use client";
-import { FileText, BookOpen, Shield, Calendar, IndianRupee, HelpCircle, Library, ClipboardList, Users, Home, Settings, Mail, Map } from 'lucide-react';
+import { FileText, BookOpen, Shield, CalendarCheck, IndianRupee, HelpCircle, Library, ClipboardList, Users, Home, Settings, Mail, Map } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { resourceCategories, quickLinks, announcement } from './resourcesData';
@@ -15,7 +15,8 @@ const iconComponents = {
     Mail,
     Map,
     HelpCircle,
-    IndianRupee
+    IndianRupee,
+    CalendarCheck
 };
 
 export default function Resources() {

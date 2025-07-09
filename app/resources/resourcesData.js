@@ -48,7 +48,7 @@ export const resourceCategories = [
     },
     {
         title: "1st year schedule",
-        icon: "Home",
+        icon: "CalendarCheck",
         color: "indigo",
         items: [
             {
