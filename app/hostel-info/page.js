@@ -2,31 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {
-    Building2,
-    User,
-    XCircle,
-    Users,
-    MapPin,
-    Shield,
-    Wifi,
-    Car,
-    Utensils,
-    Dumbbell,
-    Camera,
-    ArrowRight,
-    HelpCircle,
-    Bath,
-    Monitor,
-    Coffee,
-    BookOpen,
-    Gamepad2,
-    ShoppingBag,
-    Zap,
-    Search,
-    X
-} from 'lucide-react';
-import SearchBar from "@/_components/hostel/SearchBar";
+import { Building2, User, XCircle, Users, MapPin, Shield, Wifi, Car, Utensils, Dumbbell, Camera, ArrowRight, HelpCircle, Bath, Monitor, Coffee, BookOpen, Gamepad2, ShoppingBag, Zap } from 'lucide-react';
 
 // Cache implementation
 const cache = new Map();
@@ -66,6 +42,15 @@ export default function HostelsPage() {
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        if (window.location.hash) {
+            const el = document.querySelector(window.location.hash);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [router.asPath]);
 
     useEffect(() => {
         const fetchHostels = async () => {
@@ -285,40 +270,42 @@ export default function HostelsPage() {
                 </div>
 
                 {/* Filter Buttons */}
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => setFilter('all')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                                filter === 'all'
-                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                        >
-                            All Hostels
-                        </button>
-                        <button
-                            onClick={() => setFilter('male')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                                filter === 'male'
-                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                        >
-                            Boys Hostels
-                        </button>
-                        <button
-                            onClick={() => setFilter('female')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                                filter === 'female'
-                                    ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                            }`}
-                        >
-                            Girls Hostels
-                        </button>
+                <section id="main">
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setFilter('all')}
+                                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                    filter === 'all'
+                                        ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                }`}
+                            >
+                                All Hostels
+                            </button>
+                            <button
+                                onClick={() => setFilter('male')}
+                                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                    filter === 'male'
+                                        ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                }`}
+                            >
+                                Boys Hostels
+                            </button>
+                            <button
+                                onClick={() => setFilter('female')}
+                                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                                    filter === 'female'
+                                        ? 'bg-gradient-to-r from-indigo-600 to-teal-600 text-white shadow-lg transform scale-105'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                }`}
+                            >
+                                Girls Hostels
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </section>
 
                 {/* Results Count */}
                 {filteredHostels.length > 0 && (

@@ -40,7 +40,7 @@ export default function Navbar() {
                         <ul className="flex space-x-8"> {/* Increased spacing for peaceful feel */}
                             <li>
                                 <Link
-                                    href="/hostel-info"
+                                    href="/hostel-info#main"
                                     className="relative px-3 py-2 font-medium transition-all duration-300 ease-out whitespace-nowrap group"
                                     style={{ color: 'var(--color-warm-gray)' }}
                                 >
@@ -149,7 +149,7 @@ export default function Navbar() {
                             isOpen ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
                         }`} style={{ transitionDelay: '100ms' }}>
                             <Link
-                                href="/hostel-info"
+                                href="/hostel-info#main"
                                 className="block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ease-out"
                                 style={{
                                     color: 'var(--color-warm-gray)',

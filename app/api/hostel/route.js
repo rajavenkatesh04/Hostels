@@ -129,7 +129,10 @@ export async function GET(request) {
                 has_ac: hostelData.hostel_rooms?.some(r => r.ac_type === 'ac') || false,
                 has_non_ac: hostelData.hostel_rooms?.some(r => r.ac_type === 'non_ac') || false,
                 // Available occupancy options
-                occupancy_options: [...new Set(hostelData.hostel_rooms?.map(r => r.occupancy) || [])].sort()
+                occupancy_options: [...new Set(hostelData.hostel_rooms?.map(r => r.occupancy) || [])].sort(),
+                // Available washroom options
+                has_attached: hostelData.hostel_rooms?.some(r => r.washroom_type === 'attached') || false,
+                has_common: hostelData.hostel_rooms?.some(r => r.washroom_type === 'common') || false,
             },
 
             // Metadata

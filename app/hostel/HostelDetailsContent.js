@@ -20,6 +20,8 @@ import {
     Info,
     IdCard
 } from 'lucide-react';
+import {underline} from "next/dist/lib/picocolors";
+
 
 export default function HostelDetailsContent() {
     const searchParams = useSearchParams();
@@ -130,6 +132,7 @@ export default function HostelDetailsContent() {
         );
     }
 
+
     return (
         <div className="bg-white text-gray-900 min-h-screen transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-24 py-8">
@@ -168,9 +171,15 @@ export default function HostelDetailsContent() {
                         </section>
                         <section className="space-y-6">
                             <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
-                                <Home size={24} className="text-indigo-500" />
+                                <Home size={24} className="text-indigo-500"/>
                                 Available Room Types
                             </h2>
+                            <div className="flex items-start gap-2 bg-gray-100  text-gray-500  text-sm px-2 py-2 ">
+                                <Info size={16} className="mt-0.5 text-amber-500" />
+                                <p className="font-medium">
+                                    Select a room below to see its pricing details in the pricing summary.
+                                </p>
+                            </div>
                             <div className="space-y-3">
                                 {hostelData.available_rooms.length > 0 ? (
                                     hostelData.available_rooms.map((room) => (
@@ -201,19 +210,21 @@ export default function HostelDetailsContent() {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className="text-gray-500 text-center py-8 font-light">No room types currently available</p>
+                                    <p className="text-gray-500 text-center py-8 font-light">No room types currently
+                                        available</p>
                                 )}
                             </div>
-                            <div className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
+                            <div
+                                className="w-full h-px bg-gradient-to-r from-indigo-500/50 via-teal-500/50 to-transparent"></div>
                         </section>
                         <section className="space-y-6">
                             <h2 className="text-2xl font-light text-gray-900 flex items-center gap-3">
-                                <User size={24} className="text-indigo-500" />
+                                <User size={24} className="text-indigo-500"/>
                                 Warden Contact
                             </h2>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <IdCard size={18} className="text-indigo-500" />
+                                    <IdCard size={18} className="text-indigo-500"/>
                                     <p className="text-lg text-medium text-teal-500">{hostelData.warden.name}</p>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -238,32 +249,36 @@ export default function HostelDetailsContent() {
                             </h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-indigo-500/5 p-4 rounded-lg border border-indigo-500/20">
-                                    <div className="text-xs text-indigo-500 font-medium">Starting room price</div>
-                                    <div className="font-medium text-gray-900">₹{hostelData.room_summary.cheapest_option?.toLocaleString()}</div>
+                                    <div className="text-xs text-indigo-500 font-medium">Options</div>
+                                    <div className="font-medium text-gray-900">
+                                        {hostelData.room_summary.has_ac && hostelData.room_summary.has_non_ac ? 'AC & Non-AC' :
+                                            hostelData.room_summary.has_ac ? 'AC Only' : 'Non-AC Only'}
+                                    </div>
                                 </div>
                                 <div className="bg-teal-500/5 p-4 rounded-lg border border-teal-500/20">
                                     <div className="text-xs text-teal-500 font-medium">Room Types</div>
                                     <div className="font-medium text-gray-900">{hostelData.room_summary.total_room_types}</div>
                                 </div>
                                 <div className="bg-indigo-500/5 p-4 rounded-lg border border-indigo-500/20">
-                                    <div className="text-xs text-indigo-500 font-medium">Options</div>
+                                    <div className="text-xs text-indigo-500 font-medium">Washroom</div>
                                     <div className="font-medium text-gray-900">
-                                        {hostelData.room_summary.has_ac && hostelData.room_summary.has_non_ac ? 'AC/Non-AC' :
-                                            hostelData.room_summary.has_ac ? 'AC Only' : 'Non-AC Only'}
+                                        {hostelData.room_summary.has_attached && hostelData.room_summary.has_common ? 'Attached & Common' :
+                                            hostelData.room_summary.has_attached ? 'Attached Only' : 'Common Only'}
                                     </div>
                                 </div>
                                 <div className="bg-teal-500/5 p-4 rounded-lg border border-teal-500/20">
                                     <div className="text-xs text-teal-500 font-medium">Sharing</div>
-                                    <div className="font-medium text-gray-900">{hostelData.room_summary.occupancy_options.join('/')}</div>
+                                    <div className="font-medium text-gray-900">{hostelData.room_summary.occupancy_options.join(', ')}</div>
                                 </div>
+
                             </div>
                         </section>
                     </div>
                     <div className="space-y-8">
                         <section className="sticky top-6 space-y-8">
                             <div className="border border-gray-300 rounded-xl p-6">
-                                <h2 className="text-2xl  text-gray-900 flex items-center gap-3 mb-6">
-                                    <ShoppingCart size={24} className="text-purple-500" />
+                                <h2 className="text-2xl text-gray-900 flex items-center gap-3 mb-6">
+                                    <ShoppingCart size={24} className="text-purple-500  " />
                                     Pricing Summary
                                 </h2>
                                 {selectedRoom ? (
@@ -310,12 +325,14 @@ export default function HostelDetailsContent() {
                         </span>
                                             </div>
                                         </div>
+
                                         <button
                                             onClick={handleProceedToBooking}
                                             className="w-full mt-6 px-6 py-4 bg-gradient-to-r from-indigo-500 to-teal-500 text-white font-medium rounded-lg hover:from-indigo-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105"
                                         >
                                             Proceed to Booking
                                         </button>
+
                                     </div>
                                 ) : (
                                     <p className="text-gray-500 text-center py-8 font-light">Select a room type to see pricing</p>
@@ -326,7 +343,7 @@ export default function HostelDetailsContent() {
                                     <Info size={18} />
                                     Important Notes
                                 </h3>
-                                <ul className="space-y-3 text-sm text-gray-700">
+                                <ul className="space-y-3  text-gray-700">
                                     <li className="flex items-start gap-3 font-light">
                                         <span className="text-indigo-500 mt-1">•</span>
                                         <span>Prices are for one entire academic year</span>
