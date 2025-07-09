@@ -98,12 +98,12 @@ export default function HostelDetailsContent() {
     return (
         <div className="bg-white text-gray-900 min-h-screen transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-24 py-8">
-                <button
-                    onClick={() => router.back()}
-                    className="mb-8 flex items-center gap-3 px-6 py-3 border border-indigo-500/30 text-indigo-500 rounded-lg hover:bg-indigo-500/5 transition-all duration-300 font-medium"
-                >
-                    <ArrowLeft size={20} /> Back to Results
-                </button>
+                {/*<button*/}
+                {/*    onClick={() => router.back()}*/}
+                {/*    className="mb-8 flex items-center gap-3 px-6 py-3 border border-indigo-500/30 text-indigo-500 rounded-lg hover:bg-indigo-500/5 transition-all duration-300 font-medium"*/}
+                {/*>*/}
+                {/*    <ArrowLeft size={20} /> Back to Results*/}
+                {/*</button>*/}
                 <div className="grid lg:grid-cols-2 gap-12">
                     <div className="space-y-8">
                         <section className="space-y-6">
