@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import {ArrowLeft, Building2, Phone, Mail, User, Users as UsersIcon, Home, MapPin, GraduationCap, CheckCircle, XCircle, Loader2, ShoppingCart, ShieldCheck, WashingMachine, Info, IdCard} from 'lucide-react';
+import {Building2, Phone, Mail, User, Users as UsersIcon, Home, MapPin, GraduationCap, CheckCircle, XCircle, Loader2, ShoppingCart, ShieldCheck, WashingMachine, Info, IdCard} from 'lucide-react';
 
 export default function HostelDetailsContent() {
     const searchParams = useSearchParams();
@@ -243,6 +243,13 @@ export default function HostelDetailsContent() {
                                     <ShoppingCart size={24} className="text-purple-500  " />
                                     Pricing Summary
                                 </h2>
+                                <div className="my-2 flex items-start gap-2 bg-gray-100  text-gray-500  text-sm px-2 py-2 ">
+                                    <Info size={16} className="mt-0.5 text-amber-500" />
+                                    <p className="font-medium">
+                                        Selected room : <span
+                                        className={`animate-pulse font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-teal-500`}>{selectedRoom?.occupancy} Sharing |  {selectedRoom?.ac_type === 'ac' ? 'AC' : 'Non-AC'} | {selectedRoom?.washroom_type === 'attached' ? 'Attached Bathroom' : 'Common Bathroom'} {selectedRoom?.notes}</span>
+                                    </p>
+                                </div>
                                 {selectedRoom ? (
                                     <div className="space-y-6">
                                         <div className="space-y-4">
