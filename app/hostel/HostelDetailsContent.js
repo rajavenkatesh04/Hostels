@@ -1,27 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import {
-    ArrowLeft,
-    Building2,
-    Phone,
-    Mail,
-    User,
-    Users as UsersIcon,
-    Home,
-    MapPin,
-    GraduationCap,
-    CheckCircle,
-    XCircle,
-    Loader2,
-    ShoppingCart,
-    ShieldCheck,
-    WashingMachine,
-    Info,
-    IdCard
-} from 'lucide-react';
-import {underline} from "next/dist/lib/picocolors";
-
+import {ArrowLeft, Building2, Phone, Mail, User, Users as UsersIcon, Home, MapPin, GraduationCap, CheckCircle, XCircle, Loader2, ShoppingCart, ShieldCheck, WashingMachine, Info, IdCard} from 'lucide-react';
 
 export default function HostelDetailsContent() {
     const searchParams = useSearchParams();
@@ -32,7 +12,6 @@ export default function HostelDetailsContent() {
     const [error, setError] = useState(null);
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [includeLaundry, setIncludeLaundry] = useState(false);
-    const [isRedirecting, setIsRedirecting] = useState(false);
 
     useEffect(() => {
         const fetchHostelDetails = async () => {
@@ -76,13 +55,12 @@ export default function HostelDetailsContent() {
         return total;
     };
 
-    const handleProceedToBooking = () => {
-        setIsRedirecting(true);
-        setTimeout(() => {
-            window.open('https://sp.srmist.edu.in/srmiststudentportal/students/loginManager/youLogin.jsp', '_blank');
-            setIsRedirecting(false);
-        }, 2000);
-    };
+
+    function handleProceedToBooking() {
+        router.push(`/ProceedToBooking`);
+    }
+
+
 
     if (isLoading) {
         return (
@@ -114,20 +92,6 @@ export default function HostelDetailsContent() {
             <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
                 <Building2 className="text-gray-400" size={64} />
                 <p className="mt-4 text-gray-600 font-light">No hostel data found.</p>
-            </div>
-        );
-    }
-
-    if (isRedirecting) {
-        return (
-            <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
-                <div className="text-center space-y-6">
-                    <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-                    <div className="space-y-2">
-                        <h2 className="text-2xl font-light text-gray-900">You're now being redirected</h2>
-                        <p className="text-gray-600 font-light">Taking you to student portal - SRMIST</p>
-                    </div>
-                </div>
             </div>
         );
     }

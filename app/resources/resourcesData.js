@@ -45,6 +45,18 @@ export const resourceCategories = [
             }
 
         ]
+    },
+    {
+        title: "1st year schedule",
+        icon: "Home",
+        color: "indigo",
+        items: [
+            {
+                title: "Important dates",
+                description: "",
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/inauguration-schedule-b-tech-integrated-m-tech-srm-ktr.pdf"
+            }
+        ]
     }
 ];
 
