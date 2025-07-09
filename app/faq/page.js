@@ -46,18 +46,13 @@ export default  function FAQ() {
         <div className="m-6">
             {/* Header - Enhanced with calming colors and breathing room */}
             <section className="space-y-4 mb-8">
-                <div className="items-center gap-4">
+                <div className="items-center gap-4 space-y-2">
                     <h1
                         className="text-4xl sm:text-4xl font-light tracking-wide transition-colors duration-300"
-                        style={{ color: 'var(--color-warm-gray)' }}
                     >
                         Frequently Asked Questions
                     </h1>
-                    <p
-                        style={{ color: 'var(--color-warm-gray)', opacity: 0.8 }}
-                    >
-                        Everything you need to know about staying with us
-                    </p>
+                    <p> Everything you need to know about staying with us </p>
                 </div>
 
             </section>

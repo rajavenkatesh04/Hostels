@@ -338,29 +338,33 @@ export default function HostelsPage() {
                                 <div className="p-6">
                                     <div className="flex items-center gap-4 mb-4">
                                         <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-indigo-500/20 to-teal-500/20 flex items-center justify-center border border-indigo-500/30 group-hover:scale-110 transition-transform duration-300">
-                                            <Building2 size={24} className="text-indigo-500" />
+                                            <Building2 size={20} className="text-indigo-500" />
                                         </div>
                                         <div className="flex-1">
                                             <h2 className="text-xl font-medium text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">{hostel.name}</h2>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <Camera className="text-green-500" size={14} />
-                                                <span className="text-sm text-gray-500">24/7 CCTV</span>
-                                            </div>
                                         </div>
                                     </div>
 
-                                    <p className="text-gray-700 font-light mb-4 leading-relaxed line-clamp-3">{hostel.description}</p>
+                                    <p className=" font-light mb-4 leading-relaxed line-clamp-1">{hostel.description}</p>
 
-                                    <div className="flex items-center justify-between mb-6">
-                                        <div className="flex items-center gap-2 text-sm text-gray-600 font-light">
-                                            <User size={16} />
+                                    <div className="flex items-center justify-between mb-6 text-sm">
+                                        <div
+                                            className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm w-fit border ${
+                                                hostel.gender === 'male'
+                                                    ? 'bg-blue-50 text-blue-500 border-blue-500'
+                                                    : 'bg-pink-50 text-pink-500 border-pink-500'
+                                            }`}
+                                        >
+                                            <User size={16} className={hostel.gender === 'male' ? 'text-blue-500' : 'text-pink-500'} />
                                             <span>{hostel.gender === 'male' ? 'Boys Hostel' : 'Girls Hostel'}</span>
                                         </div>
+
+
 
                                         {hostel.pricing && (
                                             <div className="text-right">
                                                 <div className="text-sm text-gray-500">Starting from</div>
-                                                <div className="text-lg font-semibold text-indigo-600">₹{hostel.pricing.min_price}</div>
+                                                <div className="text-lg font-semibold text-indigo-500">₹{hostel.pricing.min_price}</div>
                                             </div>
                                         )}
                                     </div>
