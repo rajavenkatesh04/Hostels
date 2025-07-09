@@ -16,7 +16,8 @@ export default function ChooseHostelCard({ results, isPartialMatch, userSelectio
 
     const handleViewDetails = (result) => {
         if (result.hostel_id) {
-            router.push(`/hostel?id=${result.hostel_id}`);
+            const url = `/hostel?id=${result.hostel_id}`;
+            window.open(url, '_blank');
         } else {
             console.error('No hostel ID found in result:', result);
         }
