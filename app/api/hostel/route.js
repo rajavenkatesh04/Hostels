@@ -84,6 +84,7 @@ export async function GET(request) {
             id: hostelData.id,
             name: hostelData.name,
             description: hostelData.description,
+            image: hostelData.image,
 
             // Academic and demographic info
             year_of_study: hostelData.year_of_study,

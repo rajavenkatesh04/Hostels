@@ -80,7 +80,7 @@ export const quickLinks = [
 
 export const announcement = {
     title: "Important Notice",
-    content: "Content is subjected to change in the upcoming days.",
+    content: "Respective hostel pictures will be added soon",
     action: {
         text: "",
         link: ""

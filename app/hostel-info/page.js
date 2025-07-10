@@ -364,13 +364,15 @@ export default function HostelsPage() {
                                         {hostel.pricing && (
                                             <div className="text-right">
                                                 <div className="text-sm text-gray-500">Starting from</div>
-                                                <div className="text-lg font-semibold text-indigo-500">₹{hostel.pricing.min_price}</div>
+                                                <div className="text-lg font-semibold text-indigo-500">₹{hostel.pricing.starting_from.toLocaleString()}</div>
                                             </div>
                                         )}
                                     </div>
 
                                     <button
-                                        onClick={() => router.push(`/hostel?id=${hostel.id}`)}
+                                        // onClick={() => router.push(`/hostel?id=${hostel.id}`)}
+                                        onClick={() => window.open(`/hostel?id=${hostel.id}`, '_blank')}
+
                                         className="w-full py-3 bg-gradient-to-r from-indigo-600 to-teal-600 hover:from-indigo-700 hover:to-teal-700 text-white font-medium rounded-lg transition-all duration-300 transform group-hover:scale-105 flex items-center justify-center gap-2"
                                     >
                                         View Details

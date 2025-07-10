@@ -54,7 +54,8 @@ export async function GET() {
                 min_price: hostel.min_price,
                 max_price: hostel.max_price,
                 mess_fees: hostel.mess_fees,
-                laundry_fees: hostel.laundry_fees
+                laundry_fees: hostel.laundry_fees,
+                starting_from: hostel.min_price + hostel.mess_fees,
             }
         }));
 
@@ -80,7 +81,7 @@ export async function GET() {
     }
 }
 
-// Optional: Handle other HTTP methods gracefully
+// Handle other HTTP methods gracefully
 export async function POST() {
     return Response.json(
         { message: 'POST method not supported for hostels listing' },
