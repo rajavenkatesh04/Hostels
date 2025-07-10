@@ -102,6 +102,22 @@ export default function Navbar() {
                                     ></div>
                                 </Link>
                             </li>
+
+                            <li>
+                                <Link
+                                    href="/gallery"
+                                    className="relative px-3 py-2 font-medium transition-all duration-300 ease-out whitespace-nowrap group"
+                                    style={{ color: 'var(--color-warm-gray)' }}
+                                >
+                                    <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+                                        Gallery
+                                    </span>
+                                    <div
+                                        className="absolute inset-0 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 ease-out"
+                                        style={{ backgroundColor: 'var(--color-teal-action)' }}
+                                    ></div>
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
@@ -234,6 +250,29 @@ export default function Navbar() {
                                 }}
                             >
                                 About
+                            </Link>
+                        </div>
+
+                        <div className={`transform transition-all duration-300 ease-out ${
+                            isOpen ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+                        }`} style={{ transitionDelay: '250ms' }}>
+                            <Link
+                                href="/gallery"
+                                className="block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ease-out"
+                                style={{
+                                    color: 'var(--color-warm-gray)',
+                                    backgroundColor: 'transparent'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = 'var(--color-blue-gray-accent)';
+                                    e.target.style.color = 'var(--color-teal-action)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = 'transparent';
+                                    e.target.style.color = 'var(--color-warm-gray)';
+                                }}
+                            >
+                                Gallery
                             </Link>
                         </div>
                     </div>
