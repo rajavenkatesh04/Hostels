@@ -35,8 +35,8 @@ export default function Page() {
     }
 
     return (
-        <div className="fixed inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-50">
-            <div className="max-w-md mx-4 p-8 bg-white rounded-xl shadow-lg border border-gray-100 text-center space-y-6 animate-fade-in">
+        <div className="min-h-screen bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-50 overflow-auto py-10">
+        <div className="max-w-md mx-4 p-8 bg-white rounded-xl shadow-lg border border-gray-100 text-center space-y-6 animate-fade-in">
                 <div className="space-y-3">
                     <h2 className="text-2xl font-light text-gray-900">You're about to be redirected</h2>
                     <p className="text-gray-600 font-light">to SRMIST - Student Portal</p>
