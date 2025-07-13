@@ -42,13 +42,41 @@ export default function Page() {
                     <p className="text-gray-600 font-light">to SRMIST - Student Portal</p>
                 </div>
 
-                {/*Alert*/}
-                <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4" role="alert">
-                    <p className="font-bold">Online Booking Dates</p>
-                    <p>Girls - 21.07.2025</p>
-                    <p>Boys - 22.07.2025</p>
-                </div>
+                {/* Enhanced Alert Section - This is the only part that changed */}
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-400 rounded-r-lg p-6 shadow-sm">
+                    <div className="flex items-start space-x-3">
+                        <div className="flex-shrink-0">
+                            <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div className="space-y-3">
+                            <h3 className="text-lg font-semibold text-amber-800">
+                                📅 Online Booking Schedule
+                            </h3>
 
+                            <div className="space-y-2 text-sm">
+                                <div className="bg-pink-50 border border-pink-200 rounded-lg p-3">
+                                    <p className="text-slate-700">
+                                        <span className="font-bold text-pink-700">First Year [Girls]</span> B-Tech/B.Arch/B.Des and M-Tech (Integrated)
+                                    </p>
+                                    <p className="text-slate-800 font-semibold mt-1">
+                                        🗓️ 21.07.2025 Monday @ 11:00 AM
+                                    </p>
+                                </div>
+
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                    <p className="text-slate-700">
+                                        <span className="font-bold text-blue-700">First Year [Boys]</span> B-Tech/B.Arch/B.Des and M-Tech (Integrated)
+                                    </p>
+                                    <p className="text-slate-800 font-semibold mt-1">
+                                        🗓️ 22.07.2025 Tuesday @ 11:00 AM
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <button
                     onClick={handleProceedToBooking}
