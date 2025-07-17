@@ -36,12 +36,12 @@ export const resourceCategories = [
             {
                 title: "Hostel fee structure for Girls",
                 description: "",
-                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/srm-hostels-booking-schedule-girls-1st-year-btech-mtech.pdf"
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/fresher-girls-25-26-booking-schedule.pdf"
             },
             {
                 title: "Hostel fee structure for Boys",
                 description: "",
-                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/srm-hostels-booking-schedule-boys-1st-year-btech-mtech.pdf"
+                link: "https://webstor.srmist.edu.in/web_assets/downloads/2025/fresher-boys-25-26-booking-schedule.pdf"
             }
 
         ]
