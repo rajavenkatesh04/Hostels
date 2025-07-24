@@ -9,6 +9,7 @@ import MasterSearch from "@/_components/hostel/MasterSearch";
 import { gsap } from "gsap";
 import Footer from "@/_components/ui/Footer";
 import ColourPalette from "@/_components/ui/ColourPalette";
+import AnnouncementBanner from "@/_components/AnnouncementBanner";
 
 export default function Home() {
     useEffect(() => {
@@ -29,9 +30,9 @@ export default function Home() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/*<ColourPalette />*/}
-            <div className="md:hidden z-50 m-4 content-section">
+            <AnnouncementBanner />
 
+            <div className="md:hidden z-50 m-4 content-section">
                 <MasterSearch />
             </div>
             <div className="banner">
