@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Github, Mail, User, CircleUserRound } from "lucide-react";
-
+import {Mail, User, CircleUserRound } from "lucide-react";
+import { FiGithub as Github } from "react-icons/fi";
 
 export default function About() {
     const titleRef = useRef(null);
