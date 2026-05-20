@@ -1,0 +1,92 @@
+'use client'
+
+import { useState } from 'react'
+import { Send } from 'lucide-react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+
+export function ContactForm() {
+  const [submitting, setSubmitting] = useState(false)
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = Object.fromEntries(new FormData(form))
+
+    setSubmitting(true)
+    // TODO: Wire to Resend/Formspree/Web3Forms for actual email delivery
+    console.log('Contact form submission:', data)
+
+    toast.success("Message sent — we'll get back to you soon")
+    form.reset()
+    setSubmitting(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="contact-name">Name</FieldLabel>
+          <Input
+            id="contact-name"
+            name="name"
+            type="text"
+            required
+            autoComplete="name"
+            placeholder="Your full name"
+          />
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="contact-email">Email</FieldLabel>
+          <Input
+            id="contact-email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
+          <FieldDescription>
+            We&apos;ll only use this to reply to your message.
+          </FieldDescription>
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="contact-subject">Subject</FieldLabel>
+          <Input
+            id="contact-subject"
+            name="subject"
+            type="text"
+            required
+            placeholder="What is this about?"
+          />
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="contact-message">Message</FieldLabel>
+          <Textarea
+            id="contact-message"
+            name="message"
+            required
+            rows={6}
+            placeholder="Tell us what's on your mind..."
+          />
+        </Field>
+
+        <Button type="submit" size="lg" disabled={submitting}>
+          <Send className="size-4" />
+          {submitting ? 'Sending...' : 'Send message'}
+        </Button>
+      </FieldGroup>
+    </form>
+  )
+}
