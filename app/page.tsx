@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { FAQAccordion } from '@/components/faq-accordion'
+import { CampusMapWrapper } from '@/components/campus-map-wrapper'
 import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
@@ -28,16 +29,8 @@ export default function HomePage() {
         </section>
 
         <section className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
-            <div className="rounded-xl border border-border bg-background px-6 py-3 shadow-sm">
-              <p className="text-sm font-medium text-muted-foreground">
-                Map coming soon
-              </p>
-            </div>
-            <p className="mt-3 max-w-sm text-xs text-muted-foreground">
-              An interactive campus map of all SRM Kattankulathur hostels will
-              live here.
-            </p>
+          <div className="h-[400px] md:h-[600px] overflow-hidden rounded-2xl border border-slate-200">
+            <CampusMapWrapper />
           </div>
 
           <div>

@@ -23,7 +23,8 @@
       "Bash(curl -s -o /tmp/re.html -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/resources)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} \\(size %{size_download} bytes\\)\\\\n\" http://localhost:3000/resources/circular-2026-27.pdf)",
       "Bash(curl *)",
-      "Bash(npx --yes svgo public/srm-logo.svg)"
+      "Bash(npx --yes svgo public/srm-logo.svg)",
+      "PowerShell(npm install *)"
     ]
   }
 }

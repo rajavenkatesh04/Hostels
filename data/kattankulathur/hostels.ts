@@ -1,12 +1,31 @@
 import type { Hostel } from '@/types/hostel'
+import {
+  UNIVERSITY_BUILDING_COORDS,
+  calculateHaversineDistance,
+  metersToWalkingMinutes,
+} from '@/lib/campus-data'
 
 const BOYS_MESS_FEES = 73000
 const BOYS_LAUNDRY_FEES = 7500
 const GIRLS_MESS_FEES = 73000
 const GIRLS_LAUNDRY_FEES = 8500
 
+function withDistance(hostel: Hostel): Hostel {
+  if (!hostel.coordinates) return hostel
+  const meters = Math.round(
+    calculateHaversineDistance(hostel.coordinates, UNIVERSITY_BUILDING_COORDS)
+  )
+  return {
+    ...hostel,
+    distanceToUB: {
+      meters,
+      walkingMinutes: metersToWalkingMinutes(meters),
+    },
+  }
+}
+
 export const kattankulathurHostels: Hostel[] = [
-  {
+  withDistance({
     slug: 'n-block',
     name: 'N Block',
     description:
@@ -23,8 +42,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.824, lng: 80.0438 },
+  }),
+  withDistance({
     slug: 'green-pearl',
     name: 'Green Pearl',
     description:
@@ -42,8 +62,9 @@ export const kattankulathurHostels: Hostel[] = [
     isOffCampus: true,
     messFees: 125000,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8195, lng: 80.042 },
+  }),
+  withDistance({
     slug: 'adhiyaman',
     name: 'Adhiyaman',
     description:
@@ -62,8 +83,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8222, lng: 80.0452 },
+  }),
+  withDistance({
     slug: 'oori',
     name: 'Oori',
     description:
@@ -80,8 +102,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8218, lng: 80.0438 },
+  }),
+  withDistance({
     slug: 'kaari',
     name: 'Kaari',
     description:
@@ -98,8 +121,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8215, lng: 80.0442 },
+  }),
+  withDistance({
     slug: 'ja-block-2',
     name: 'JA Block 2',
     description:
@@ -107,17 +131,16 @@ export const kattankulathurHostels: Hostel[] = [
     branch: 'kattankulathur',
     gender: 'boys',
     year: 1,
-    rooms: [
-      { sharing: 7, ac: false, washroom: 'attached', price: 37000 },
-    ],
+    rooms: [{ sharing: 7, ac: false, washroom: 'attached', price: 37000 }],
     wardenName: 'TBD',
     wardenContact: 'TBD',
     wardenEmail: 'TBD',
     isOffCampus: true,
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.818, lng: 80.048 },
+  }),
+  withDistance({
     slug: 'kalpana-chawla',
     name: 'Kalpana Chawla',
     description:
@@ -134,8 +157,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8245, lng: 80.0452 },
+  }),
+  withDistance({
     slug: 'meenakshi',
     name: 'Meenakshi',
     description:
@@ -158,8 +182,9 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'TBD',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8242, lng: 80.046 },
+  }),
+  withDistance({
     slug: 'thamarai',
     name: 'Thamarai',
     description:
@@ -167,16 +192,15 @@ export const kattankulathurHostels: Hostel[] = [
     branch: 'kattankulathur',
     gender: 'girls',
     year: 1,
-    rooms: [
-      { sharing: 2, ac: false, washroom: 'common', price: 60000 },
-    ],
+    rooms: [{ sharing: 2, ac: false, washroom: 'common', price: 60000 }],
     wardenName: 'TBD',
     wardenContact: 'TBD',
     wardenEmail: 'TBD',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8238, lng: 80.0428 },
+  }),
+  withDistance({
     slug: 'mullai',
     name: 'Mullai',
     description:
@@ -184,16 +208,15 @@ export const kattankulathurHostels: Hostel[] = [
     branch: 'kattankulathur',
     gender: 'girls',
     year: 1,
-    rooms: [
-      { sharing: 3, ac: false, washroom: 'common', price: 50000 },
-    ],
+    rooms: [{ sharing: 3, ac: false, washroom: 'common', price: 50000 }],
     wardenName: 'TBD',
     wardenContact: 'TBD',
     wardenEmail: 'TBD',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-  },
-  {
+    coordinates: { lat: 12.8236, lng: 80.0432 },
+  }),
+  withDistance({
     slug: 'senbagam',
     name: 'Senbagam',
     description:
@@ -201,13 +224,12 @@ export const kattankulathurHostels: Hostel[] = [
     branch: 'kattankulathur',
     gender: 'girls',
     year: 1,
-    rooms: [
-      { sharing: 6, ac: false, washroom: 'common', price: 45000 },
-    ],
+    rooms: [{ sharing: 6, ac: false, washroom: 'common', price: 45000 }],
     wardenName: 'TBD',
     wardenContact: 'TBD',
     wardenEmail: 'TBD',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-  },
+    coordinates: { lat: 12.8233, lng: 80.0425 },
+  }),
 ]

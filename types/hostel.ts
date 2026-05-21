@@ -27,6 +27,14 @@ export type Hostel = {
   laundryFees: number
   imageUrl?: string
   placeId?: string
+  coordinates?: {
+    lat: number
+    lng: number
+  }
+  distanceToUB?: {
+    meters: number
+    walkingMinutes: number
+  }
 }
 
 export type HostelFilter = {
