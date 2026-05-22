@@ -29,7 +29,7 @@ export default function HomePage() {
         </section>
 
         <section className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className="h-[400px] md:h-[600px] overflow-hidden rounded-2xl border border-slate-200">
+          <div className="h-100 md:h-150 overflow-hidden rounded-2xl border border-slate-200">
             <CampusMapWrapper />
           </div>
 

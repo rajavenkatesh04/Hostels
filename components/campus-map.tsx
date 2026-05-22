@@ -66,6 +66,7 @@ export function CampusMap() {
         mapStyle={mapStyleUrl}
         dragRotate={false}
         touchZoomRotate={false}
+        cooperativeGestures={true}
         style={{ width: '100%', height: '100%' }}
       >
         <NavigationControl position="bottom-right" showCompass={false} />
