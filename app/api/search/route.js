@@ -53,7 +53,8 @@ export async function GET(request) {
                     price,
                     notes
                 )
-            `);
+            `)
+            .eq('year_of_study', '1st_year'); // TEMP-FY26: only 1st-year booking open
 
         if (error) {
             handleSupabaseError(error);

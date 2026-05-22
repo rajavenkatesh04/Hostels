@@ -7,7 +7,8 @@ export async function GET() {
         const { data, error } = await supabase
             .from('hostels')
             .select('id, name, gender, plus_code')
-            .not('plus_code', 'is', null);
+            .not('plus_code', 'is', null)
+            .eq('year_of_study', '1st_year'); // TEMP-FY26: only 1st-year booking open
 
         if (error) throw error;
 

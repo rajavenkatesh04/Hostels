@@ -48,6 +48,7 @@ export async function GET(request) {
                 )
             `)
             .eq('id', hostelId)
+            .eq('year_of_study', '1st_year') // TEMP-FY26: only 1st-year booking open; non-1st-year IDs 404
             .single(); // We expect exactly one hostel
 
         if (hostelError) {

@@ -22,7 +22,8 @@ export async function GET() {
         const { data: branches, error } = await supabase
             .from('hostels')
             .select('branch')
-            .not('branch', 'is', null); // we exclude any null values
+            .not('branch', 'is', null) // we exclude any null values
+            .eq('year_of_study', '1st_year'); // TEMP-FY26: only branches with 1st-year hostels
 
         if (error) {
             handleSupabaseError(error);

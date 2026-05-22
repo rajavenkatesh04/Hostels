@@ -18,7 +18,8 @@ export async function POST(request) {
 
         // Convert to database values
         const genderEnum = gender === 'boys' ? 'male' : 'female';
-        const yearEnum = `${yearOfStudy}${yearOfStudy === '1' ? 'st' : yearOfStudy === '2' ? 'nd' : yearOfStudy === '3' ? 'rd' : 'th'}_year`;
+        let yearEnum = `${yearOfStudy}${yearOfStudy === '1' ? 'st' : yearOfStudy === '2' ? 'nd' : yearOfStudy === '3' ? 'rd' : 'th'}_year`;
+        yearEnum = '1st_year'; // TEMP-FY26: force 1st-year regardless of input; only 1st-year booking open
         const occupancyLimit = parseInt(sharing);
         const branchEnum = branch;
 

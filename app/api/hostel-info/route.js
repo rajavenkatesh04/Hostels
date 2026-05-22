@@ -19,7 +19,8 @@ export async function GET() {
                 max_price,
                 mess_fees,
                 laundry_fees
-            `);
+            `)
+            .eq('year_of_study', '1st_year'); // TEMP-FY26: only 1st-year booking open
 
         if (hostelsError) {
             handleSupabaseError(hostelsError);
