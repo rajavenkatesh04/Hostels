@@ -189,11 +189,21 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone className="size-4 text-muted-foreground" />
-                <span>{hostel.wardenContact}</span>
+                <a
+                  href={`tel:${hostel.wardenContact}`}
+                  className="text-slate-700 hover:text-indigo-600 hover:underline"
+                >
+                  {hostel.wardenContact}
+                </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="size-4 text-muted-foreground" />
-                <span className="break-all">{hostel.wardenEmail}</span>
+                <a
+                  href={`mailto:${hostel.wardenEmail}`}
+                  className="break-all text-slate-700 hover:text-indigo-600 hover:underline"
+                >
+                  {hostel.wardenEmail}
+                </a>
               </div>
             </CardContent>
           </Card>
