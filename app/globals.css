@@ -148,3 +148,7 @@
 .maplibregl-popup-close-button {
   display: none;
 }
+
+.maplibregl-cooperative-gesture-screen {
+  z-index: 1 !important;
+}

@@ -36,7 +36,7 @@ export default function RootLayout({
         <NuqsAdapter>
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
+          {/*<SiteFooter />*/}
           <Toaster richColors position="top-right" />
         </NuqsAdapter>
       </body>

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getAllHostels, getHostelBySlug } from '@/lib/hostels'
 import { HostelDetail } from '@/components/hostel-detail'
+import { HostelGallery } from '@/components/hostel-gallery'
 
 export const dynamicParams = false
 
@@ -31,7 +32,8 @@ export default async function HostelDetailPage(
   if (!hostel) notFound()
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
+      <HostelGallery hostel={hostel} />
       <Suspense fallback={null}>
         <HostelDetail hostel={hostel} />
       </Suspense>

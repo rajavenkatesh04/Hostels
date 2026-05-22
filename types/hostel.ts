@@ -26,6 +26,7 @@ export type Hostel = {
   messFees: number
   laundryFees: number
   imageUrl?: string
+  images?: string[]
   placeId?: string
   coordinates?: {
     lat: number

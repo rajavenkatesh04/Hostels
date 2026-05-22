@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FAQAccordion } from '@/components/faq-accordion'
 import { CampusMapWrapper } from '@/components/campus-map-wrapper'
 import { ArrowRight } from "lucide-react";
+import { SiteFooter } from '@/components/site-footer'
 
 export default function HomePage() {
   return (

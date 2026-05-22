@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { Download, FileText } from 'lucide-react'
+import { Download, Eye, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -9,16 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-
-const resources = [
-  {
-    title: 'Hostel Fees Circular 2026–27',
-    description:
-      'Official SRMIST circular with the complete hostel fee structure for all first-year B.Tech and M.Tech (Integrated) students at Kattankulathur.',
-    href: '/resources/circular-2026-27.pdf',
-    filename: 'circular-2026-27.pdf',
-  },
-] as const
+import { resources, type Resource } from '@/data/resources'
 
 export const metadata = {
   title: 'Resources — SRM Hostels',
@@ -28,7 +18,7 @@ export const metadata = {
 
 export default function ResourcesPage() {
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
       <header className="space-y-2">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
           Resources
@@ -40,29 +30,56 @@ export default function ResourcesPage() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         {resources.map((r) => (
-          <Card key={r.href} className="flex h-full flex-col">
-            <CardHeader>
-              <div className="mb-2 inline-flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <FileText className="size-5" />
-              </div>
-              <CardTitle>{r.title}</CardTitle>
-              <CardDescription>{r.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1" />
-            <CardFooter>
-              <Button
-                className="w-full"
-                render={
-                  <Link href={r.href} download={r.filename} target="_blank">
-                    <Download className="size-4" />
-                    Download PDF
-                  </Link>
-                }
-              />
-            </CardFooter>
-          </Card>
+          <ResourceCard key={r.id} resource={r} />
         ))}
       </div>
     </div>
+  )
+}
+
+function ResourceCard({ resource }: { resource: Resource }) {
+  const { title, description, url, isExternal } = resource
+  // The `download` attribute only triggers a save dialog for same-origin
+  // requests, so it's a no-op (or worse, ignored with a warning) on external URLs.
+  const downloadAttr = isExternal ? undefined : ''
+
+  return (
+    <Card className="flex h-full flex-col">
+      <CardHeader>
+        <div className="mb-2 inline-flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <FileText className="size-5" />
+        </div>
+        <CardTitle>{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      <CardContent className="flex-1" />
+      <CardFooter className="gap-2">
+        <Button
+          variant="outline"
+          className="flex-1"
+          render={
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              <Eye className="size-4" />
+              <span className="hidden sm:inline">View</span>
+            </a>
+          }
+        />
+        <Button
+          variant="default"
+          className="flex-1"
+          render={
+            <a
+              href={url}
+              download={downloadAttr}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Download className="size-4" />
+              <span className="hidden sm:inline">Download</span>
+            </a>
+          }
+        />
+      </CardFooter>
+    </Card>
   )
 }
