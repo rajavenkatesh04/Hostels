@@ -16,9 +16,7 @@ import {
 import type { Hostel, Room, WashroomType } from '@/types/hostel'
 import { cn } from '@/lib/utils'
 import { getDirectionsUrl } from '@/lib/maps'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 
 const BOOKING_URL = 'https://sp.srmist.edu.in/srmiststudentportal'
@@ -79,23 +77,29 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
       <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
         <div className="space-y-8 min-w-0">
           <header className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={isBoys ? 'default' : 'secondary'}>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span
+                className={`rounded-full px-2.5 py-1 font-medium ${
+                  isBoys
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'bg-pink-50 text-pink-700'
+                }`}
+              >
                 {isBoys ? 'Boys' : 'Girls'}
-              </Badge>
-              <Badge variant="outline">
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 font-medium text-gray-700">
                 <MapPin className="size-3" />
                 {hostel.isOffCampus ? 'Off-campus' : 'On-campus'}
-              </Badge>
-              <Badge variant="outline">
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 font-medium text-gray-700">
                 <GraduationCap className="size-3" />
                 {yearLabels[hostel.year] ?? `Year ${hostel.year}`}
-              </Badge>
+              </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h1 className="font-serif text-3xl font-light tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
               {hostel.name}
             </h1>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="leading-relaxed text-gray-600">
               {hostel.description}
             </p>
             {(hostel.coordinates || hostel.floorPlanUrl) && (
@@ -139,13 +143,13 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
           </header>
 
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2 className="text-lg font-semibold tracking-tight text-gray-900">
               Available Room Types
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-600">
               Select a room type to update the pricing summary.
             </p>
-            <div className="space-y-2 pt-1">
+            <div className="space-y-3 pt-2">
               {hostel.rooms.map((room, index) => (
                 <RoomOption
                   key={`${room.ac}-${room.washroom}-${room.sharing}-${index}`}
@@ -160,106 +164,106 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
         </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <Card>
-            <CardHeader>
-              <CardTitle>Pricing Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2 text-sm">
-                <PriceRow
-                  label="Selected room"
-                  value={selectedRoom.price}
-                  sublabel={describeRoom(selectedRoom)}
-                />
-                <PriceRow label="Mess fee (mandatory)" value={hostel.messFees} />
-                <div className="flex items-start justify-between gap-3 py-1">
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <Switch
-                      checked={laundryEnabled}
-                      onCheckedChange={setLaundryEnabled}
-                      className="mt-0.5"
-                    />
-                    <span className="text-muted-foreground text-sm leading-tight">
-                      Laundry
-                      <span className="block text-xs">(optional)</span>
-                    </span>
-                  </label>
-                  <span
-                    className={cn(
-                      'text-sm tabular-nums',
-                      !laundryEnabled && 'text-muted-foreground line-through'
-                    )}
-                  >
-                    ₹{hostel.laundryFees.toLocaleString('en-IN')}
-                  </span>
-                </div>
-                <div className="flex items-baseline justify-between border-t border-border pt-3">
-                  <span className="font-semibold">Total annual</span>
-                  <span className="text-xl font-bold tabular-nums">
-                    ₹{total.toLocaleString('en-IN')}
-                  </span>
-                </div>
-              </div>
-              <Button
-                className="w-full"
-                size="lg"
-                render={
-                  <a
-                    href={BOOKING_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+          <div className="rounded-xl border-2 border-gray-200 bg-white p-6 md:p-8">
+            <h2 className="mb-5 text-lg font-semibold tracking-tight text-gray-900">
+              Pricing Summary
+            </h2>
+            <div className="space-y-3 text-sm">
+              <PriceRow
+                label="Selected room"
+                value={selectedRoom.price}
+                sublabel={describeRoom(selectedRoom)}
+              />
+              <PriceRow label="Mess fee (mandatory)" value={hostel.messFees} />
+              <div className="flex items-start justify-between gap-3 py-1">
+                <label className="flex cursor-pointer items-start gap-2">
+                  <Switch
+                    checked={laundryEnabled}
+                    onCheckedChange={setLaundryEnabled}
+                    className="mt-0.5"
                   />
-                }
-              >
-                Proceed to Booking
-                <ArrowUpRight className="size-4" />
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                Opens the SRM student portal in a new tab.
-              </p>
-            </CardContent>
-          </Card>
+                  <span className="text-sm leading-tight text-gray-600">
+                    Laundry
+                    <span className="block text-xs">(optional)</span>
+                  </span>
+                </label>
+                <span
+                  className={cn(
+                    'text-sm tabular-nums',
+                    !laundryEnabled
+                      ? 'text-gray-400 line-through'
+                      : 'text-gray-700'
+                  )}
+                >
+                  ₹{hostel.laundryFees.toLocaleString('en-IN')}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-t-2 border-gray-100 pt-4">
+                <span className="font-semibold text-gray-900">
+                  Total annual
+                </span>
+                <span className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-2xl font-bold tabular-nums text-transparent">
+                  ₹{total.toLocaleString('en-IN')}
+                </span>
+              </div>
+            </div>
+            <Button
+              size="lg"
+              className="mt-6 h-auto w-full bg-linear-to-r from-indigo-600 to-teal-600 px-6 py-1.5 text-base text-white hover:from-indigo-700 hover:to-teal-700"
+              render={
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+            >
+              Proceed to Booking
+              <ArrowUpRight className="size-4" />
+            </Button>
+            <p className="mt-3 text-center text-xs text-gray-500">
+              Opens the SRM student portal in a new tab.
+            </p>
+          </div>
         </aside>
       </div>
 
-      <div className="grid gap-8 border-t border-border pt-10 md:grid-cols-2">
+      <div className="grid gap-8 border-t border-gray-200 pt-10 md:grid-cols-2">
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold tracking-tight">
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
             Warden Contact
           </h2>
-          <Card>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-3 text-sm">
-                <Users className="size-4 text-muted-foreground" />
-                <span>{hostel.wardenName}</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Phone className="size-4 text-muted-foreground" />
-                <a
-                  href={`tel:${hostel.wardenContact}`}
-                  className="text-slate-700 hover:text-indigo-600 hover:underline"
-                >
-                  {hostel.wardenContact}
-                </a>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Mail className="size-4 text-muted-foreground" />
-                <a
-                  href={`mailto:${hostel.wardenEmail}`}
-                  className="break-all text-slate-700 hover:text-indigo-600 hover:underline"
-                >
-                  {hostel.wardenEmail}
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="space-y-3 rounded-xl border-2 border-gray-200 bg-white p-6">
+            <div className="flex items-center gap-3 text-sm text-gray-700">
+              <Users className="size-4 text-gray-400" />
+              <span>{hostel.wardenName}</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <Phone className="size-4 text-gray-400" />
+              <a
+                href={`tel:${hostel.wardenContact}`}
+                className="text-gray-700 hover:text-indigo-600 hover:underline"
+              >
+                {hostel.wardenContact}
+              </a>
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <Mail className="size-4 text-gray-400" />
+              <a
+                href={`mailto:${hostel.wardenEmail}`}
+                className="break-all text-gray-700 hover:text-indigo-600 hover:underline"
+              >
+                {hostel.wardenEmail}
+              </a>
+            </div>
+          </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold tracking-tight">
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
             Important Notes
           </h2>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="space-y-2 text-sm text-gray-600">
             <li>· All prices are annual fees for the 2026–27 academic year.</li>
             <li>· Mess fee is mandatory and included in the total.</li>
             <li>· Laundry fee is optional and can be added at any time.</li>
@@ -294,42 +298,63 @@ function RoomOption({
       onClick={onSelect}
       aria-pressed={selected}
       className={cn(
-        'relative w-full rounded-lg border p-4 text-left transition-all',
+        'relative w-full rounded-lg border-2 p-4 text-left transition-all duration-200 md:p-5',
         selected
-          ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
-          : 'border-border bg-background hover:bg-muted/50'
+          ? 'border-blue-500 bg-blue-50 text-blue-700'
+          : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
       )}
     >
       {isUrlMatch && (
-        <span className="absolute -top-2.5 left-4 bg-background px-2 text-xs font-medium text-indigo-600">
+        <span className="absolute -top-2.5 left-4 bg-white px-2 text-xs font-medium text-indigo-600">
           Your selection
         </span>
       )}
       <div className="flex items-start justify-between gap-4">
-        <div className="space-y-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium">
+        <div className="min-w-0 space-y-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold md:text-base">
             <span className="inline-flex items-center gap-1">
-              {room.ac ? (
-                <Snowflake className="size-3.5 text-muted-foreground" />
-              ) : null}
+              {room.ac ? <Snowflake className="size-4" /> : null}
               {room.ac ? 'AC' : 'Non-AC'}
             </span>
-            <span className="text-muted-foreground">·</span>
+            <span className={selected ? 'text-blue-400' : 'text-gray-400'}>
+              ·
+            </span>
             <span>
               {room.washroom === 'attached' ? 'Attached' : 'Common'} Washroom
             </span>
-            <span className="text-muted-foreground">·</span>
+            <span className={selected ? 'text-blue-400' : 'text-gray-400'}>
+              ·
+            </span>
             <span>{room.sharing} Sharing</span>
           </div>
           {room.notes && (
-            <p className="text-xs text-muted-foreground">{room.notes}</p>
+            <p
+              className={cn(
+                'text-xs',
+                selected ? 'text-blue-600/80' : 'text-gray-500'
+              )}
+            >
+              {room.notes}
+            </p>
           )}
         </div>
-        <div className="text-right shrink-0">
-          <p className="text-base font-semibold tabular-nums">
+        <div className="shrink-0 text-right">
+          <p
+            className={cn(
+              'text-base font-bold tabular-nums md:text-lg',
+              selected ? 'text-blue-700' : 'text-gray-900'
+            )}
+          >
             ₹{room.price.toLocaleString('en-IN')}
           </p>
-          <p className="text-xs text-muted-foreground">room only</p>
+          <p
+            className={cn(
+              'text-xs',
+              selected ? 'text-blue-600/80' : 'text-gray-500'
+            )}
+          >
+            room only
+          </p>
         </div>
       </div>
     </button>
@@ -347,11 +372,15 @@ function PriceRow({
 }) {
   return (
     <div className="flex items-start justify-between gap-3">
-      <div>
-        <p className="text-sm text-muted-foreground">{label}</p>
-        {sublabel && <p className="text-xs text-muted-foreground/80">{sublabel}</p>}
+      <div className="min-w-0">
+        <p className="text-sm text-gray-600">{label}</p>
+        {sublabel && (
+          <p className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-xs font-medium text-transparent">
+            {sublabel}
+          </p>
+        )}
       </div>
-      <span className="text-sm tabular-nums">
+      <span className="shrink-0 text-sm tabular-nums text-gray-700">
         ₹{value.toLocaleString('en-IN')}
       </span>
     </div>

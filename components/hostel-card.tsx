@@ -1,15 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, MapPin } from 'lucide-react'
 import type { Hostel, WashroomType } from '@/types/hostel'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 export type ForwardParams = {
@@ -44,52 +35,61 @@ export function HostelCard({
   const isBoys = hostel.gender === 'boys'
 
   return (
-    <Card className="flex h-full flex-col">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <CardTitle className="text-lg">{hostel.name}</CardTitle>
-          <Badge variant={isBoys ? 'default' : 'secondary'}>
-            {isBoys ? 'Boys' : 'Girls'}
-          </Badge>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="size-3" />
-            {hostel.isOffCampus ? 'Off-campus' : 'On-campus'}
-          </span>
-          <span className="text-xs text-muted-foreground">·</span>
-          <span className="text-xs text-muted-foreground">
-            {hostel.rooms.length} room{hostel.rooms.length === 1 ? '' : ' types'}
-          </span>
-        </div>
-        <CardDescription className="line-clamp-3 pt-2">
-          {hostel.description}
-        </CardDescription>
-      </CardHeader>
+    <div className="group flex h-full flex-col rounded-xl border-2 border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg">
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-lg font-semibold tracking-tight text-gray-900">
+          {hostel.name}
+        </h3>
+        <span
+          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
+            isBoys
+              ? 'bg-blue-50 text-blue-700'
+              : 'bg-pink-50 text-pink-700'
+          }`}
+        >
+          {isBoys ? 'Boys' : 'Girls'}
+        </span>
+      </div>
 
-      <CardContent className="flex-1">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+        <span className="inline-flex items-center gap-1">
+          <MapPin className="size-3" />
+          {hostel.isOffCampus ? 'Off-campus' : 'On-campus'}
+        </span>
+        <span>·</span>
+        <span>
+          {hostel.rooms.length} room{hostel.rooms.length === 1 ? '' : ' types'}
+        </span>
+      </div>
+
+      <p className="mt-3 line-clamp-3 text-sm text-gray-600">
+        {hostel.description}
+      </p>
+
+      <div className="mt-6 flex-1">
+        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
           Starting at
         </p>
         <p className="mt-1">
-          <span className="text-2xl font-bold tracking-tight">
+          <span className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
             ₹{startingPrice.toLocaleString('en-IN')}
           </span>
-          <span className="ml-1 text-sm font-normal text-muted-foreground">
+          <span className="ml-1 text-sm font-normal text-gray-500">
             / year
           </span>
         </p>
-      </CardContent>
+      </div>
 
-      <CardFooter>
+      <div className="mt-6">
         <Button
-          className="w-full"
+          size="lg"
+          className="h-auto w-full px-6 py-3 text-base"
           render={<Link href={buildDetailHref(hostel.slug, forwardParams)} />}
         >
           View Details
           <ArrowRight className="size-4" />
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }

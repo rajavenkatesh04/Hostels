@@ -146,6 +146,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'kalpana-chawla',
     name: 'Kalpana Chawla',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/kalpana-chawla-floor-plan-girls-hostel.pdf',
     description:
         'On-campus girls hostel with premium AC rooms and attached washrooms, available in 2 and 4 sharing configurations.',
     branch: 'kattankulathur',
@@ -165,6 +166,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'meenakshi',
     name: 'Meenakshi',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/meenakshi-floor-plan-girls-hostel.pdf',
     description:
         'On-campus girls hostel with AC and Non-AC rooms and attached washrooms. The 4-sharing AC option uses bunker cots.',
     branch: 'kattankulathur',
@@ -190,6 +192,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'thamarai',
     name: 'Thamarai',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/thamarai-floor-plan-girls-hostel.pdf',
     description:
         'On-campus girls hostel with Non-AC 2-sharing rooms and common washrooms.',
     branch: 'kattankulathur',

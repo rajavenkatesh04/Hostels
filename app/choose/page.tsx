@@ -11,10 +11,8 @@ export const metadata = {
 export default async function ChoosePage() {
   const hostels = await getAllHostels()
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <Suspense fallback={null}>
-        <Picker hostels={hostels} />
-      </Suspense>
-    </div>
+    <Suspense fallback={null}>
+      <Picker hostels={hostels} />
+    </Suspense>
   )
 }

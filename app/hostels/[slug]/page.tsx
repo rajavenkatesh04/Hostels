@@ -32,11 +32,13 @@ export default async function HostelDetailPage(
   if (!hostel) notFound()
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
-      <HostelGallery hostel={hostel} />
-      <Suspense fallback={null}>
-        <HostelDetail hostel={hostel} />
-      </Suspense>
+    <div className="bg-gray-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
+        <HostelGallery hostel={hostel} />
+        <Suspense fallback={null}>
+          <HostelDetail hostel={hostel} />
+        </Suspense>
+      </div>
     </div>
   )
 }
