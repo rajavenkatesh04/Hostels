@@ -125,7 +125,7 @@ export function CampusMap() {
           <Popup
             longitude={selectedHostel.coordinates.lng}
             latitude={selectedHostel.coordinates.lat}
-            anchor="bottom"
+            // anchor="bottom"
             offset={22}
             closeOnClick={false}
             closeButton={false}
@@ -177,6 +177,8 @@ function HostelMarkerDot({ gender, isOffCampus }: HostelMarkerDotProps) {
     </div>
   )
 }
+
+
 
 function UBMarkerDot() {
   return (

@@ -42,7 +42,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.nblock.ktr@srmist.edu.in',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-    coordinates: { lat: 12.824, lng: 80.0438 },
+    coordinates: { lat: 12.820882831171065, lng: 80.04669320297067},
   }),
   withDistance({
     slug: 'green-pearl',
@@ -62,7 +62,7 @@ export const kattankulathurHostels: Hostel[] = [
     isOffCampus: true,
     messFees: 125000,
     laundryFees: BOYS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8195, lng: 80.042 },
+    coordinates: { lat: 12.814531323805664, lng: 80.03770012313159},
   }),
   withDistance({
     slug: 'adhiyaman',
@@ -83,7 +83,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.adhiyaman.ktr@srmist.edu.in',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8222, lng: 80.0452 },
+    coordinates: { lat: 12.821507981936358, lng: 80.04356801812088},
   }),
   withDistance({
     slug: 'oori',
@@ -102,7 +102,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.oorri.ktr@srmist.edu.in',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8218, lng: 80.0438 },
+    coordinates: { lat: 12.821770667718747, lng: 80.04352640299375},
   }),
   withDistance({
     slug: 'kaari',
@@ -121,7 +121,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.kaari.ktr@srmist.edu.in',
     messFees: BOYS_MESS_FEES,
     laundryFees: BOYS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8215, lng: 80.0442 },
+    coordinates: { lat: 12.822148678485568, lng: 80.04351107110479},
   }),
   withDistance({
     slug: 'ja-block-2',
@@ -157,7 +157,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.kalpananchawla.ktr@srmist.edu.in',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8245, lng: 80.0452 },
+    coordinates: { lat: 12.820492634513078, lng: 80.04536791085057},
   }),
   withDistance({
     slug: 'meenakshi',
@@ -182,7 +182,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.meenakshi.ktr@srmist.edu.in',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8242, lng: 80.046 },
+    coordinates: { lat: 12.822186371757859, lng: 80.04237207076467},
   }),
   withDistance({
     slug: 'thamarai',
@@ -198,7 +198,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.thamarai.ktr@srmist.edu.in',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8238, lng: 80.0428 },
+    coordinates: { lat: 12.820498169977368, lng: 80.04448365140557},
   }),
   withDistance({
     slug: 'mullai',
@@ -214,7 +214,7 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.mullai.ktr@srmist.edu.in',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8236, lng: 80.0432 },
+    coordinates: { lat: 12.820462072184977, lng: 80.04413609588211},
   }),
   withDistance({
     slug: 'senbagam',
@@ -230,6 +230,6 @@ export const kattankulathurHostels: Hostel[] = [
     wardenEmail: 'warden.senbagam.ktr@srmist.edu.in',
     messFees: GIRLS_MESS_FEES,
     laundryFees: GIRLS_LAUNDRY_FEES,
-    coordinates: { lat: 12.8233, lng: 80.0425 },
+    coordinates: { lat: 12.821055156548852, lng: 80.04453450765574},
   }),
 ]

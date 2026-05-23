@@ -1,20 +1,19 @@
 export const UNIVERSITY_BUILDING_COORDS = {
-  lat: 12.823,
-  lng: 80.0444,
+  lat: 12.8234939,
+  lng: 80.0423590,
 } as const
 
 export const UNIVERSITY_BUILDING_POLYGON: { lat: number; lng: number }[] = [
-  { lat: 12.8233, lng: 80.0441 },
-  { lat: 12.8233, lng: 80.0447 },
-  { lat: 12.8231, lng: 80.0449 },
-  { lat: 12.8227, lng: 80.0447 },
-  { lat: 12.8227, lng: 80.0441 },
-  { lat: 12.8229, lng: 80.0439 },
+  { lat: 12.8237535, lng: 80.0426184 },
+  { lat: 12.823748, lng: 80.0423692 },
+  { lat: 12.8235768, lng: 80.0420803 },
+  { lat: 12.8232453, lng: 80.0420293 },
+  { lat: 12.8231459, lng: 80.0426977 },
 ]
 
 export const KATTANKULATHUR_CENTER = {
-  lat: 12.8225,
-  lng: 80.0444,
+  lat: 12.8222,  // a bit south of UB so hostels are visible
+  lng: 80.0425,
 } as const
 
 type LatLng = { lat: number; lng: number }

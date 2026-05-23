@@ -79,7 +79,7 @@ export function SiteHeader() {
         <Link
           href="/"
           aria-label="SRM Hostels — Home"
-          className="flex shrink-0 items-center"
+          className="flex shrink-0 items-center transition-transform duration-200 hover:scale-105"
         >
           <Image
             src="/srm-logo.svg"
@@ -87,7 +87,7 @@ export function SiteHeader() {
             width={600}
             height={203}
             priority
-            className="h-8 w-auto"
+            className="h-8 w-auto transition-opacity duration-200 hover:opacity-80"
           />
         </Link>
 
