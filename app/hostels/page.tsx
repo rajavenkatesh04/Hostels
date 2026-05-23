@@ -13,7 +13,7 @@ export default async function HostelsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <header className="space-y-2 mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-sans tracking-tight">
           All Hostels
         </h1>
         <p className="text-muted-foreground">

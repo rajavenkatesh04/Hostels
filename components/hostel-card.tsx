@@ -35,9 +35,9 @@ export function HostelCard({
   const isBoys = hostel.gender === 'boys'
 
   return (
-    <div className="group flex h-full flex-col rounded-xl border-2 border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-lg">
+    <div className="group flex h-full flex-col rounded-xl border-2 border-gray-200 bg-gray-50 p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:bg-white hover:shadow-lg">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-lg font-semibold tracking-tight text-gray-900">
+        <h3 className="text-3xl font-semibold tracking-tight text-gray-900">
           {hostel.name}
         </h3>
         <span
@@ -71,7 +71,7 @@ export function HostelCard({
           Starting at
         </p>
         <p className="mt-1">
-          <span className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+          <span className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
             ₹{startingPrice.toLocaleString('en-IN')}
           </span>
           <span className="ml-1 text-sm font-normal text-gray-500">
@@ -83,7 +83,7 @@ export function HostelCard({
       <div className="mt-6">
         <Button
           size="lg"
-          className="h-auto w-full px-6 py-3 text-base"
+          className="h-auto w-full px-6 py-2.5 bg-gray-700 "
           render={<Link href={buildDetailHref(hostel.slug, forwardParams)} />}
         >
           View Details
