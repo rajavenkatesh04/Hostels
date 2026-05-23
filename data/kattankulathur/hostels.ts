@@ -67,6 +67,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'adhiyaman',
     name: 'Adhiyaman',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/adhiyaman-floor-plan-boys-hostel.pdf',
     description:
         'On-campus boys hostel offering a wide range of AC and Non-AC room configurations, all with attached washrooms.',
     branch: 'kattankulathur',
@@ -88,6 +89,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'oori',
     name: 'Oori',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/oori-floor-plan-boys-hostel.pdf',
     description:
         'On-campus boys hostel with air-conditioned rooms and common washrooms. Available in 4 and 5 sharing configurations at the same price.',
     branch: 'kattankulathur',
@@ -107,6 +109,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'kaari',
     name: 'Kaari',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/kaari-floor-plan-boys-hostel.pdf',
     description:
         'On-campus boys hostel with budget-friendly Non-AC rooms and common washrooms. Available in 4 and 5 sharing configurations.',
     branch: 'kattankulathur',
@@ -219,6 +222,7 @@ export const kattankulathurHostels: Hostel[] = [
   withDistance({
     slug: 'senbagam',
     name: 'Senbagam',
+    floorPlanUrl: 'https://webstor.srmist.edu.in/web_assets/downloads/2025/senbagam-floor-plan-girls-hostel.pdf',
     description:
         'On-campus girls hostel with budget-friendly Non-AC 6-sharing rooms and common washrooms.',
     branch: 'kattankulathur',

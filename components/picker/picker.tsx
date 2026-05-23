@@ -7,7 +7,16 @@ import {
   parseAsStringLiteral,
   parseAsNumberLiteral,
 } from 'nuqs'
-import { Info } from 'lucide-react'
+import {
+  Bath,
+  Bed,
+  Info,
+  Mars,
+  Snowflake,
+  Users,
+  Venus,
+  Wind,
+} from 'lucide-react'
 import type { Hostel, Room } from '@/types/hostel'
 import { Button } from '@/components/ui/button'
 import { HostelCard } from '@/components/hostel-card'
@@ -15,7 +24,7 @@ import { HostelCard } from '@/components/hostel-card'
 const genderParser = parseAsStringLiteral(['boys', 'girls'] as const)
 const washroomParser = parseAsStringLiteral(['attached', 'common'] as const)
 const yearParser = parseAsNumberLiteral([1, 2, 3, 4] as const)
-const sharingParser = parseAsNumberLiteral([2, 3, 4, 5, 6] as const)
+const sharingParser = parseAsNumberLiteral([2, 3, 4, 5, 6, 7] as const)
 
 const filterParsers = {
   gender: genderParser,
@@ -33,14 +42,14 @@ const campuses = [
   },
 ] as const
 
-const sharingOptions = [2, 3, 4, 5, 6] as const
+const sharingOptions = [2, 3, 4, 5, 6, 7] as const
 
 type Filters = {
   gender: 'boys' | 'girls' | null
   year: 1 | 2 | 3 | 4 | null
   ac: boolean | null
   washroom: 'attached' | 'common' | null
-  sharing: 2 | 3 | 4 | 5 | 6 | null
+  sharing: 2 | 3 | 4 | 5 | 6 | 7 | null
 }
 
 function roomMatchesAll(room: Room, filters: Filters) {
@@ -102,6 +111,13 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
     filters.washroom !== null ||
     filters.sharing !== null
 
+  const activeFilterCount =
+    (filters.gender !== null ? 1 : 0) +
+    (filters.ac !== null ? 1 : 0) +
+    (filters.washroom !== null ? 1 : 0) +
+    (filters.sharing !== null ? 1 : 0)
+  const showResults = activeFilterCount >= 2
+
   function clearAll() {
     setFilters({
       gender: null,
@@ -141,6 +157,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 })
               }
             >
+              <Mars className="size-4" />
               Boys
             </ToggleButton>
             <ToggleButton
@@ -151,6 +168,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 })
               }
             >
+              <Venus className="size-4" />
               Girls
             </ToggleButton>
           </div>
@@ -182,12 +200,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
             closed. Please visit the hostel office for more information.
           </NoteCallout>
           <div className="flex flex-wrap gap-3 pt-3">
-            <ToggleButton
-              selected={filters.year === 1}
-              onClick={() =>
-                setFilters({ year: filters.year === 1 ? null : 1 })
-              }
-            >
+            <ToggleButton selected onClick={() => {}}>
               1st Year
             </ToggleButton>
           </div>
@@ -202,6 +215,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 setFilters({ ac: filters.ac === true ? null : true })
               }
             >
+              <Snowflake className="size-4" />
               AC
             </ToggleButton>
             <ToggleButton
@@ -210,6 +224,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 setFilters({ ac: filters.ac === false ? null : false })
               }
             >
+              <Wind className="size-4" />
               Non-AC
             </ToggleButton>
           </div>
@@ -227,6 +242,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 })
               }
             >
+              <Bath className="size-4" />
               Attached
             </ToggleButton>
             <ToggleButton
@@ -237,6 +253,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                 })
               }
             >
+              <Users className="size-4" />
               Common
             </ToggleButton>
           </div>
@@ -253,6 +270,7 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
                   setFilters({ sharing: filters.sharing === n ? null : n })
                 }
               >
+                <Bed className="size-4" />
                 {n} Sharing
               </ToggleButton>
             ))}
@@ -261,35 +279,52 @@ export function Picker({ hostels }: { hostels: Hostel[] }) {
       </div>
 
       <section className="border-t border-border pt-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <ResultsHeading
-            type={results.type}
-            count={results.hostels.length}
-            anyFilterSet={anyFilterSet}
-          />
-          {anyFilterSet && (
-            <Button variant="ghost" size="sm" onClick={clearAll}>
-              Clear all filters
-            </Button>
-          )}
-        </div>
-
-        {results.hostels.length === 0 ? (
+        {!showResults ? (
           <div className="rounded-xl border border-dashed border-border p-10 text-center">
             <p className="text-muted-foreground">
-              No hostels match your current selection. Try removing a filter.
+              Answer the questions above to see your matches.
             </p>
+            {anyFilterSet && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearAll}
+                className="mt-3"
+              >
+                Clear all filters
+              </Button>
+            )}
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {results.hostels.map((hostel) => (
-              <HostelCard
-                key={hostel.slug}
-                hostel={hostel}
-                forwardParams={forwardParams}
+          <>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <ResultsHeading
+                type={results.type}
+                count={results.hostels.length}
               />
-            ))}
-          </div>
+              <Button variant="ghost" size="sm" onClick={clearAll}>
+                Clear all filters
+              </Button>
+            </div>
+
+            {results.hostels.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border p-10 text-center">
+                <p className="text-muted-foreground">
+                  No hostels match your current selection. Try removing a filter.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {results.hostels.map((hostel) => (
+                  <HostelCard
+                    key={hostel.slug}
+                    hostel={hostel}
+                    forwardParams={forwardParams}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </section>
     </div>
@@ -356,19 +391,10 @@ function NoteCallout({ children }: { children: React.ReactNode }) {
 function ResultsHeading({
   type,
   count,
-  anyFilterSet,
 }: {
   type: 'exact' | 'closest'
   count: number
-  anyFilterSet: boolean
 }) {
-  if (!anyFilterSet) {
-    return (
-      <h2 className="text-xl font-semibold tracking-tight">
-        All hostels ({count})
-      </h2>
-    )
-  }
   if (type === 'exact') {
     return (
       <h2 className="text-xl font-semibold tracking-tight">

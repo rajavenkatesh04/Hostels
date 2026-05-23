@@ -4,15 +4,18 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   ArrowUpRight,
+  FileText,
   GraduationCap,
   Mail,
   MapPin,
+  Navigation,
   Phone,
   Snowflake,
   Users,
 } from 'lucide-react'
 import type { Hostel, Room, WashroomType } from '@/types/hostel'
 import { cn } from '@/lib/utils'
+import { getDirectionsUrl } from '@/lib/maps'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -27,13 +30,15 @@ const yearLabels: Record<number, string> = {
   4: '4th Year',
 }
 
-function findInitialRoomIndex(
+function findUrlMatchedRoomIndex(
   hostel: Hostel,
   searchParams: URLSearchParams
-) {
+): number | null {
   const acStr = searchParams.get('ac')
   const washroomStr = searchParams.get('washroom')
   const sharingStr = searchParams.get('sharing')
+
+  if (!acStr && !washroomStr && !sharingStr) return null
 
   const ac = acStr === 'true' ? true : acStr === 'false' ? false : null
   const washroom: WashroomType | null =
@@ -47,16 +52,18 @@ function findInitialRoomIndex(
       (washroom === null || r.washroom === washroom) &&
       (sharing === null || r.sharing === sharing)
   )
-  return idx >= 0 ? idx : 0
+  return idx >= 0 ? idx : null
 }
 
 export function HostelDetail({ hostel }: { hostel: Hostel }) {
   const searchParams = useSearchParams()
-  const initialIndex = useMemo(
-    () => findInitialRoomIndex(hostel, new URLSearchParams(searchParams.toString())),
+  const urlMatchedIndex = useMemo(
+    () => findUrlMatchedRoomIndex(hostel, new URLSearchParams(searchParams.toString())),
     [hostel, searchParams]
   )
-  const [selectedRoomIndex, setSelectedRoomIndex] = useState(initialIndex)
+  const [selectedRoomIndex, setSelectedRoomIndex] = useState(
+    urlMatchedIndex ?? 0
+  )
   const [laundryEnabled, setLaundryEnabled] = useState(false)
 
   const selectedRoom = hostel.rooms[selectedRoomIndex]
@@ -91,6 +98,44 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
             <p className="text-muted-foreground leading-relaxed">
               {hostel.description}
             </p>
+            {(hostel.coordinates || hostel.floorPlanUrl) && (
+              <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:flex-wrap">
+                {hostel.coordinates && (
+                  <Button
+                    size="lg"
+                    render={
+                      <a
+                        href={getDirectionsUrl(
+                          hostel.coordinates.lat,
+                          hostel.coordinates.lng
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <Navigation className="size-4" />
+                    Navigate
+                  </Button>
+                )}
+                {hostel.floorPlanUrl && (
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    render={
+                      <a
+                        href={hostel.floorPlanUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <FileText className="size-4" />
+                    Floor Plan
+                  </Button>
+                )}
+              </div>
+            )}
           </header>
 
           <section className="space-y-3">
@@ -106,6 +151,7 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
                   key={`${room.ac}-${room.washroom}-${room.sharing}-${index}`}
                   room={room}
                   selected={selectedRoomIndex === index}
+                  isUrlMatch={urlMatchedIndex === index}
                   onSelect={() => setSelectedRoomIndex(index)}
                 />
               ))}
@@ -234,10 +280,12 @@ export function HostelDetail({ hostel }: { hostel: Hostel }) {
 function RoomOption({
   room,
   selected,
+  isUrlMatch,
   onSelect,
 }: {
   room: Room
   selected: boolean
+  isUrlMatch?: boolean
   onSelect: () => void
 }) {
   return (
@@ -246,12 +294,17 @@ function RoomOption({
       onClick={onSelect}
       aria-pressed={selected}
       className={cn(
-        'w-full rounded-lg border p-4 text-left transition-all',
+        'relative w-full rounded-lg border p-4 text-left transition-all',
         selected
           ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
           : 'border-border bg-background hover:bg-muted/50'
       )}
     >
+      {isUrlMatch && (
+        <span className="absolute -top-2.5 left-4 bg-background px-2 text-xs font-medium text-indigo-600">
+          Your selection
+        </span>
+      )}
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1 min-w-0">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium">
