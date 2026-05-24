@@ -16,29 +16,36 @@ Do NOT use this skill for:
 - Hotfixes to v1 (different workflow, ask the user)
 - Anything that would force-push main (use the explicit v2→main swap, not this skill)
 
+## Core principles (read before every invocation)
+
+1. **One ship = one commit.** Stage everything with `git add -A`. Never split changes into multiple commits because they "seem unrelated." If the user wanted separate commits, they would have committed before invoking ship.
+
+2. **Always complete the full workflow.** Steps 1 through 5, every time. Do not stop at "pushed to v2" — the user said ship, which means production. Only the explicit error conditions in the Error Handling section justify stopping mid-flow.
+
+3. **No improvisation.** This skill's instructions are commands, not suggestions. If you think a different approach would be better, the user can adjust manually after. Don't deviate based on judgment about what's "cleaner."
+
+4. **Brief output.** Show key command output and final state. Don't narrate every step. The user wants confirmation it worked, not a story.
+
 ## The workflow
 
 ### Step 1 — Confirm repo, ensure on v2
 
 ```bash
-# Confirm we're in the right repo
 git remote -v
-# Expect: origin https://github.com/rajavenkatesh04/Hostels.git
 ```
 
-If origin is not the Hostels repo: stop and tell the user "This doesn't look like the Hostels repo. The ship skill is configured for that repo only."
+If origin is not `https://github.com/rajavenkatesh04/Hostels.git`: stop and tell the user "This doesn't look like the Hostels repo. The ship skill is configured for that repo only."
 
 ```bash
-# Check current branch
 git branch --show-current
 ```
 
 If current branch is NOT `v2`:
 - Switch automatically: `git checkout v2`
-- Tell the user: "You were on `{previous branch}` — switched to `v2`."
-- If the checkout fails (uncommitted changes that would be overwritten), STOP and report. Tell the user to commit or stash their work on the current branch first.
+- Tell the user: "You were on `{previous branch}` — switched to v2."
+- If checkout fails because uncommitted changes would be overwritten, STOP. Tell the user to commit or stash their work on the current branch first. Do not force.
 
-If current branch IS `v2`: proceed silently.
+If current branch IS `v2`: proceed silently, no announcement.
 
 ### Step 2 — Show what's about to be committed
 
@@ -46,34 +53,38 @@ If current branch IS `v2`: proceed silently.
 git status --short
 ```
 
-Show the output to the user. They should see the list of modified/added/deleted files.
+Show the output. The user sees the list of modified/added/deleted files.
 
-If `git status --short` shows nothing (clean working tree):
-- Tell the user: "Nothing to commit on v2. Skipping to the main-promotion step in case you have unpushed v2 commits to promote."
+If working tree is clean (no output):
+- Tell the user: "Nothing to commit on v2. Skipping to main-promotion in case you have unpushed v2 commits to promote."
 - Skip directly to Step 4.
+
+**Unexpected files in the diff:** If `.claude/`, `node_modules/`, `.next/`, `.env*`, or other typically-ignored paths appear in the status, mention it once: "Note: `{path}` is modified — including it. Add to `.gitignore` if this is unwanted churn." Then proceed. Do NOT skip these files. Do NOT split them out.
 
 ### Step 3 — Auto-generate commit message, commit, push v2
 
-Analyze the changed files and write a concise conventional-commit-style message yourself. Do NOT ask the user for a message.
+Analyze the staged diff and write a concise conventional-commit-style message yourself. Do NOT ask the user for a message.
 
 Guidelines for the message:
-- Use a conventional prefix: `feat:` for new functionality, `fix:` for bug fixes, `refactor:` for code changes that don't change behavior, `docs:` for docs/README/comments, `chore:` for housekeeping (config, dependencies, .gitignore, etc.), `style:` for formatting only.
-- Keep the subject line under 72 characters.
-- Be specific about what changed, not vague. "feat: add comparison drawer to hostel listing" beats "feat: new feature".
-- Look at the actual diff (`git diff --staged` after staging) if the file names alone aren't enough to write a good message.
-- If multiple unrelated things changed, mention the most significant one in the subject and list the rest in the body (separate the body from subject with a blank line).
-- Don't include "by Claude" or any attribution to yourself. The commit is the user's.
+- Conventional prefix: `feat:` (new functionality), `fix:` (bug fix), `refactor:` (no behavior change), `docs:` (docs/comments), `chore:` (config/deps/gitignore), `style:` (formatting).
+- Subject line under 72 characters.
+- Specific, not vague: "feat: add comparison drawer to hostel listing" not "feat: new feature".
+- Look at `git diff --staged` if filenames alone aren't enough to describe what changed.
+- **Multiple unrelated changes:** pick the most significant for the subject line, list the rest in the body (blank line after subject). Do NOT skip files or split commits.
+- No attribution to yourself. The commit is the user's work.
 
-Then run:
+Then run, in this exact order:
 
 ```bash
 git add -A
-git diff --staged --stat  # show user what's being staged
+git diff --staged --stat
 git commit -m "{your generated message}"
 git push origin v2
 ```
 
-After push completes, tell the user briefly: "Committed and pushed to v2: `{commit message}`. Vercel preview building."
+Brief confirmation: "Committed and pushed to v2: `{message}`. Continuing to main promotion."
+
+Do NOT stop here. Continue immediately to Step 4.
 
 ### Step 4 — Promote v2 to main
 
@@ -84,9 +95,9 @@ git merge v2
 git push origin main
 ```
 
-Expected: fast-forward merge (main is one or more commits behind v2). If there's a merge conflict, STOP. Report the conflict files. The user needs to resolve manually.
+Expected: fast-forward merge. If there's a merge conflict, STOP. Report the conflict files. The user resolves manually and re-runs the skill.
 
-After successful push, tell the user: "Promoted to main. Vercel production deploying — should be live at hostel-livid.vercel.app in ~2 minutes."
+After successful push: "Promoted to main at `{short-sha}`. Production deploying — live at hostel-livid.vercel.app in ~2 minutes."
 
 ### Step 5 — Switch back to v2
 
@@ -94,32 +105,39 @@ After successful push, tell the user: "Promoted to main. Vercel production deplo
 git checkout v2
 ```
 
-Final state: user is back on `v2`, ready for next work. Tell them: "Back on v2. Ready for next changes."
+Final state: user is back on `v2`. Tell them: "Back on v2. Ready for next changes."
 
 ## Error handling
 
-**Checkout to v2 fails (uncommitted changes block it):** Stop. Tell the user to stash or commit their current-branch work first. Do not force-checkout.
+**Checkout to v2 fails (uncommitted changes block it):** Stop. Tell user to stash or commit current-branch work first. Do not force-checkout.
+
+**Checkout to main fails mid-flow (dirty working tree from prior step):** This can happen if files were modified between steps (e.g., Claude Code's own settings file). Run `git stash push -u -m "ship-flow-interim"`, retry the checkout, complete the merge and push, then `git checkout v2 && git stash pop`. Tell the user once at the end: "Stashed and reapplied `{files}` during the flow."
 
 **Detached HEAD or unknown branch state:** Stop, report. Do not attempt to fix automatically.
 
-**Merge conflict in step 4:** Stop. Show the conflict files. Tell the user to resolve, then re-run the skill.
+**Merge conflict in step 4:** Stop. Show conflict files. User resolves manually, then re-runs the skill.
 
-**Push rejected (non-fast-forward):** Someone pushed to main from elsewhere. Tell the user: "main has commits I don't have. Run `git fetch origin && git log origin/main` to see them, then decide whether to merge or override."
+**Push rejected (non-fast-forward) on main:** Someone else pushed to main. Tell the user: "main has commits I don't have. Run `git fetch origin && git log origin/main` to see them, then decide whether to merge or override."
 
-**Network failure mid-flow:** Whichever step failed, report it. Don't auto-retry. The user should re-run after fixing connectivity.
+**Push rejected on v2:** Less common. Same diagnosis — `git fetch origin && git log origin/v2`. User decides.
 
-**Generated commit message looks wrong to the user:** If the user pushes back on the auto-generated message after the fact, offer to amend it: `git commit --amend -m "new message"` then `git push origin v2 --force-with-lease` (only safe because v2 is the user's working branch, not main). But don't proactively ask — only if they raise it.
+**Network failure mid-flow:** Report the step that failed. Do not auto-retry. User re-runs after fixing connectivity.
+
+**Generated commit message looks wrong (user pushes back after the fact):** Offer to amend: `git commit --amend -m "new message"` then `git push origin v2 --force-with-lease`. Safe on v2 only — NEVER force-push to main. Only do this if user explicitly asks.
 
 ## What this skill does NOT do
 
-- Force-push to main (never)
-- Create feature branches (use `git checkout -b branch-name` manually for those)
+- Force-push to main (never, under any circumstance)
+- Split changes across multiple commits, even if files seem unrelated (one ship = one commit)
+- Stop after pushing to v2 without promoting to main (the full flow runs every time)
+- Create feature branches (manual: `git checkout -b name`)
 - Delete branches (cleanup is manual)
-- Touch v1-snapshot or any backup branches
+- Touch v1-snapshot or backup branches
 - Run tests, builds, or deploys (Vercel handles deploys)
-- Pull v2 before committing (current local v2 is assumed authoritative)
-- Ask the user for a commit message (the skill writes it from the diff)
+- Pull v2 before committing (local v2 is assumed authoritative)
+- Ask the user for a commit message (skill writes it from the diff)
+- Verify production is live (user does this themselves via Vercel dashboard + incognito browser)
 
 ## Tone
 
-When reporting to the user, be brief. Use plain language. Don't narrate every git command — show the output of key steps and the final state. The user wants confirmation that it worked, not a story.
+Brief. Plain language. Show key command output and final state. The user wants confirmation it worked. Don't recap the workflow at the end — they just lived through it.
