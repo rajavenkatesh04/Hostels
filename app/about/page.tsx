@@ -30,13 +30,13 @@ export default function AboutPage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-16">
         {/* Masthead */}
         <header className="space-y-5 border-b border-stone-300 pb-10">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs uppercase tracking-[0.18em] text-stone-500">
-            <span className="text-[#0c4da2]">About</span>
-            <span className="text-stone-300">/</span>
-            <span>Student-Built</span>
-            <span className="text-stone-300">/</span>
-            <span>Unofficial</span>
-          </div>
+          {/*<div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs uppercase tracking-[0.18em] text-stone-500">*/}
+          {/*  <span className="text-[#0c4da2]">About</span>*/}
+          {/*  <span className="text-stone-300">/</span>*/}
+          {/*  <span>Student-Built</span>*/}
+          {/*  <span className="text-stone-300">/</span>*/}
+          {/*  <span>Unofficial</span>*/}
+          {/*</div>*/}
           <h1 className="font-display text-4xl font-medium leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl">
             About SRM Hostels.
           </h1>
