@@ -8,20 +8,20 @@ export default function HomePage() {
   return (
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-16 sm:space-y-20">
         {/* Masthead */}
-        <header className="space-y-5 border-b border-stone-300 pb-10">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs uppercase tracking-[0.18em] text-stone-500">
-            <span className="text-[#0c4da2]">SRM Hostels</span>
-            <span className="text-stone-300">/</span>
-            <span>Academic Year 2026–27</span>
-          </div>
-          <h1 className="font-display text-[2.5rem] font-medium leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl max-w-3xl">
-            Find a place to call home on campus.
-          </h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-stone-700">
-            Browse hostels, compare room types, and estimate your annual fees —
-            all in one place.
-          </p>
-        </header>
+        {/*<header className="space-y-5 border-b border-stone-300 pb-10">*/}
+        {/*  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs uppercase tracking-[0.18em] text-stone-500">*/}
+        {/*    <span className="text-[#0c4da2]">SRM Hostels</span>*/}
+        {/*    <span className="text-stone-300">/</span>*/}
+        {/*    <span>Academic Year 2026–27</span>*/}
+        {/*  </div>*/}
+        {/*  <h1 className="font-display text-[2.5rem] font-medium leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl max-w-3xl">*/}
+        {/*    Find a place to call home on campus.*/}
+        {/*  </h1>*/}
+        {/*  <p className="max-w-2xl text-lg leading-relaxed text-stone-700">*/}
+        {/*    Browse hostels, compare room types, and estimate your annual fees —*/}
+        {/*    all in one place.*/}
+        {/*  </p>*/}
+        {/*</header>*/}
 
         {/* Primary CTA — the "choose" banner */}
         <section>
@@ -59,7 +59,7 @@ export default function HomePage() {
         {/* Map + FAQ */}
         <section className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-5">
-            <SectionHeader number="01" title="Campus Map" />
+            <SectionHeader number="01" title="Hostels Map" />
             <p className="text-base leading-relaxed text-stone-600">
               All hostel locations across the SRM Kattankulathur campus.
             </p>
