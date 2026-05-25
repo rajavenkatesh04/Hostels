@@ -74,7 +74,10 @@ export function SiteHeader() {
   }
 
   return (
-      <header className="sticky top-0 z-40 w-full border-b border-stone-300 bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 z-40 w-full bg-[#08366f] text-white shadow-sm">
+        {/* Top hairline accent */}
+        <div className="h-0.5 w-full bg-[#0c4da2]" />
+
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
           <Link
               href="/"
@@ -82,26 +85,27 @@ export function SiteHeader() {
               className="flex shrink-0 items-center"
           >
             <Image
-                src="/srm-logo.svg"
+                src="/srm-logo-white.svg"
                 alt="SRM Hostels"
                 width={600}
                 height={203}
                 priority
-                className="h-8 w-auto transition-opacity duration-200 hover:opacity-70"
+                className="h-8 w-auto transition-opacity duration-200 hover:opacity-80"
             />
           </Link>
 
-          {/* Vertical divider after logo */}
+          {/* Vertical divider */}
           <span
               aria-hidden
-              className="hidden h-6 w-px shrink-0 bg-stone-300 md:block"
+              className="hidden h-6 w-px shrink-0 bg-white/20 md:block"
           />
 
+          {/* Desktop search */}
           <div
               ref={desktopWrapperRef}
               className="relative hidden flex-1 md:flex md:max-w-md"
           >
-            <Search className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-stone-400" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-white/50" />
             <Input
                 type="search"
                 value={query}
@@ -111,39 +115,41 @@ export function SiteHeader() {
                 placeholder="Search hostels..."
                 aria-label="Search hostels"
                 className={cn(
-                    'w-full rounded-sm border-stone-300 bg-white pl-9 text-sm placeholder:text-stone-400 focus-visible:border-[#0c4da2] focus-visible:ring-0',
-                    dropdownOpen && 'border-[#0c4da2]'
+                    'w-full rounded-sm border-white/20 bg-white/10 pl-9 text-sm text-white placeholder:text-white/50 focus-visible:border-white/60 focus-visible:bg-white/15 focus-visible:ring-0',
+                    dropdownOpen && 'border-white/60 bg-white/15'
                 )}
             />
             {dropdownOpen && (
-                <div className="absolute inset-x-0 top-full z-50 mt-2 max-h-[400px] overflow-y-auto rounded-sm border-2 border-[#0c4da2] bg-white shadow-lg">
+                <div className="absolute inset-x-0 top-full z-50 mt-2 max-h-[400px] overflow-y-auto rounded-sm border-2 border-[#0c4da2] bg-white text-stone-900 shadow-xl">
                   <SearchResults query={query} onSelect={onDesktopResultSelect} />
                 </div>
             )}
           </div>
 
+          {/* Desktop nav */}
           <nav className="ml-auto hidden items-center gap-1 md:flex">
             {navLinks.map((link) => (
                 <Link
                     key={link.href}
                     href={link.href}
-                    className="group relative px-3 py-2 font-mono text-xs uppercase tracking-[0.18em] text-stone-600 transition-colors hover:text-[#0c4da2]"
+                    className="group relative px-3 py-2 font-mono text-xs uppercase tracking-[0.18em] text-white/80 transition-colors hover:text-white"
                 >
                   {link.label}
                   <span
                       aria-hidden
-                      className="absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-[#0c4da2] transition-transform duration-200 group-hover:scale-x-100"
+                      className="absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-white transition-transform duration-200 group-hover:scale-x-100"
                   />
                 </Link>
             ))}
           </nav>
 
+          {/* Mobile icons */}
           <div className="ml-auto flex items-center gap-1 md:hidden">
             <Button
                 variant="ghost"
                 size="icon"
                 aria-label="Search hostels"
-                className="text-stone-700 hover:bg-stone-100 hover:text-[#0c4da2]"
+                className="text-white/90 hover:bg-white/10 hover:text-white"
                 onClick={() => setMobileSearchOpen(true)}
             >
               <Search />
@@ -152,7 +158,7 @@ export function SiteHeader() {
                 variant="ghost"
                 size="icon"
                 aria-label="Open menu"
-                className="text-stone-700 hover:bg-stone-100 hover:text-[#0c4da2]"
+                className="text-white/90 hover:bg-white/10 hover:text-white"
                 onClick={() => setMobileNavOpen(true)}
             >
               <Menu />

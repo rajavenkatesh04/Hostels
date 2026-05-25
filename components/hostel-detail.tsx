@@ -340,7 +340,7 @@ function RoomOption({
       >
         {isUrlMatch && (
             <span className="absolute -top-2.5 left-5 bg-white px-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#0c4da2]">
-          Suggested
+          Your Preference
         </span>
         )}
         <div className="flex items-start justify-between gap-6">
