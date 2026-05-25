@@ -40,7 +40,7 @@ export default function HomePage() {
                   Help me choose my hostel
                 </h2>
                 <p className="max-w-lg text-base leading-relaxed text-stone-600 md:text-lg">
-                  Answer a few questions about your year, budget, and preferences
+                  Answer a few questions about your preferences
                   — we&apos;ll narrow it down for you.
                 </p>
               </div>
