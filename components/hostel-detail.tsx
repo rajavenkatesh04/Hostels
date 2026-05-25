@@ -5,13 +5,12 @@ import { useSearchParams } from 'next/navigation'
 import {
   ArrowUpRight,
   FileText,
-  GraduationCap,
   Mail,
-  MapPin,
   Navigation,
   Phone,
   Snowflake,
-  Users,
+  Check,
+  Info,
 } from 'lucide-react'
 import type { Hostel, Room, WashroomType } from '@/types/hostel'
 import { cn } from '@/lib/utils'
@@ -22,15 +21,15 @@ import { Switch } from '@/components/ui/switch'
 const BOOKING_URL = 'https://sp.srmist.edu.in/srmiststudentportal'
 
 const yearLabels: Record<number, string> = {
-  1: '1st Year',
-  2: '2nd Year',
-  3: '3rd Year',
-  4: '4th Year',
+  1: 'First Year',
+  2: 'Second Year',
+  3: 'Third Year',
+  4: 'Fourth Year',
 }
 
 function findUrlMatchedRoomIndex(
-  hostel: Hostel,
-  searchParams: URLSearchParams
+    hostel: Hostel,
+    searchParams: URLSearchParams
 ): number | null {
   const acStr = searchParams.get('ac')
   const washroomStr = searchParams.get('washroom')
@@ -40,15 +39,15 @@ function findUrlMatchedRoomIndex(
 
   const ac = acStr === 'true' ? true : acStr === 'false' ? false : null
   const washroom: WashroomType | null =
-    washroomStr === 'attached' || washroomStr === 'common' ? washroomStr : null
+      washroomStr === 'attached' || washroomStr === 'common' ? washroomStr : null
   const sharingNum = sharingStr ? Number(sharingStr) : NaN
   const sharing = Number.isFinite(sharingNum) ? sharingNum : null
 
   const idx = hostel.rooms.findIndex(
-    (r) =>
-      (ac === null || r.ac === ac) &&
-      (washroom === null || r.washroom === washroom) &&
-      (sharing === null || r.sharing === sharing)
+      (r) =>
+          (ac === null || r.ac === ac) &&
+          (washroom === null || r.washroom === washroom) &&
+          (sharing === null || r.sharing === sharing)
   )
   return idx >= 0 ? idx : null
 }
@@ -56,334 +55,429 @@ function findUrlMatchedRoomIndex(
 export function HostelDetail({ hostel }: { hostel: Hostel }) {
   const searchParams = useSearchParams()
   const urlMatchedIndex = useMemo(
-    () => findUrlMatchedRoomIndex(hostel, new URLSearchParams(searchParams.toString())),
-    [hostel, searchParams]
+      () =>
+          findUrlMatchedRoomIndex(
+              hostel,
+              new URLSearchParams(searchParams.toString())
+          ),
+      [hostel, searchParams]
   )
   const [selectedRoomIndex, setSelectedRoomIndex] = useState(
-    urlMatchedIndex ?? 0
+      urlMatchedIndex ?? 0
   )
   const [laundryEnabled, setLaundryEnabled] = useState(false)
 
   const selectedRoom = hostel.rooms[selectedRoomIndex]
   const total =
-    selectedRoom.price +
-    hostel.messFees +
-    (laundryEnabled ? hostel.laundryFees : 0)
+      selectedRoom.price +
+      hostel.messFees +
+      (laundryEnabled ? hostel.laundryFees : 0)
 
   const isBoys = hostel.gender === 'boys'
 
   return (
-    <div className="space-y-12">
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
-        <div className="space-y-8 min-w-0">
-          <header className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span
-                className={`rounded-full px-2.5 py-1 font-medium ${
-                  isBoys
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'bg-pink-50 text-pink-700'
-                }`}
-              >
-                {isBoys ? 'Boys' : 'Girls'}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 font-medium text-gray-700">
-                <MapPin className="size-3" />
-                {hostel.isOffCampus ? 'Off-campus' : 'On-campus'}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 font-medium text-gray-700">
-                <GraduationCap className="size-3" />
-                {yearLabels[hostel.year] ?? `Year ${hostel.year}`}
-              </span>
-            </div>
-            <h1 className="font-serif text-3xl font-light tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
-              {hostel.name}
-            </h1>
-            <p className="leading-relaxed text-gray-600">
-              {hostel.description}
-            </p>
-            {(hostel.coordinates || hostel.floorPlanUrl) && (
-              <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:flex-wrap">
+      <div className="space-y-16">
+        {/* Header */}
+        <header className="space-y-6 border-b border-stone-300 pb-10">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs uppercase tracking-[0.18em] text-stone-500">
+            <span className="text-[#0c4da2]">{isBoys ? 'Boys' : 'Girls'}</span>
+            <span className="text-stone-300">/</span>
+            <span>{hostel.isOffCampus ? 'Off-Campus' : 'On-Campus'}</span>
+            <span className="text-stone-300">/</span>
+            <span>{yearLabels[hostel.year] ?? `Year ${hostel.year}`}</span>
+          </div>
+          <h1 className="font-display text-[2.75rem] font-medium leading-[1.05] tracking-tight text-stone-900 sm:text-5xl md:text-6xl">
+            {hostel.name}
+          </h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-stone-700">
+            {hostel.description}
+          </p>
+          {(hostel.coordinates || hostel.floorPlanUrl) && (
+              <div className="flex flex-wrap gap-3 pt-1">
                 {hostel.coordinates && (
-                  <Button
-                    size="lg"
-                    render={
-                      <a
-                        href={getDirectionsUrl(
-                          hostel.coordinates.lat,
-                          hostel.coordinates.lng
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    }
-                  >
-                    <Navigation className="size-4" />
-                    Navigate
-                  </Button>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        className="rounded-sm border-2 border-[#0c4da2] bg-transparent text-base text-[#0c4da2] hover:bg-[#0c4da2] hover:text-white"
+                        render={
+                          <a
+                              href={getDirectionsUrl(
+                                  hostel.coordinates.lat,
+                                  hostel.coordinates.lng
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                          />
+                        }
+                    >
+                      <Navigation className="size-4" />
+                      Navigate
+                    </Button>
                 )}
                 {hostel.floorPlanUrl && (
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    render={
-                      <a
-                        href={hostel.floorPlanUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    }
-                  >
-                    <FileText className="size-4" />
-                    Floor Plan
-                  </Button>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        className="rounded-sm border-2 border-[#0c4da2] bg-transparent text-base text-[#0c4da2] hover:bg-[#0c4da2] hover:text-white"
+                        render={
+                          <a
+                              href={hostel.floorPlanUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                          />
+                        }
+                    >
+                      <FileText className="size-4" />
+                      Floor Plan
+                    </Button>
                 )}
               </div>
-            )}
-          </header>
+          )}
+        </header>
 
-          <section className="space-y-3">
-            <h2 className="text-lg font-semibold tracking-tight text-gray-900">
-              Available Room Types
-            </h2>
-            <p className="text-sm text-gray-600">
-              Select a room type to update the pricing summary.
-            </p>
-            <div className="space-y-3 pt-2">
+        <div className="grid gap-12 lg:grid-cols-[1fr_400px] lg:gap-16">
+          {/* Rooms */}
+          <section className="min-w-0 space-y-6">
+            <SectionHeader
+                number="01"
+                title="Available Room Types"
+                count={hostel.rooms.length}
+            />
+            <div className="space-y-3">
               {hostel.rooms.map((room, index) => (
-                <RoomOption
-                  key={`${room.ac}-${room.washroom}-${room.sharing}-${index}`}
-                  room={room}
-                  selected={selectedRoomIndex === index}
-                  isUrlMatch={urlMatchedIndex === index}
-                  onSelect={() => setSelectedRoomIndex(index)}
-                />
+                  <RoomOption
+                      key={`${room.ac}-${room.washroom}-${room.sharing}-${index}`}
+                      room={room}
+                      selected={selectedRoomIndex === index}
+                      isUrlMatch={urlMatchedIndex === index}
+                      onSelect={() => setSelectedRoomIndex(index)}
+                  />
               ))}
             </div>
           </section>
-        </div>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="rounded-xl border-2 border-gray-200 bg-white p-6 md:p-8">
-            <h2 className="mb-5 text-lg font-semibold tracking-tight text-gray-900">
-              Pricing Summary
-            </h2>
-            <div className="space-y-3 text-sm">
-              <PriceRow
-                label="Selected room"
-                value={selectedRoom.price}
-                sublabel={describeRoom(selectedRoom)}
-              />
-              <PriceRow label="Mess fee (mandatory)" value={hostel.messFees} />
-              <div className="flex items-start justify-between gap-3 py-1">
-                <label className="flex cursor-pointer items-start gap-2">
-                  <Switch
-                    checked={laundryEnabled}
-                    onCheckedChange={setLaundryEnabled}
-                    className="mt-0.5"
-                  />
-                  <span className="text-sm leading-tight text-gray-600">
-                    Laundry
-                    <span className="block text-xs">(optional)</span>
+          {/* Pricing — slightly smaller on mobile */}
+          <aside className="lg:sticky lg:top-24 lg:self-start">
+            <div className="overflow-hidden rounded-sm border-2 border-[#0c4da2] bg-white">
+              <div className="border-b-2 border-[#0c4da2] px-5 py-4 md:px-6 md:py-5">
+                <h2 className="font-display text-xl font-medium text-stone-900 md:text-2xl">
+                  Pricing Summary
+                </h2>
+              </div>
+
+              <div className="space-y-4 px-5 py-5 md:space-y-5 md:px-6 md:py-6">
+                <PriceRow
+                    label="Selected Room"
+                    value={selectedRoom.price}
+                    sublabel={describeRoom(selectedRoom)}
+                />
+                <Divider />
+                <PriceRow
+                    label="Mess Fee"
+                    value={hostel.messFees}
+                    sublabel="Mandatory"
+                />
+                <Divider />
+                <div className="flex items-start justify-between gap-3">
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <Switch
+                        checked={laundryEnabled}
+                        onCheckedChange={setLaundryEnabled}
+                        className="mt-1"
+                    />
+                    <span className="leading-tight">
+                    <span className="text-sm text-stone-800 md:text-base">
+                      Laundry
+                    </span>
+                    <span className="mt-0.5 block text-xs text-stone-500">
+                      Optional
+                    </span>
                   </span>
-                </label>
-                <span
-                  className={cn(
-                    'text-sm tabular-nums',
-                    !laundryEnabled
-                      ? 'text-gray-400 line-through'
-                      : 'text-gray-700'
-                  )}
-                >
+                  </label>
+                  <span
+                      className={cn(
+                          'tabular-nums transition-colors text-sm md:text-base',
+                          !laundryEnabled
+                              ? 'text-stone-400 line-through'
+                              : 'font-medium text-stone-900'
+                      )}
+                  >
                   ₹{hostel.laundryFees.toLocaleString('en-IN')}
                 </span>
+                </div>
               </div>
-              <div className="flex items-baseline justify-between border-t-2 border-gray-100 pt-4">
-                <span className="font-semibold text-gray-900">
-                  Total annual
+
+              <div className="border-t-2 border-[#0c4da2] bg-[#0c4da2]/[0.05] px-5 py-4 md:px-6 md:py-5">
+                <div className="flex items-baseline justify-between gap-3">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-stone-700 md:text-xs">
+                  Total / Year
                 </span>
-                <span className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-2xl font-bold tabular-nums text-transparent">
+                  <span className="font-display text-[1.75rem] font-medium leading-none tabular-nums text-[#0c4da2] md:text-[2rem]">
                   ₹{total.toLocaleString('en-IN')}
                 </span>
+                </div>
+              </div>
+
+              <div className="p-3">
+                <Button
+                    size="lg"
+                    className="group h-auto w-full rounded-sm bg-[#0c4da2] px-6 py-3.5 text-sm font-medium tracking-wide text-white hover:bg-[#093d82] md:py-4 md:text-base"
+                    render={
+                      <a
+                          href={BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                      />
+                    }
+                >
+                  Proceed to Booking
+                  <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 md:size-5" />
+                </Button>
+                <p className="mt-2.5 text-center text-xs text-stone-500">
+                  Opens the SRM Student Portal in a new tab
+                </p>
               </div>
             </div>
-            <Button
-              size="lg"
-              className="mt-6 h-auto w-full bg-linear-to-r from-indigo-600 to-teal-600 px-6 py-1.5 text-base text-white hover:from-indigo-700 hover:to-teal-700"
-              render={
-                <a
-                  href={BOOKING_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-            >
-              Proceed to Booking
-              <ArrowUpRight className="size-4" />
-            </Button>
-            <p className="mt-3 text-center text-xs text-gray-500">
-              Opens the SRM student portal in a new tab.
-            </p>
-          </div>
-        </aside>
-      </div>
+          </aside>
+        </div>
 
-      <div className="grid gap-8 border-t border-gray-200 pt-10 md:grid-cols-2">
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
-            Warden Contact
-          </h2>
-          <div className="space-y-3 rounded-xl border-2 border-gray-200 bg-white p-6">
-            <div className="flex items-center gap-3 text-sm text-gray-700">
-              <Users className="size-4 text-gray-400" />
-              <span>{hostel.wardenName}</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-              <Phone className="size-4 text-gray-400" />
-              <a
-                href={`tel:${hostel.wardenContact}`}
-                className="text-gray-700 hover:text-indigo-600 hover:underline"
-              >
-                {hostel.wardenContact}
-              </a>
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-              <Mail className="size-4 text-gray-400" />
-              <a
-                href={`mailto:${hostel.wardenEmail}`}
-                className="break-all text-gray-700 hover:text-indigo-600 hover:underline"
-              >
-                {hostel.wardenEmail}
-              </a>
-            </div>
-          </div>
-        </section>
+        {/* Footer info */}
+        <div className="grid gap-x-16 gap-y-10 border-t border-stone-300 pt-12 md:grid-cols-2">
+          <section className="space-y-5">
+            <SectionHeader number="02" title="Warden" />
+            <dl className="space-y-3 text-base">
+              <ContactRow icon={null} label="Name" value={hostel.wardenName} />
+              <ContactRow
+                  icon={<Phone className="size-4" />}
+                  label="Phone"
+                  value={hostel.wardenContact}
+                  href={`tel:${hostel.wardenContact}`}
+              />
+              <ContactRow
+                  icon={<Mail className="size-4" />}
+                  label="Email"
+                  value={hostel.wardenEmail}
+                  href={`mailto:${hostel.wardenEmail}`}
+              />
+            </dl>
+          </section>
 
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
-            Important Notes
-          </h2>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>· All prices are annual fees for the 2026–27 academic year.</li>
-            <li>· Mess fee is mandatory and included in the total.</li>
-            <li>· Laundry fee is optional and can be added at any time.</li>
-            <li>
-              · Booking is on a first-come, first-served basis through the SRM
-              student portal.
-            </li>
-            {hostel.isOffCampus && (
-              <li>· This is an off-campus hostel — plan transport accordingly.</li>
-            )}
-          </ul>
-        </section>
+          <section className="space-y-5">
+            <SectionHeader number="03" title="Notes" />
+            <ul className="space-y-3 text-base leading-relaxed text-stone-700">
+              <NoteItem>
+                All prices are annual fees for the 2026–27 academic year.
+              </NoteItem>
+              <NoteItem>
+                Mess fee is mandatory and is included in the total above.
+              </NoteItem>
+              <NoteItem>
+                Laundry can be added or dropped at any point during the year.
+              </NoteItem>
+              <NoteItem>
+                Booking is first-come, first-served via the SRM student portal.
+              </NoteItem>
+              {hostel.isOffCampus && (
+                  <NoteItem>
+                    This is an off-campus hostel — plan transport accordingly.
+                  </NoteItem>
+              )}
+            </ul>
+          </section>
+        </div>
       </div>
-    </div>
+  )
+}
+
+/* ---------- Subcomponents ---------- */
+
+function SectionHeader({
+                         number,
+                         title,
+                         count,
+                       }: {
+  number: string
+  title: string
+  count?: number
+}) {
+  return (
+      <div className="flex items-baseline gap-3">
+      <span className="font-mono text-xs tracking-[0.2em] text-[#0c4da2]">
+        {number}
+      </span>
+        <h2 className="font-display text-2xl font-medium tracking-tight text-stone-900 md:text-[1.75rem]">
+          {title}
+          {typeof count === 'number' && (
+              <span className="ml-2 text-stone-400">({count})</span>
+          )}
+        </h2>
+      </div>
   )
 }
 
 function RoomOption({
-  room,
-  selected,
-  isUrlMatch,
-  onSelect,
-}: {
+                      room,
+                      selected,
+                      isUrlMatch,
+                      onSelect,
+                    }: {
   room: Room
   selected: boolean
   isUrlMatch?: boolean
   onSelect: () => void
 }) {
   return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={selected}
-      className={cn(
-        'relative w-full rounded-lg border-2 p-4 text-left transition-all duration-200 md:p-5',
-        selected
-          ? 'border-blue-500 bg-blue-50 text-blue-700'
-          : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
-      )}
-    >
-      {isUrlMatch && (
-        <span className="absolute -top-2.5 left-4 bg-white px-2 text-xs font-medium text-indigo-600">
-          Your selection
-        </span>
-      )}
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 space-y-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold md:text-base">
-            <span className="inline-flex items-center gap-1">
-              {room.ac ? <Snowflake className="size-4" /> : null}
-              {room.ac ? 'AC' : 'Non-AC'}
-            </span>
-            <span className={selected ? 'text-blue-400' : 'text-gray-400'}>
-              ·
-            </span>
-            <span>
-              {room.washroom === 'attached' ? 'Attached' : 'Common'} Washroom
-            </span>
-            <span className={selected ? 'text-blue-400' : 'text-gray-400'}>
-              ·
-            </span>
-            <span>{room.sharing} Sharing</span>
-          </div>
-          {room.notes && (
-            <p
-              className={cn(
-                'text-xs',
-                selected ? 'text-blue-600/80' : 'text-gray-500'
-              )}
-            >
-              {room.notes}
-            </p>
+      <button
+          type="button"
+          onClick={onSelect}
+          aria-pressed={selected}
+          className={cn(
+              'group relative block w-full rounded-sm border-2 px-5 py-5 text-left transition-all duration-150 md:px-6 md:py-6',
+              selected
+                  ? 'border-[#0c4da2] bg-[#0c4da2]/[0.04]'
+                  : 'border-stone-200 bg-white hover:border-stone-300 hover:bg-stone-50'
           )}
-        </div>
-        <div className="shrink-0 text-right">
-          <p
-            className={cn(
-              'text-base font-bold tabular-nums md:text-lg',
-              selected ? 'text-blue-700' : 'text-gray-900'
+      >
+        {isUrlMatch && (
+            <span className="absolute -top-2.5 left-5 bg-white px-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#0c4da2]">
+          Suggested
+        </span>
+        )}
+        <div className="flex items-start justify-between gap-6">
+          <div className="flex min-w-0 flex-1 items-start gap-4">
+            {/* Radio */}
+            <span
+                className={cn(
+                    'mt-1 flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors',
+                    selected
+                        ? 'border-[#0c4da2] bg-[#0c4da2]'
+                        : 'border-stone-300 bg-white group-hover:border-stone-400'
+                )}
+            >
+            {selected && (
+                <Check className="size-3 text-white" strokeWidth={3} />
             )}
-          >
-            ₹{room.price.toLocaleString('en-IN')}
-          </p>
-          <p
-            className={cn(
-              'text-xs',
-              selected ? 'text-blue-600/80' : 'text-gray-500'
-            )}
-          >
-            room only
-          </p>
+          </span>
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-lg font-medium text-stone-900 md:text-xl">
+              <span className="inline-flex items-center gap-1.5">
+                {room.ac && (
+                    <Snowflake
+                        className={cn(
+                            'size-4',
+                            selected ? 'text-[#0c4da2]' : 'text-stone-500'
+                        )}
+                    />
+                )}
+                {room.ac ? 'AC' : 'Non-AC'}
+              </span>
+                <Dot />
+                <span>
+                {room.washroom === 'attached' ? 'Attached' : 'Common'} Washroom
+              </span>
+                <Dot />
+                <span>{room.sharing}-Share</span>
+              </div>
+              {room.notes && (
+                  <p className="inline-flex items-start gap-1.5 rounded-sm bg-amber-50 px-2 py-1 text-sm leading-snug text-amber-900 ring-1 ring-amber-200">
+                    <Info className="mt-0.5 size-3.5 shrink-0 text-amber-600" />
+                    <span>{room.notes}</span>
+                  </p>
+              )}
+            </div>
+          </div>
+          <div className="shrink-0 text-right">
+            <p
+                className={cn(
+                    'font-display text-xl font-medium tabular-nums md:text-2xl',
+                    selected ? 'text-[#0c4da2]' : 'text-stone-900'
+                )}
+            >
+              ₹{room.price.toLocaleString('en-IN')}
+            </p>
+            <p className="text-xs text-stone-500">room only</p>
+          </div>
         </div>
-      </div>
-    </button>
+      </button>
   )
 }
 
+function Dot() {
+  return (
+      <span
+          aria-hidden
+          className="inline-block size-1 rounded-full bg-stone-300"
+      />
+  )
+}
+
+function Divider() {
+  return <div className="h-px bg-stone-200" />
+}
+
 function PriceRow({
-  label,
-  value,
-  sublabel,
-}: {
+                    label,
+                    value,
+                    sublabel,
+                  }: {
   label: string
   value: number
   sublabel?: string
 }) {
   return (
-    <div className="flex items-start justify-between gap-3">
-      <div className="min-w-0">
-        <p className="text-sm text-gray-600">{label}</p>
-        {sublabel && (
-          <p className="bg-linear-to-r from-indigo-600 to-teal-600 bg-clip-text text-xs font-medium text-transparent">
-            {sublabel}
-          </p>
-        )}
-      </div>
-      <span className="shrink-0 text-sm tabular-nums text-gray-700">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm text-stone-800 md:text-base">{label}</p>
+          {sublabel && (
+              <p className="mt-0.5 text-xs text-stone-500">{sublabel}</p>
+          )}
+        </div>
+        <span className="shrink-0 text-sm font-medium tabular-nums text-stone-900 md:text-base">
         ₹{value.toLocaleString('en-IN')}
       </span>
-    </div>
+      </div>
+  )
+}
+
+function ContactRow({
+                      icon,
+                      label,
+                      value,
+                      href,
+                    }: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  href?: string
+}) {
+  const content = (
+      <span className="flex items-center gap-2 text-stone-900">
+      {icon && <span className="text-stone-400">{icon}</span>}
+        <span className={cn(href && 'hover:text-[#0c4da2] hover:underline')}>
+        {value}
+      </span>
+    </span>
+  )
+  return (
+      <div className="grid grid-cols-[90px_1fr] items-baseline gap-3 border-b border-stone-200 pb-3 last:border-0 last:pb-0">
+        <dt className="font-mono text-xs uppercase tracking-[0.18em] text-stone-500">
+          {label}
+        </dt>
+        <dd className="break-all">
+          {href ? <a href={href}>{content}</a> : content}
+        </dd>
+      </div>
+  )
+}
+
+function NoteItem({ children }: { children: React.ReactNode }) {
+  return (
+      <li className="flex gap-3">
+      <span aria-hidden className="select-none font-mono text-stone-300">
+        —
+      </span>
+        <span>{children}</span>
+      </li>
   )
 }
 
